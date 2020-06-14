@@ -1,0 +1,74 @@
+package com.jga.jumper.entity;
+
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Pool;
+import com.jga.jumper.config.GameConfig;
+
+public class Obstacle extends EntityBase implements Pool.Poolable {
+
+    // == constants ==
+    private static final float SCALE_MAX = 1.0f;
+
+    // == attributes ==
+    private Circle sensor = new Circle();
+    private float sensorAngleDegree;
+    private float scale;
+
+
+    // == constructors ==
+    public Obstacle() {
+        setSize(GameConfig.OBSTACLE_SIZE, GameConfig.OBSTACLE_SIZE);
+    }
+
+    // == public methods ==
+    public void update(float delta) {
+        if (scale < SCALE_MAX) {
+            scale += delta;
+        }
+    }
+
+    public void setAngleDegree(float value) {
+        angleDegree = value % 360;
+        sensorAngleDegree = angleDegree + 20f;
+
+        float radius = GameConfig.PLANET_HALF_SIZE;
+
+        float originX = GameConfig.WORLD_CENTER_X;
+        float originY = GameConfig.WORLD_CENTER_Y;
+
+        float newX = originX + MathUtils.cosDeg(-angleDegree) * radius;
+        float newY = originY + MathUtils.sinDeg(-angleDegree) * radius;
+
+        setPosition(newX, newY);
+
+        float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * radius;
+        float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * radius;
+
+        //sensor.set(sensorX, sensorY, getWidth(), getHeight());
+        sensor.set(sensorX, sensorY, GameConfig.OBSTACLE_HALF_SIZE);
+    }
+
+    public float getAngleDegree() {
+        return angleDegree;
+    }
+
+    public Circle getSensor() {
+        return sensor;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public float getSensorAngleDegree() {
+        return sensorAngleDegree;
+    }
+
+
+    @Override
+    public void reset() {
+        setPosition(0,0);
+        scale = 0.0f;
+    }
+}

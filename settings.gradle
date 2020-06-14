@@ -1,0 +1,3 @@
+include ':jga-utils'
+include 'desktop', 'android', 'core'
+
