@@ -1,4 +1,4 @@
-package com.jga.jumper.common;
+package com.jga.jumper.state_machines;
 
 public enum GameState {
     MENU,

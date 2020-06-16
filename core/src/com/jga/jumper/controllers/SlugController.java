@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Pools;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Monster;
-import com.jga.jumper.entity.Obstacle;
 import com.jga.jumper.entity.Slug;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
 
@@ -51,13 +50,15 @@ public class SlugController {
         if (slugs.size == 0) {
             addSlugs();
         }
+        System.out.println("slugs");
     }
 
     public void addSlugs() {
 
         MonsterController monsterController = controllerRegister.getMonsterController();
 
-        int count = MathUtils.random(2, GameConfig.MAX_OBSTACLES);
+        //int count = MathUtils.random(2, GameConfig.MAX_OBSTACLES);
+        int count = 1;
         Monster monster = monsterController.getMonsters().get(0);
 
         for (int i = 0; i < count; i++) {

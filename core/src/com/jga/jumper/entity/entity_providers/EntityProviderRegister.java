@@ -12,6 +12,7 @@ public class EntityProviderRegister {
     private MonsterEntityProvider monsterEntityProvider;
     private BackgroundEntityProvider backgroundEntityProvider;
     private PlanetEntityProvider planetEntityProvider;
+    private SlugEntityProvider slugEntityProvider;
 
     public EntityProviderRegister(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
@@ -24,6 +25,7 @@ public class EntityProviderRegister {
         this.monsterEntityProvider = new MonsterEntityProvider(controllerRegister.getMonsterController());
         this.backgroundEntityProvider = new BackgroundEntityProvider(controllerRegister.getBackgroundController());
         this.planetEntityProvider = new PlanetEntityProvider(controllerRegister.getPlanetController());
+        this.slugEntityProvider = new SlugEntityProvider(controllerRegister.getSlugController());
     }
 
     public CoinEntityProvider getCoinEntityProvider() {
@@ -44,5 +46,9 @@ public class EntityProviderRegister {
 
     public PlanetEntityProvider getPlanetEntityProvider() {
         return planetEntityProvider;
+    }
+
+    public SlugEntityProvider getSlugEntityProvider() {
+        return slugEntityProvider;
     }
 }

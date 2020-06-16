@@ -16,7 +16,7 @@ public class DistanceChecker<T extends EntityBase> {
     public boolean isEntityNearBy(float angle) {
 
         for (EntityBase entity : entities) {
-            float angleDegree = entity.getAngleDegree();
+            float angleDegree = entity.getAngleDegrees();
 
             float diff = Math.abs(Math.abs(angleDegree) - Math.abs(angle));
 

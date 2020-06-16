@@ -8,9 +8,8 @@ import com.badlogic.gdx.utils.Pools;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Monster;
-import com.jga.jumper.entity.MonsterState;
+import com.jga.jumper.state_machines.MonsterState;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
-import com.jga.jumper.screen.game.MasterController;
 
 public class MonsterController {
 

@@ -1,6 +1,6 @@
 package com.jga.jumper.controllers;
 
-import com.jga.jumper.common.GameState;
+import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.screen.menu.OverlayCallBack;
 
 public class OverlayCallbackController {

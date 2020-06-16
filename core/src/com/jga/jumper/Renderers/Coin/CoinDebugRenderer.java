@@ -1,13 +1,8 @@
-package com.jga.jumper.Renderers;
+package com.jga.jumper.Renderers.Coin;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.Array;
-import com.jga.jumper.assets.RegionNames;
 import com.jga.jumper.entity.Coin;
 
 public class CoinDebugRenderer {

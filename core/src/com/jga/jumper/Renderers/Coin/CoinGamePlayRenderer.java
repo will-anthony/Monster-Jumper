@@ -32,7 +32,7 @@ public class CoinGamePlayRenderer {
                     0, 0,
                     coin.getWidth(), coin.getHeight(),
                     coin.getScale(), coin.getScale(),
-                    GameConfig.START_ANGLE - coin.getAngleDegree());
+                    GameConfig.START_ANGLE - coin.getAngleDegrees());
         }
     }
 }

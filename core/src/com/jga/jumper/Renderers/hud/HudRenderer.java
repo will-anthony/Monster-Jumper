@@ -14,10 +14,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.jumper.assets.AssetDescriptors;
 import com.jga.jumper.common.FloatingScore;
 import com.jga.jumper.common.GameManager;
-import com.jga.jumper.common.GameState;
+import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.controllers.ControllerRegister;
-import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
 import com.jga.jumper.screen.menu.GameOverOverlay;
 import com.jga.jumper.screen.menu.MenuOverlay;
 

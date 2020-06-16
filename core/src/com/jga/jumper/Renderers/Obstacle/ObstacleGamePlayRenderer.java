@@ -32,7 +32,7 @@ public class ObstacleGamePlayRenderer {
                     0, 0,
                     obstacle.getWidth(), obstacle.getHeight(),
                     obstacle.getScale(), obstacle.getScale(),
-                    GameConfig.START_ANGLE - obstacle.getAngleDegree());
+                    GameConfig.START_ANGLE - obstacle.getAngleDegrees());
         }
     }
 }

@@ -3,12 +3,14 @@ package com.jga.jumper.Renderers;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.jga.jumper.Renderers.Background.BackgroundGamePlayRenderer;
 import com.jga.jumper.Renderers.Coin.CoinGamePlayRenderer;
+import com.jga.jumper.Renderers.Coin.CoinDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterGamePlayRenderer;
 import com.jga.jumper.Renderers.Obstacle.ObstacleDebugRenderer;
 import com.jga.jumper.Renderers.Obstacle.ObstacleGamePlayRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
+import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
 
 public class RendererRegister {
 
@@ -19,9 +21,11 @@ public class RendererRegister {
     private ObstacleGamePlayRenderer obstacleGamePlayRenderer;
     private PlanetGamePlayRenderer planetGamePlayRenderer;
 
+    private SlugGamePlayRenderer slugGamePlayRenderer;
+
     private MonsterDebugRenderer monsterDebugRenderer;
     private ObstacleDebugRenderer obstacleDebugRenderer;
-    private com.jga.jumper.Renderers.CoinDebugRenderer coinDebugRenderer;
+    private CoinDebugRenderer coinDebugRenderer;
     private PlanetDebugRenderer planetDebugRenderer;
 
     private TextureAtlas gamePlayAtlas;
@@ -37,10 +41,11 @@ public class RendererRegister {
         obstacleGamePlayRenderer = new ObstacleGamePlayRenderer(gamePlayAtlas);
         coinGamePlayRenderer = new CoinGamePlayRenderer(gamePlayAtlas);
         planetGamePlayRenderer = new PlanetGamePlayRenderer(gamePlayAtlas);
+        slugGamePlayRenderer = new SlugGamePlayRenderer(gamePlayAtlas);
 
         monsterDebugRenderer = new MonsterDebugRenderer();
         obstacleDebugRenderer = new ObstacleDebugRenderer();
-        coinDebugRenderer = new com.jga.jumper.Renderers.CoinDebugRenderer();
+        coinDebugRenderer = new CoinDebugRenderer();
         planetDebugRenderer = new PlanetDebugRenderer();
     }
 
@@ -72,11 +77,15 @@ public class RendererRegister {
         return obstacleDebugRenderer;
     }
 
-    public com.jga.jumper.Renderers.CoinDebugRenderer getCoinDebugRenderer() {
+    public CoinDebugRenderer getCoinDebugRenderer() {
         return coinDebugRenderer;
     }
 
     public PlanetDebugRenderer getPlanetDebugRenderer() {
         return planetDebugRenderer;
+    }
+
+    public SlugGamePlayRenderer getSlugGamePlayRenderer() {
+        return  slugGamePlayRenderer;
     }
 }

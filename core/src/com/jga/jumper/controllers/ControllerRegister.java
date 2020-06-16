@@ -61,4 +61,8 @@ public class ControllerRegister {
     public OverlayCallbackController getOverlayCallbackController() {
         return overlayCallbackController;
     }
+
+    public SlugController getSlugController() {
+        return slugController;
+    }
 }

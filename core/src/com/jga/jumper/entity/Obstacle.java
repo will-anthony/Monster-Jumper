@@ -29,16 +29,16 @@ public class Obstacle extends EntityBase implements Pool.Poolable {
     }
 
     public void setAngleDegree(float value) {
-        angleDegree = value % 360;
-        sensorAngleDegree = angleDegree + 20f;
+        angleDegrees = value % 360;
+        sensorAngleDegree = angleDegrees + 20f;
 
         float radius = GameConfig.PLANET_HALF_SIZE;
 
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
-        float newX = originX + MathUtils.cosDeg(-angleDegree) * radius;
-        float newY = originY + MathUtils.sinDeg(-angleDegree) * radius;
+        float newX = originX + MathUtils.cosDeg(-angleDegrees) * radius;
+        float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
 
         setPosition(newX, newY);
 
@@ -47,10 +47,6 @@ public class Obstacle extends EntityBase implements Pool.Poolable {
 
         //sensor.set(sensorX, sensorY, getWidth(), getHeight());
         sensor.set(sensorX, sensorY, GameConfig.OBSTACLE_HALF_SIZE);
-    }
-
-    public float getAngleDegree() {
-        return angleDegree;
     }
 
     public Circle getSensor() {

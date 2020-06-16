@@ -1,6 +1,10 @@
-package com.jga.jumper.entity;
+package com.jga.jumper.state_machines;
 
-public enum MonsterState {
+import com.jga.jumper.state_machines.interfaces.MinimumEntityStates;
+import com.jga.jumper.state_machines.interfaces.DashingEntityStates;
+import com.jga.jumper.state_machines.interfaces.JumpingEntityStates;
+
+public enum MonsterState implements MinimumEntityStates, JumpingEntityStates, DashingEntityStates {
     WALKING,
     IDLE,
     JUMPING,
@@ -36,9 +40,10 @@ public enum MonsterState {
     public MonsterState currentState() {
         if (isFalling()) return FALLING;
         else if (isJumping()) return JUMPING;
-        else if (isWalking()) return WALKING;
         else if (isDashing()) return DASHING;
+        else if (isWalking()) return WALKING;
         else if (isIdle()) return IDLE;
+        else if (isDead()) return DEAD;
         else return null;
     }
 }

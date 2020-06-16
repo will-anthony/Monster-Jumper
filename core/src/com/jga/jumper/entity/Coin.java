@@ -19,6 +19,7 @@ public class Coin extends EntityBase implements Pool.Poolable {
     }
 
     // == public methods ==
+
     public void update(float delta) {
         if (scale < SCALE_MAX) {
             scale += delta;
@@ -26,7 +27,7 @@ public class Coin extends EntityBase implements Pool.Poolable {
     }
 
     public void setAngleDegree(float value) {
-        angleDegree = value % 360;
+        angleDegrees = value % 360;
 
         float radius = GameConfig.PLANET_HALF_SIZE;
 
@@ -37,15 +38,11 @@ public class Coin extends EntityBase implements Pool.Poolable {
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
-        float newX = originX + MathUtils.cosDeg(-angleDegree) * radius;
-        float newY = originY + MathUtils.sinDeg(-angleDegree) * radius;
+        float newX = originX + MathUtils.cosDeg(-angleDegrees) * radius;
+        float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
 
         setPosition(newX, newY);
 
-    }
-
-    public float getAngleDegree() {
-        return angleDegree;
     }
 
     public float getScale() {

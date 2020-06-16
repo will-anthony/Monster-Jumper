@@ -1,7 +1,8 @@
 package com.jga.jumper.screen.game;
 
 import com.jga.jumper.common.GameManager;
-import com.jga.jumper.common.GameState;
+import com.jga.jumper.controllers.SlugController;
+import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.controllers.CoinController;
 import com.jga.jumper.controllers.ControllerRegister;
@@ -24,6 +25,7 @@ public class MasterController {
     private ObstacleController obstacleController;
     private FloatingScoreController floatingScoreController;
     private MonsterController monsterController;
+    private SlugController slugController;
 
     // == constructors ==
     public MasterController(ControllerRegister controllerRegister) {
@@ -36,6 +38,7 @@ public class MasterController {
         this.obstacleController = controllerRegister.getObstacleController();
         this.monsterController = controllerRegister.getMonsterController();
         this.floatingScoreController = controllerRegister.getFloatingScoreController();
+        this.slugController = controllerRegister.getSlugController();
     }
 
     // == public methods ==
@@ -62,9 +65,7 @@ public class MasterController {
         obstacleController.update(delta);
         coinController.update(delta);
         floatingScoreController.update(delta);
-
-        obstacleController.spawnObstacles(delta);
-        coinController.spawnCoins(delta);
+        slugController.update(delta);
 
         checkCollision();
     }

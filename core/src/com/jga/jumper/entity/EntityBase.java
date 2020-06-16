@@ -11,7 +11,7 @@ public abstract class EntityBase {
     protected float width = 1;
     protected float height = 1;
 
-    protected float angleDegree;
+    protected float angleDegrees;
 
     protected Circle bounds;
 
@@ -63,9 +63,11 @@ public abstract class EntityBase {
         return bounds;
     }
 
-    public float getAngleDegree() {
-        return angleDegree;
+    public float getAngleDegrees() {
+        return angleDegrees;
     }
+
+    public abstract void update(float delta);
 
     // == private methods ==
     public void updateBounds() {
