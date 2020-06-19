@@ -62,8 +62,8 @@ public class MasterController {
 
         GameManager.INSTANCE.updateDisplayScore(delta);
         monsterController.update(delta);
-        obstacleController.update(delta);
-        coinController.update(delta);
+//        obstacleController.update(delta);
+//        coinController.update(delta);
         floatingScoreController.update(delta);
         slugController.update(delta);
 
@@ -115,6 +115,9 @@ public class MasterController {
 
         // player <-> coins
         coinController.checkCollision(monster);
+
+        // player <-> slug
+
 
 
     }

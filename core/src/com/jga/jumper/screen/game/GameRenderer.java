@@ -20,6 +20,7 @@ import com.jga.jumper.Renderers.Obstacle.ObstacleGamePlayRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
 import com.jga.jumper.Renderers.RendererRegister;
+import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
 import com.jga.jumper.config.GameConfig;
@@ -124,6 +125,7 @@ public class GameRenderer implements Disposable {
             renderer.setProjectionMatrix(camera.combined);
 
             renderer.begin(ShapeRenderer.ShapeType.Line);
+
             drawDebug();
             renderer.end();
         }
@@ -146,6 +148,10 @@ public class GameRenderer implements Disposable {
         // obstacles
         ObstacleDebugRenderer obstacleDebugRenderer = rendererRegister.getObstacleDebugRenderer();
         obstacleDebugRenderer.renderObstacleDebug(renderer, obstacles);
+
+        // slug
+        SlugDebugRenderer slugDebugRenderer = rendererRegister.getSlugDebugRenderer();
+        slugDebugRenderer.renderObstacleDebug(renderer, slugs);
     }
 
 

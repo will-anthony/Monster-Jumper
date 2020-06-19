@@ -28,19 +28,19 @@ public abstract class EntityGamePlayRenderer<T extends EntityBase> {
 
     // == public methods ==
     protected abstract void createAnimations(TextureAtlas textureAtlas);
+
     public abstract void renderGamePlay(SpriteBatch batch, Array<T> entities, float delta);
     // check current states in this method and and call drawGamePlay with corresponding animation
 
-    protected void drawGamePlay(SpriteBatch batch, Array<T> entities, Animation<TextureRegion> animation, float delta) {
-
+    protected void drawGamePlay(SpriteBatch batch, Array<T> entities, Animation<TextureRegion> animation, float delta, float rotationOffset) {
         this.animationTime += delta;
         TextureRegion textureRegion = animation.getKeyFrame(animationTime);
         for (EntityBase entity : entities) {
-            batch.draw(textureRegion,entity.getX(), entity.getY(),
-                    0, 0,
+            batch.draw(textureRegion, entity.getX(), entity.getY(),
+                    0f, 0,
                     entity.getWidth(), entity.getHeight(),
                     1.5f, 1.5f,
-                    GameConfig.START_ANGLE - entity.getAngleDegrees());
+                    GameConfig.START_ANGLE - entity.getRotation(rotationOffset));
         }
     }
 

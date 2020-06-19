@@ -66,7 +66,6 @@ public class Monster extends EntityBase implements Pool.Poolable {
     }
 
     private void move(float delta) {
-
         angleDegrees += (angleDegreeSpeed + dashSpeed) * delta;
         angleDegrees = angleDegrees % 360;
         dashSpeed = 0;

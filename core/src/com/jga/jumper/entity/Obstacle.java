@@ -45,7 +45,6 @@ public class Obstacle extends EntityBase implements Pool.Poolable {
         float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * radius;
         float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * radius;
 
-        //sensor.set(sensorX, sensorY, getWidth(), getHeight());
         sensor.set(sensorX, sensorY, GameConfig.OBSTACLE_HALF_SIZE);
     }
 

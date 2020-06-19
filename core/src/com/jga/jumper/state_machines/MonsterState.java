@@ -10,6 +10,7 @@ public enum MonsterState implements MinimumEntityStates, JumpingEntityStates, Da
     JUMPING,
     FALLING,
     DASHING,
+    DYING,
     DEAD;
 
     // == public methods ==
@@ -33,6 +34,12 @@ public enum MonsterState implements MinimumEntityStates, JumpingEntityStates, Da
         return this == IDLE;
     }
 
+    @Override
+    public boolean isDying() {
+        return this == DYING;
+    }
+
+
     public boolean isDead() {
         return this == DEAD;
     }
@@ -43,6 +50,7 @@ public enum MonsterState implements MinimumEntityStates, JumpingEntityStates, Da
         else if (isDashing()) return DASHING;
         else if (isWalking()) return WALKING;
         else if (isIdle()) return IDLE;
+        else if (isDying()) return DYING;
         else if (isDead()) return DEAD;
         else return null;
     }

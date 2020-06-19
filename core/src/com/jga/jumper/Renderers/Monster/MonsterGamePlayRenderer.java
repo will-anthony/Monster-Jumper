@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.jga.jumper.Renderers.EntityGamePlayRenderer;
 import com.jga.jumper.assets.RegionNames;
-import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Monster;
 import com.jga.jumper.state_machines.MonsterState;
 
@@ -62,29 +61,29 @@ public class MonsterGamePlayRenderer extends EntityGamePlayRenderer<Monster> {
 
             if (monster.getState() == MonsterState.IDLE) {
                 hasIdleAnimationStarted = checkIfAnimationHasStarted(hasIdleAnimationStarted);
-                super.drawGamePlay(batch, monsters, super.idleAnimation, delta);
+                super.drawGamePlay(batch, monsters, super.idleAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.DASHING) {
                 hasDashAnimationStarted = checkIfAnimationHasStarted(hasDashAnimationStarted);
                 batch.setColor(1.0f, 1.0f, 1.0f, 0.2f);
-                super.drawGamePlay(batch, monsters, dashingAnimation, delta);
+                super.drawGamePlay(batch, monsters, dashingAnimation, delta, 0);
                 batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             } else if (monster.getState() == MonsterState.JUMPING) {
                 hasJumpAnimationStarted = checkIfAnimationHasStarted(hasJumpAnimationStarted);
-                super.drawGamePlay(batch, monsters, jumpingAnimation, delta);
+                super.drawGamePlay(batch, monsters, jumpingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.FALLING) {
                 hasFallAnimationStarted = checkIfAnimationHasStarted(hasFallAnimationStarted);
-                super.drawGamePlay(batch, monsters, fallingAnimation, delta);
+                super.drawGamePlay(batch, monsters, fallingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.WALKING) {
                 hasWalkAnimationStarted = checkIfAnimationHasStarted(hasWalkAnimationStarted);
-                super.drawGamePlay(batch, monsters, super.walkingAnimation, delta);
+                super.drawGamePlay(batch, monsters, super.walkingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.DEAD) {
                 hasDeadAnimationStarted = checkIfAnimationHasStarted(hasDeadAnimationStarted);
-                super.drawGamePlay(batch, monsters, super.deathAnimation, delta);
+                super.drawGamePlay(batch, monsters, super.deathAnimation, delta, 0);
             }
         }
     }

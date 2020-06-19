@@ -2,7 +2,9 @@ package com.jga.jumper.Renderers.Monster;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Monster;
 
 public class MonsterDebugRenderer {
@@ -17,8 +19,10 @@ public class MonsterDebugRenderer {
 
         for (Monster monster : monsters) {
             Circle monsterBounds = monster.getBounds();
+
             renderer.circle(monsterBounds.x + 0.5f, monsterBounds.y + 0.5f, monsterBounds.radius, 30);
-            renderer.point(monsterBounds.x, monsterBounds.y, 0);
         }
+
+
     }
 }

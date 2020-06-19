@@ -1,6 +1,7 @@
 package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 
 public abstract class EntityBase {
 
@@ -65,6 +66,10 @@ public abstract class EntityBase {
 
     public float getAngleDegrees() {
         return angleDegrees;
+    }
+
+    public float getRotation(float offset) {
+        return angleDegrees + offset;
     }
 
     public abstract void update(float delta);

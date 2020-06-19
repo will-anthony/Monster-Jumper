@@ -10,6 +10,7 @@ import com.jga.jumper.Renderers.Obstacle.ObstacleDebugRenderer;
 import com.jga.jumper.Renderers.Obstacle.ObstacleGamePlayRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
+import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
 
 public class RendererRegister {
@@ -27,6 +28,7 @@ public class RendererRegister {
     private ObstacleDebugRenderer obstacleDebugRenderer;
     private CoinDebugRenderer coinDebugRenderer;
     private PlanetDebugRenderer planetDebugRenderer;
+    private SlugDebugRenderer slugDebugRenderer;
 
     private TextureAtlas gamePlayAtlas;
 
@@ -47,6 +49,7 @@ public class RendererRegister {
         obstacleDebugRenderer = new ObstacleDebugRenderer();
         coinDebugRenderer = new CoinDebugRenderer();
         planetDebugRenderer = new PlanetDebugRenderer();
+        slugDebugRenderer = new SlugDebugRenderer();
     }
 
     public BackgroundGamePlayRenderer getBackgroundGamePlayRenderer() {
@@ -87,5 +90,9 @@ public class RendererRegister {
 
     public SlugGamePlayRenderer getSlugGamePlayRenderer() {
         return  slugGamePlayRenderer;
+    }
+
+    public SlugDebugRenderer getSlugDebugRenderer() {
+        return slugDebugRenderer;
     }
 }
