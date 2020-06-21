@@ -17,10 +17,6 @@ public class MonsterGamePlayRenderer extends EntityGamePlayRenderer<Monster> {
     private Animation<TextureRegion> fallingAnimation;
     private Animation<TextureRegion> dashingAnimation;
 
-    private boolean hasDashAnimationStarted;
-    private boolean hasJumpAnimationStarted;
-    private boolean hasFallAnimationStarted;
-
     // == constructors ==
     public MonsterGamePlayRenderer(TextureAtlas textureAtlas) {
         super(textureAtlas);
@@ -60,41 +56,40 @@ public class MonsterGamePlayRenderer extends EntityGamePlayRenderer<Monster> {
             Monster monster = monsters.get(i);
 
             if (monster.getState() == MonsterState.IDLE) {
-                hasIdleAnimationStarted = checkIfAnimationHasStarted(hasIdleAnimationStarted);
-                super.drawGamePlay(batch, monsters, super.idleAnimation, delta, 0);
+                monster.setHasIdleAnimationStarted(checkIfAnimationHasStarted(monster.hasIdleAnimationStarted(), monster));
+                super.drawGamePlay(batch, monster, super.idleAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.DASHING) {
-                hasDashAnimationStarted = checkIfAnimationHasStarted(hasDashAnimationStarted);
+                monster.setHasDashAnimationStarted(checkIfAnimationHasStarted(monster.isHasDashAnimationStarted(), monster));
                 batch.setColor(1.0f, 1.0f, 1.0f, 0.2f);
-                super.drawGamePlay(batch, monsters, dashingAnimation, delta, 0);
+                super.drawGamePlay(batch, monster, dashingAnimation, delta, 0);
                 batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             } else if (monster.getState() == MonsterState.JUMPING) {
-                hasJumpAnimationStarted = checkIfAnimationHasStarted(hasJumpAnimationStarted);
-                super.drawGamePlay(batch, monsters, jumpingAnimation, delta, 0);
+                monster.setHasJumpAnimationStarted(checkIfAnimationHasStarted(monster.isHasJumpAnimationStarted(), monster));
+                super.drawGamePlay(batch, monster, jumpingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.FALLING) {
-                hasFallAnimationStarted = checkIfAnimationHasStarted(hasFallAnimationStarted);
-                super.drawGamePlay(batch, monsters, fallingAnimation, delta, 0);
+                monster.setHasFallAnimationStarted(checkIfAnimationHasStarted(monster.isHasFallAnimationStarted(), monster));
+                super.drawGamePlay(batch, monster, fallingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.WALKING) {
-                hasWalkAnimationStarted = checkIfAnimationHasStarted(hasWalkAnimationStarted);
-                super.drawGamePlay(batch, monsters, super.walkingAnimation, delta, 0);
+                monster.setHasWalkAnimationStarted(checkIfAnimationHasStarted(monster.hasWalkAnimationStarted(), monster));
+                super.drawGamePlay(batch, monster, super.walkingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.DEAD) {
-                hasDeadAnimationStarted = checkIfAnimationHasStarted(hasDeadAnimationStarted);
-                super.drawGamePlay(batch, monsters, super.deathAnimation, delta, 0);
+                monster.setHasDeadAnimationStarted(checkIfAnimationHasStarted(monster.hasDeadAnimationStarted(), monster));
+                super.drawGamePlay(batch, monster, super.deathAnimation, delta, 0);
             }
         }
     }
 
     @Override
-    protected void setAllAnimationStatesToFalse() {
-        super.setAllAnimationStatesToFalse();
-        hasDashAnimationStarted = false;
-        hasJumpAnimationStarted = false;
-        hasFallAnimationStarted = false;
-
+    protected void setAllAnimationStatesToFalse(Monster monster) {
+        super.setAllAnimationStatesToFalse(monster);
+        monster.setHasDashAnimationStarted(false);
+        monster.setHasJumpAnimationStarted(false);
+        monster.setHasFallAnimationStarted(false);
     }
 }
 

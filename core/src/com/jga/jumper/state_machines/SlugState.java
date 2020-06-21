@@ -1,53 +1,28 @@
 package com.jga.jumper.state_machines;
 
-import com.badlogic.gdx.utils.Array;
-import com.jga.jumper.state_machines.interfaces.MinimumEntityStates;
-import com.jga.jumper.state_machines.interfaces.SpawningEntityStates;
+public enum SlugState {
+    SPAWNING,
+    IDLE,
+    WALKING,
+    DYING,
+    DEAD;
 
-public class SlugState {
+    private boolean isSpawning() { return this.SPAWNING == SPAWNING; }
 
-    // == attributes ==
+    private boolean isIdle() { return this.IDLE == IDLE; }
 
-    private final int spawning = 0;
-    private final int idle = 1;
-    private final int walking = 2;
-    private final int dying = 3;
-    private final int dead = 4;
+    private boolean isWalking() { return this.WALKING == WALKING; }
 
-    private int currentSlugState;
+    private boolean isDying() { return this.DYING == DYING; }
 
-    // == constructor ==
-    public SlugState() {
+    private boolean isDead() { return this.DEAD == DEAD; }
 
-    }
-
-    public int getCurrentSlugState() {
-        if (isSpawning()) return spawning;
-        else if (isIdle()) return idle;
-        else if (isWalking()) return walking;
-        else if (isDying()) return dying;
-        else return dead;
-    }
-
-    public void setCurrentSlugState(int newState) {
-        if (newState >= 0 && newState <= 4) {
-            this.currentSlugState = newState;
-        }
-    }
-
-    private boolean isSpawning() {
-        return this.currentSlugState == spawning;
-    }
-
-    private boolean isIdle() {
-        return this.currentSlugState == idle;
-    }
-
-    private boolean isWalking() {
-        return this.currentSlugState == dying;
-    }
-
-    private boolean isDying() {
-        return this.currentSlugState == walking;
+    public SlugState getCurrentSlugState() {
+        if (isSpawning()) return SPAWNING;
+        else if (isIdle()) return IDLE;
+        else if (isWalking()) return WALKING;
+        else if (isDying()) return DYING;
+        else if (isDead())return DEAD;
+        else return null;
     }
 }

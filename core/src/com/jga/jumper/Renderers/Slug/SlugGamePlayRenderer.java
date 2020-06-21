@@ -38,19 +38,19 @@ public class SlugGamePlayRenderer extends EntityGamePlayRenderer<Slug> {
             switch (slug.getCurrentSlugState()) {
                 case 0:
                     // spawning
-                    drawSpawningAnimation(batch, slugs, delta);
+                    drawSpawningAnimation(batch, slug, delta);
                     break;
                 case 1:
                     // idle
-                    drawIdleAnimation(batch, slugs, delta);
+                    drawIdleAnimation(batch, slug, delta);
                     break;
                 case 2:
                     // walking
-                    drawWalkingAnimation(batch, slugs, delta);
+                    drawWalkingAnimation(batch, slug, delta);
                     break;
                 case 3:
                     // dying
-                    drawDeathAnimation(batch, slugs, delta);
+                    drawDeathAnimation(batch, slug, delta);
                     break;
                 case 4:
                     break;
@@ -58,24 +58,24 @@ public class SlugGamePlayRenderer extends EntityGamePlayRenderer<Slug> {
         }
     }
 
-    private void drawSpawningAnimation(SpriteBatch batch, Array<Slug> slugs, float delta) {
-        hasIdleAnimationStarted = checkIfAnimationHasStarted(hasIdleAnimationStarted);
-        super.drawGamePlay(batch, slugs, super.idleAnimation, delta, 12);
+    private void drawSpawningAnimation(SpriteBatch batch, Slug slug, float delta) {
+        slug.setHasIdleAnimationStarted(checkIfAnimationHasStarted(slug.hasIdleAnimationStarted(), slug));
+        super.drawGamePlay(batch, slug, super.idleAnimation, delta, 12);
     }
 
-    private void drawIdleAnimation(SpriteBatch batch, Array<Slug> slugs, float delta) {
-        hasIdleAnimationStarted = checkIfAnimationHasStarted(hasIdleAnimationStarted);
-        super.drawGamePlay(batch, slugs, super.idleAnimation, delta, 12);
+    private void drawIdleAnimation(SpriteBatch batch, Slug slug, float delta) {
+        slug.setHasIdleAnimationStarted(checkIfAnimationHasStarted(slug.hasIdleAnimationStarted(), slug));
+        super.drawGamePlay(batch, slug, super.idleAnimation, delta, 12);
     }
 
-    private void drawWalkingAnimation(SpriteBatch batch, Array<Slug> slugs, float delta) {
-        hasWalkAnimationStarted = checkIfAnimationHasStarted(hasWalkAnimationStarted);
-        super.drawGamePlay(batch, slugs, super.idleAnimation, delta, 12);
+    private void drawWalkingAnimation(SpriteBatch batch, Slug slug, float delta) {
+        slug.setHasWalkAnimationStarted(checkIfAnimationHasStarted(slug.hasWalkAnimationStarted(), slug));
+        super.drawGamePlay(batch, slug, super.idleAnimation, delta, 12);
     }
 
-    private void drawDeathAnimation(SpriteBatch batch, Array<Slug> slugs, float delta) {
-        hasDeadAnimationStarted = checkIfAnimationHasStarted(hasDeadAnimationStarted);
-        super.drawGamePlay(batch, slugs, super.deathAnimation, delta, 12);
+    private void drawDeathAnimation(SpriteBatch batch, Slug slug, float delta) {
+        slug.setHasDeadAnimationStarted(checkIfAnimationHasStarted(slug.hasDeadAnimationStarted(), slug));
+        super.drawGamePlay(batch, slug, super.deathAnimation, delta, 12);
     }
 
 }

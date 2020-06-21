@@ -60,7 +60,7 @@ public class GameRenderer implements Disposable {
     private ParticleEffect spaceDust;
     private TextureAtlas gamePlayAtlas;
 
-    private boolean debugIsOn;
+    private boolean debugIsOn = true;
 
     // == constructors ==
     public GameRenderer(ControllerRegister controllerRegister, SpriteBatch batch,

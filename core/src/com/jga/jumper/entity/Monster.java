@@ -17,6 +17,10 @@ public class Monster extends EntityBase implements Pool.Poolable {
     private float acceleration = GameConfig.MONSTER_START_ACCELERATION;
     private MonsterState state = MonsterState.IDLE;
 
+    private boolean hasDashAnimationStarted;
+    private boolean hasJumpAnimationStarted;
+    private boolean hasFallAnimationStarted;
+
     // == constructors ==
     public Monster() {
         angleDegrees = GameConfig.START_ANGLE;
@@ -116,5 +120,29 @@ public class Monster extends EntityBase implements Pool.Poolable {
 
     public void walk() {
         state = MonsterState.WALKING;
+    }
+
+    public boolean isHasDashAnimationStarted() {
+        return hasDashAnimationStarted;
+    }
+
+    public void setHasDashAnimationStarted(boolean hasDashAnimationStarted) {
+        this.hasDashAnimationStarted = hasDashAnimationStarted;
+    }
+
+    public boolean isHasJumpAnimationStarted() {
+        return hasJumpAnimationStarted;
+    }
+
+    public void setHasJumpAnimationStarted(boolean hasJumpAnimationStarted) {
+        this.hasJumpAnimationStarted = hasJumpAnimationStarted;
+    }
+
+    public boolean isHasFallAnimationStarted() {
+        return hasFallAnimationStarted;
+    }
+
+    public void setHasFallAnimationStarted(boolean hasFallAnimationStarted) {
+        this.hasFallAnimationStarted = hasFallAnimationStarted;
     }
 }

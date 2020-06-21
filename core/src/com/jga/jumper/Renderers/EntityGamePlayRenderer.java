@@ -14,12 +14,6 @@ public abstract class EntityGamePlayRenderer<T extends EntityBase> {
     protected Animation<TextureRegion> idleAnimation;
     protected Animation<TextureRegion> deathAnimation;
 
-    protected float animationTime = 0;
-
-    protected boolean hasIdleAnimationStarted;
-    protected boolean hasWalkAnimationStarted;
-    protected boolean hasDeadAnimationStarted;
-
     // == constructors ==
     public EntityGamePlayRenderer(TextureAtlas textureAtlas) {
         // create animations in constructor
@@ -32,33 +26,33 @@ public abstract class EntityGamePlayRenderer<T extends EntityBase> {
     public abstract void renderGamePlay(SpriteBatch batch, Array<T> entities, float delta);
     // check current states in this method and and call drawGamePlay with corresponding animation
 
-    protected void drawGamePlay(SpriteBatch batch, Array<T> entities, Animation<TextureRegion> animation, float delta, float rotationOffset) {
-        this.animationTime += delta;
+    protected void drawGamePlay(SpriteBatch batch, T entity, Animation<TextureRegion> animation, float delta, float rotationOffset) {
+
+        float animationTime = entity.getAnimationTime();
+        entity.setAnimationTime(animationTime += delta);
         TextureRegion textureRegion = animation.getKeyFrame(animationTime);
-        for (EntityBase entity : entities) {
-            batch.draw(textureRegion, entity.getX(), entity.getY(),
-                    0f, 0,
-                    entity.getWidth(), entity.getHeight(),
-                    1.5f, 1.5f,
-                    GameConfig.START_ANGLE - entity.getRotation(rotationOffset));
-        }
+        batch.draw(textureRegion, entity.getX(), entity.getY(),
+                0f, 0,
+                entity.getWidth(), entity.getHeight(),
+                1.5f, 1.5f,
+                GameConfig.START_ANGLE - entity.getRotation(rotationOffset));
     }
 
-    protected boolean checkIfAnimationHasStarted(boolean hasAnimationStarted) {
+    protected boolean checkIfAnimationHasStarted(boolean hasAnimationStarted, T entity) {
         if (!hasAnimationStarted) {
-            resetAnimationTime();
-            setAllAnimationStatesToFalse();
+            resetAnimationTime(entity);
+            setAllAnimationStatesToFalse(entity);
         }
         return true;
     }
 
-    protected void setAllAnimationStatesToFalse() {
-        hasIdleAnimationStarted = false;
-        hasWalkAnimationStarted = false;
-        hasDeadAnimationStarted = false;
+    protected void setAllAnimationStatesToFalse(T entity) {
+       entity.setHasIdleAnimationStarted(false);
+       entity.setHasWalkAnimationStarted(false);
+       entity.setHasDeadAnimationStarted(false);
     }
 
-    protected void resetAnimationTime() {
-        this.animationTime = 0;
+    protected void resetAnimationTime(T entity) {
+        entity.setAnimationTime(0);
     }
 }
