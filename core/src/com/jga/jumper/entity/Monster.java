@@ -17,6 +17,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
     private float acceleration = GameConfig.MONSTER_START_ACCELERATION;
     private MonsterState state = MonsterState.IDLE;
 
+
     private boolean hasDashAnimationStarted;
     private boolean hasJumpAnimationStarted;
     private boolean hasFallAnimationStarted;

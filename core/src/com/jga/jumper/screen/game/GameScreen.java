@@ -60,7 +60,7 @@ public class GameScreen extends ScreenAdapter {
         loseSound = assetManager.get(AssetDescriptors.LOSE);
 
         final EntityProviderRegister entityProviderRegister = new EntityProviderRegister(controllerRegister);
-        gameRenderer = new GameRenderer(controllerRegister, game.getBatch(), assetManager, entityProviderRegister);
+        gameRenderer = new GameRenderer(game.getBatch(), assetManager, entityProviderRegister);
         hudRenderer = new HudRenderer(controllerRegister, game.getBatch(), assetManager);
 
     }

@@ -1,29 +1,39 @@
 package com.jga.jumper.entity;
 
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
 
-public class Slug extends EntityBase implements Pool.Poolable {
+public class Slug extends EnemyBase implements Pool.Poolable {
 
-    private float angleDegreeSpeed = GameConfig.SLUG_START_ANGULAR_SPEED;
-    private Circle sensor = new Circle();
+    private float angleDegreeSpeed;
+    private float sensorAngleDegree;
     private int currentSlugState;
-    private float radius;
-    private float deathTimer = 0.5f;
+    private float deathTimer;
+    private Rectangle distanceSensor;
 
     public Slug() {
+        angleDegreeSpeed = GameConfig.SLUG_START_ANGULAR_SPEED;
         setSize(GameConfig.SLUG_SIZE, GameConfig.SLUG_SIZE);
-        radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE;
+        super.setRadius(GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE);
+        deathTimer = 0.5f;
+
+        int directionMultiplier = clockWise ? 1:-1;
+        distanceSensor = new Rectangle(x,y,directionMultiplier * 3f,3f);
     }
 
     public void update(float delta) {
-
     }
 
     public void move(float delta) {
-        angleDegrees -= angleDegreeSpeed * delta;
+
+        int directionalMultiplier = 1;
+
+        if (clockWise) {
+            directionalMultiplier = -1;
+        }
+        angleDegrees -= (angleDegreeSpeed * directionalMultiplier) * delta;
         setAngleDegree();
     }
 
@@ -32,34 +42,38 @@ public class Slug extends EntityBase implements Pool.Poolable {
         setAngleDegree();
     }
 
+    @Override
     public void setAngleDegree() {
 
-        float sensorAngleDegree = angleDegrees + 3f;
+        sensorAngleDegree = angleDegrees + 3f;
+
+        super.setAngleDegree();
 
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
-        float newX = originX + MathUtils.cosDeg(-angleDegrees) * radius;
-        float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
-
-        setPosition(newX, newY);
-
         float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius + 0.2f);
         float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius + 0.2f);
 
-        sensor.set(sensorX, sensorY, GameConfig.OBSTACLE_HALF_SIZE);
+        updateSensorBounds(sensorX, sensorY);
+        updateDistanceSensor(super.x,super.y);
     }
 
     @Override
     public void reset() {
         setPosition(0, 0);
-        currentSlugState = 0;
+        currentSlugState = GameConfig.ENEMY_SPAWNING_STATE;
         radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE;
         deathTimer = 0.5f;
+        super.clockWise = MathUtils.randomBoolean();
     }
 
-    public Circle getSensor() {
+    public Rectangle getSensor() {
         return sensor;
+    }
+
+    public Rectangle getDistanceSensor() {
+        return distanceSensor;
     }
 
     public float getRadius() {
@@ -85,5 +99,9 @@ public class Slug extends EntityBase implements Pool.Poolable {
 
     public void setCurrentSlugState(int currentSlugState) {
         this.currentSlugState = currentSlugState;
+    }
+
+    private void updateDistanceSensor(float x, float y) {
+        distanceSensor.setPosition(x,y);
     }
 }

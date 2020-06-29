@@ -11,12 +11,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.jumper.Renderers.Background.BackgroundGamePlayRenderer;
-import com.jga.jumper.Renderers.Coin.CoinDebugRenderer;
-import com.jga.jumper.Renderers.Coin.CoinGamePlayRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterGamePlayRenderer;
-import com.jga.jumper.Renderers.Obstacle.ObstacleDebugRenderer;
-import com.jga.jumper.Renderers.Obstacle.ObstacleGamePlayRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
 import com.jga.jumper.Renderers.RendererRegister;
@@ -24,11 +20,8 @@ import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.entity.Background;
-import com.jga.jumper.entity.Coin;
 import com.jga.jumper.entity.Monster;
-import com.jga.jumper.entity.Obstacle;
 import com.jga.jumper.entity.Planet;
 import com.jga.jumper.entity.Slug;
 import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
@@ -38,14 +31,11 @@ import com.jga.util.debug.DebugCameraController;
 public class GameRenderer implements Disposable {
 
     // == attributes ==
-    private final ControllerRegister controllerRegister;
     private RendererRegister rendererRegister;
     private EntityProviderRegister entityProviderRegister;
     private Array<Planet> planets;
     private Array<Background> backgrounds;
     private Array<Monster> monsters;
-    private Array<Coin> coins;
-    private Array<Obstacle> obstacles;
     private Array<Slug> slugs;
 
     private final SpriteBatch batch;
@@ -60,12 +50,10 @@ public class GameRenderer implements Disposable {
     private ParticleEffect spaceDust;
     private TextureAtlas gamePlayAtlas;
 
-    private boolean debugIsOn = true;
+    private boolean debugIsOn;
 
     // == constructors ==
-    public GameRenderer(ControllerRegister controllerRegister, SpriteBatch batch,
-                        AssetManager assetManager, EntityProviderRegister entityProviderRegister) {
-        this.controllerRegister = controllerRegister;
+    public GameRenderer(SpriteBatch batch, AssetManager assetManager, EntityProviderRegister entityProviderRegister) {
         this.batch = batch;
         this.assetManager = assetManager;
         this.entityProviderRegister = entityProviderRegister;
@@ -87,8 +75,6 @@ public class GameRenderer implements Disposable {
         planets = entityProviderRegister.getPlanetEntityProvider().getEntities();
         monsters = entityProviderRegister.getMonsterEntityProvider().getEntities();
         slugs = entityProviderRegister.getSlugEntityProvider().getEntities();
-        coins = entityProviderRegister.getCoinEntityProvider().getEntities();
-        obstacles = entityProviderRegister.getObstacleEntityProvider().getEntities();
         backgrounds = entityProviderRegister.getBackgroundEntityProvider().getEntities();
 
         spaceDust = assetManager.get(AssetDescriptors.DUST);
@@ -141,14 +127,6 @@ public class GameRenderer implements Disposable {
         MonsterDebugRenderer monsterDebugRenderer = rendererRegister.getMonsterDebugRenderer();
         monsterDebugRenderer.renderMonsterDebug(renderer, monsters);
 
-        // coins
-        CoinDebugRenderer coinDebugRenderer = rendererRegister.getCoinDebugRenderer();
-        coinDebugRenderer.renderDebug(renderer, coins);
-
-        // obstacles
-        ObstacleDebugRenderer obstacleDebugRenderer = rendererRegister.getObstacleDebugRenderer();
-        obstacleDebugRenderer.renderObstacleDebug(renderer, obstacles);
-
         // slug
         SlugDebugRenderer slugDebugRenderer = rendererRegister.getSlugDebugRenderer();
         slugDebugRenderer.renderObstacleDebug(renderer, slugs);
@@ -166,16 +144,9 @@ public class GameRenderer implements Disposable {
 
     private void drawGamePlay(float delta) {
 
-        float animationTime = controllerRegister.getMasterController().getAnimationTime();
-        animationTime += delta;
-
         // background
         BackgroundGamePlayRenderer backgroundGamePlayRenderer = rendererRegister.getBackgroundGamePlayRenderer();
         backgroundGamePlayRenderer.renderBackgroundGamePlay(batch, backgrounds);
-
-        // obstacles
-        ObstacleGamePlayRenderer obstacleGamePlayRenderer = rendererRegister.getObstacleGamePlayRenderer();
-        obstacleGamePlayRenderer.renderObstacleGamePlay(batch, animationTime, obstacles);
 
         // dust
         spaceDust.draw(batch);
@@ -187,10 +158,6 @@ public class GameRenderer implements Disposable {
         // planet
         PlanetGamePlayRenderer planetGamePlayRenderer = rendererRegister.getPlanetGamePlayRenderer();
         planetGamePlayRenderer.renderPlanetGamePlay(batch, planets);
-
-        // coin
-        CoinGamePlayRenderer coinGamePlayRenderer = rendererRegister.getCoinGamePlayRenderer();
-        coinGamePlayRenderer.renderCoinGamePlay(batch, animationTime, coins);
 
         // monster
         MonsterGamePlayRenderer monsterGamePlayRenderer = rendererRegister.getMonsterGamePlayRenderer();

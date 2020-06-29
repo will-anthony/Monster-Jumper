@@ -2,6 +2,7 @@ package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 
 public abstract class EntityBase {
 
@@ -17,13 +18,14 @@ public abstract class EntityBase {
 
     protected boolean hasIdleAnimationStarted;
     protected boolean hasWalkAnimationStarted;
+    protected boolean hasAttackAnimationStarted;
     protected boolean hasDeadAnimationStarted;
 
-    protected Circle bounds;
+    protected Rectangle bounds;
 
     // == constructors ==
     public EntityBase() {
-        bounds = new Circle(x,y, 0.5f);
+        bounds = new Rectangle(x,y,width,height);
         animationTime = 0;
     }
 
@@ -56,7 +58,7 @@ public abstract class EntityBase {
         return height;
     }
 
-    public Circle getBounds() {
+    public Rectangle getBounds() {
         return bounds;
     }
 
@@ -90,6 +92,14 @@ public abstract class EntityBase {
 
     public void setHasWalkAnimationStarted(boolean hasWalkAnimationStarted) {
         this.hasWalkAnimationStarted = hasWalkAnimationStarted;
+    }
+
+    public boolean hasAttackAnimationStarted() {
+        return hasAttackAnimationStarted;
+    }
+
+    public void setHasAttackAnimationStarted(boolean hasAttackAnimationStarted) {
+        this.hasAttackAnimationStarted = hasAttackAnimationStarted;
     }
 
     public boolean hasDeadAnimationStarted() {

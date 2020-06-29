@@ -2,6 +2,7 @@ package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
 
@@ -11,7 +12,7 @@ public class Obstacle extends EntityBase implements Pool.Poolable {
     private static final float SCALE_MAX = 1.0f;
 
     // == attributes ==
-    private Circle sensor = new Circle();
+    private Rectangle sensor = new Rectangle();
     private float sensorAngleDegree;
     private float scale;
 
@@ -45,10 +46,10 @@ public class Obstacle extends EntityBase implements Pool.Poolable {
         float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * radius;
         float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * radius;
 
-        sensor.set(sensorX, sensorY, GameConfig.OBSTACLE_HALF_SIZE);
+        sensor.set(sensorX, sensorY, width, height);
     }
 
-    public Circle getSensor() {
+    public Rectangle getSensor() {
         return sensor;
     }
 

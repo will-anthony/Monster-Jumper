@@ -7,14 +7,14 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EntityBase;
+import com.jga.jumper.entity.EnemyBase;
 import com.jga.jumper.entity.Monster;
 import com.jga.jumper.entity.Slug;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
 import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.state_machines.MonsterState;
 
-public class SlugController {
+public class SlugController implements EnemyController<Slug> {
     // == attributes ==
     private final Array<Slug> slugs = new Array<>();
     private final Pool<Slug> slugPool = Pools.get(Slug.class, 10);
@@ -36,60 +36,88 @@ public class SlugController {
 
         for (int i = 0; i < slugs.size; i++) {
             slug = slugs.get(i);
-            System.out.println(slug);
-
             switch (slug.getCurrentSlugState()) {
                 case 0:
                     // spawning
-                    slugSpawnLogic(slug);
+                    enemySpawnLogic(slug);
                     break;
                 case 1:
                     // idle
                     break;
                 case 2:
                     // walking
-                    slug.move(delta);
-                    checkCollision(monsterController.getMonsters().get(0));
+                    enemyWalkLogic(slug, delta);
                     break;
                 case 3:
-                    // dying
-                    float deathTimer = slug.getDeathTimer();
-                    if(deathTimer > 0) {
-                        slug.setDeathTimer(deathTimer -= delta);
-                    }
-
-                    if(deathTimer <= 0) {
-                        slug.setCurrentSlugState(4);
-                    }
+                    // attacking
+                    enemyAttackLogic(slug, delta);
                     break;
                 case 4:
+                    // dying
+                    enemyDyingLogic(slug, delta);
+                    break;
+                case 5:
                     // dead
-                    slugPool.free(slug);
-                    slugs.removeIndex(i);
+                    enemyDeathLogic(slug);
                     break;
             }
         }
-        spawnSlugs(delta);
     }
 
-    public void spawnSlugs(float delta) {
-        slugSpawnTimer += delta;
-
-        if (slugSpawnTimer < GameConfig.OBSTACLE_SPAWN_TIME) {
-            return;
+    @Override
+    public void enemySpawnLogic(Slug enemy) {
+        // slug emerges from planet
+        if (enemy.getRadius() < GameConfig.PLANET_HALF_SIZE) {
+            enemy.setRadius(enemy.getRadius() + 0.01f);
         }
-        slugSpawnTimer = 0;
-
-        if (slugs.size == 0) {
-            tryToAddSlugs();
+        if (enemy.getRadius() >= GameConfig.PLANET_HALF_SIZE) {
+            enemy.setRadius(GameConfig.PLANET_HALF_SIZE);
+            enemy.setCurrentSlugState(GameConfig.ENEMY_WALKING_STATE);
         }
     }
 
-    public void tryToAddSlugs() {
+    @Override
+    public void enemyWalkLogic(Slug enemy, float delta) {
+        enemy.move(delta);
+        checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
+        checkEnemyCollision(enemy, slugs);
+    }
 
-        int count = MathUtils.random(2, GameConfig.MAX_OBSTACLES);
+    @Override
+    public void enemyAttackLogic(Slug enemy, float delta) {
+        enemy.move(delta);
+        checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
+        checkEnemyCollision(enemy, slugs);
+    }
 
-        for (int i = 0; i < count; i++) {
+    @Override
+    public void enemyDyingLogic(Slug enemy, float delta) {
+        float deathTimer = enemy.getDeathTimer();
+        System.out.println(deathTimer);
+        if (deathTimer > 0) {
+            enemy.setDeathTimer(deathTimer -= delta);
+        }
+
+        if (deathTimer <= 0) {
+            enemy.setCurrentSlugState(GameConfig.ENEMY_DEAD_STATE);
+        }
+    }
+
+    @Override
+    public void enemyDeathLogic(Slug enemy) {
+        slugPool.free(enemy);
+        slugs.removeValue(enemy, true);
+    }
+
+    @Override
+    public boolean isEnemyNearby(float angle) {
+        DistanceChecker<Slug> slugDistanceChecker = new DistanceChecker<>(slugs);
+        return slugDistanceChecker.isEntityNearBy(angle);
+    }
+
+    public void tryToAddSlugs(int numberOfEnemies) {
+
+        for (int i = 0; i < numberOfEnemies; i++) {
 
             float randomAngle = MathUtils.random(0, 360);
 
@@ -97,30 +125,16 @@ public class SlugController {
                 Slug slug = slugPool.obtain();
                 slug.setStartingPosition(randomAngle);
                 slugs.add(slug);
+            } else {
+                numberOfEnemies++;
             }
         }
     }
 
     private boolean canSlugSpawn(float randomAngle) {
-        boolean canSpawn = !isSlugNearby(randomAngle)
+        boolean canSpawn = !isEnemyNearby(randomAngle)
                 && !monsterController.isMonsterNearBy(randomAngle);
         return canSpawn;
-    }
-
-    private void slugSpawnLogic(Slug slug) {
-        // slug emerges from planet
-        if (slug.getRadius() < GameConfig.PLANET_HALF_SIZE) {
-            slug.setRadius(slug.getRadius() + 0.01f);
-        }
-        if (slug.getRadius() >= GameConfig.PLANET_HALF_SIZE) {
-            slug.setRadius(GameConfig.PLANET_HALF_SIZE);
-            slug.setCurrentSlugState(2);
-        }
-    }
-
-    public boolean isSlugNearby(float angle) {
-        DistanceChecker<Slug> slugDistanceChecker = new DistanceChecker<>(slugs);
-        return slugDistanceChecker.isEntityNearBy(angle);
     }
 
     public void restart() {
@@ -132,23 +146,54 @@ public class SlugController {
         return slugs;
     }
 
-    public void checkCollision(EntityBase otherEntity) {
-        for (int i = 0; i < slugs.size; i++) {
-            Slug slug = slugs.get(i);
-            Array<Monster> monsters = controllerRegister.getMonsterController().getMonsters();
-            Monster monster = monsters.get(0);
-            if (Intersector.overlaps(otherEntity.getBounds(), slug.getSensor()) ||
-                    monster.getState() == MonsterState.DASHING && Intersector.overlaps(otherEntity.getBounds(), slug.getBounds())) {
-                slug.setCurrentSlugState(3);
-                monster.jump();
-            } else if (Intersector.overlaps(otherEntity.getBounds(), slug.getBounds()) &&
-                    monster.getState() != MonsterState.DASHING) {
-                soundListener.lose();
+    public void checkMonsterCollision(Slug slug, Monster monster) {
 
-                monster.dead();
-                controllerRegister.getMasterController().setGameState(GameState.GAME_OVER);
+        // monster kills slug with jump attack
+        if (Intersector.overlaps(monster.getBounds(), slug.getSensor()) && monster.getState() == MonsterState.FALLING) {
+            slug.setCurrentSlugState(GameConfig.ENEMY_DYING_STATE);
+            monster.jump();
+
+        } else if (monster.getState() == MonsterState.DASHING && Intersector.overlaps(monster.getBounds(), slug.getBounds())) {
+            slug.setCurrentSlugState(GameConfig.ENEMY_DYING_STATE);
+
+            // slug kills monster
+        } else if (Intersector.overlaps(monster.getBounds(), slug.getBounds()) &&
+                monster.getState() != MonsterState.DASHING) {
+            soundListener.lose();
+
+            monster.dead();
+            controllerRegister.getMasterController().setGameState(GameState.GAME_OVER);
+        }
+    }
+
+    private void checkEnemyDistanceCollision(Monster monster, Slug slug) {
+        if(Intersector.overlaps(monster.getBounds(), slug.getBounds())) {
+            slug.setCurrentSlugState(GameConfig.ENEMY_ATTACKING_STATE);
+        }
+    }
+
+
+    public void checkEnemyCollision(EnemyBase enemyBase1, Array<Slug> enemyBases) {
+
+        for (Slug slug : enemyBases) {
+
+            if (Intersector.overlaps(enemyBase1.getBounds(), slug.getBounds())) {
+
+                // flip
+                if (enemyBase1.isClockWise()) {
+                    enemyBase1.setClockWise(false);
+                } else {
+                    enemyBase1.setClockWise(true);
+                }
+
+                if (slug.isClockWise()) {
+                    slug.setClockWise(false);
+                } else {
+                    slug.setClockWise(true);
+                }
             }
         }
     }
 }
+
 
