@@ -26,7 +26,7 @@ public class GameConfig {
     public static final float START_ANGLE = -90f;
 
     // slug
-    public static final float SLUG_SIZE = 1.5f;
+    public static final float SLUG_SIZE = 1.25f;
     public static final float SLUG_START_ANGULAR_SPEED = 8f;
     public static final int ENEMY_SPAWNING_STATE = 0;
     public static final int ENEMY_IDLE_STATE = 1;
@@ -34,6 +34,12 @@ public class GameConfig {
     public static final int ENEMY_ATTACKING_STATE = 3;
     public static final int ENEMY_DYING_STATE = 4;
     public static final int ENEMY_DEAD_STATE = 5;
+    public static final int ENEMY_DAMAGED_STATE = 6;
+
+    // bear
+    public static final float BEAR_SIZE = 2f;
+    public static final float BEAR_START_ANGULAR_SPEED = 5f;
+    public static final float BEAR_CHARGE_SPEED = 26f;
 
     public static final float MONSTER_MAX_SPEED = 2f;
     public static final float MONSTER_START_ACCELERATION = 4f;
@@ -51,7 +57,7 @@ public class GameConfig {
     public static final int OBSTACLE_SCORE = 5;
 
     public static final float START_WAIT_TIME = 3f;
-    public static final float MIN_ANG_DIST = 40f;
+    public static final float MIN_ANG_DIST = 60f;
 
     public static final float FLOATING_DURATION = 0.75f;
     public static final float BACKGROUND_SCROLLING_SPEED = 2.5f;

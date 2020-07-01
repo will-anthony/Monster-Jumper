@@ -83,6 +83,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
         float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
 
         setPosition(newX, newY);
+        updateBounds(newX, newY);
     }
 
     public void reset() {

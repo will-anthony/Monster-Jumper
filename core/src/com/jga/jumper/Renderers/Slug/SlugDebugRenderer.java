@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EnemyBase;
 import com.jga.jumper.entity.Slug;
 
 public class SlugDebugRenderer {

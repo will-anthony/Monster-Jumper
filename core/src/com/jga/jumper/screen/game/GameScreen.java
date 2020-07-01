@@ -1,5 +1,6 @@
 package com.jga.jumper.screen.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
@@ -72,6 +73,8 @@ public class GameScreen extends ScreenAdapter {
         controllerRegister.getMasterController().update(delta);
         gameRenderer.render(delta);
         hudRenderer.render();
+        Gdx.app.log("Java Heap", String.valueOf(Gdx.app.getJavaHeap()));
+        Gdx.app.log("Native Heap", String.valueOf(Gdx.app.getNativeHeap()));
     }
 
     @Override

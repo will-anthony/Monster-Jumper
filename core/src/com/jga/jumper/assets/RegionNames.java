@@ -6,7 +6,6 @@ public class RegionNames {
     public static final String OBSTACLE = "obstacle";
     public static final String BACKGROUND = "background";
     public static final String PLANET = "earth";
-    public static final String TERRAN = "terran";
     public static final String PLAYER_IDLE = "idle";
     public static final String PLAYER_JUMP = "jump";
     public static final String PLAYER_FALL = "fall";
@@ -18,6 +17,12 @@ public class RegionNames {
     public static final String SLUG_DEATH = "slug_death";
     public static final String SLUG_WALK = "slug_walk";
     public static final String SLUG_ATTACK = "slug_attack";
+
+    public static final String BEAR_IDLE = "bear_idle";
+    public static final String BEAR_WALK = "bear_walk";
+    public static final String BEAR_DAMAGE = "bear_damage";
+    public static final String BEAR_ATTACK = "bear_attack";
+    public static final String BEAR_DEATH = "bear_death";
 
     public static final String LOGO = "logo";
     public static final String GAME_OVER = "game-over";

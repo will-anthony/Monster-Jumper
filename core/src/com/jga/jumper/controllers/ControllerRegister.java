@@ -13,6 +13,7 @@ public class ControllerRegister {
     private BackgroundController backgroundController;
     private PlanetController planetController;
     private SlugController slugController;
+    private BearController bearController;
     private OverlayCallbackController overlayCallbackController;
 
     private MasterController masterController;
@@ -26,6 +27,7 @@ public class ControllerRegister {
         this.backgroundController =  new BackgroundController();
         this.planetController = new PlanetController();
         this.slugController = new SlugController(this, soundListener);
+        this.bearController = new BearController(this, soundListener);
         this.overlayCallbackController = new OverlayCallbackController(this);
         this.masterController = new MasterController(this);
     }
@@ -64,5 +66,9 @@ public class ControllerRegister {
 
     public SlugController getSlugController() {
         return slugController;
+    }
+
+    public BearController getBearController() {
+        return bearController;
     }
 }

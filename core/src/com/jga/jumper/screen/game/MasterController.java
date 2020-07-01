@@ -2,6 +2,7 @@ package com.jga.jumper.screen.game;
 
 import com.jga.jumper.common.GameManager;
 import com.jga.jumper.config.GameConfig;
+import com.jga.jumper.controllers.BearController;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.controllers.FloatingScoreController;
 import com.jga.jumper.controllers.MonsterController;
@@ -23,6 +24,7 @@ public class MasterController {
     private FloatingScoreController floatingScoreController;
     private MonsterController monsterController;
     private SlugController slugController;
+    private BearController bearController;
     private Level1 level1;
     private Level2 level2;
 
@@ -32,6 +34,7 @@ public class MasterController {
         this.monsterController = controllerRegister.getMonsterController();
         this.floatingScoreController = controllerRegister.getFloatingScoreController();
         this.slugController = controllerRegister.getSlugController();
+        this.bearController = controllerRegister.getBearController();
         this.level1 = new Level1(controllerRegister);
         this.level2 = new Level2(controllerRegister);
         this.gameLevel = 1;
@@ -48,6 +51,8 @@ public class MasterController {
             monsterController.update(delta);
             floatingScoreController.update(delta);
             slugController.update(delta);
+            bearController.update(delta);
+
 
             gameLevelLogic(delta);
         }

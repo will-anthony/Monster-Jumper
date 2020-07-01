@@ -52,9 +52,13 @@ public class Slug extends EnemyBase implements Pool.Poolable {
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
-        float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius + 0.2f);
-        float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius + 0.2f);
+        float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius - 0.2f);
+        float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius - 0.2f);
 
+        float boundsX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius - 0.4f);
+        float boundsY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius - 0.4f);
+
+        updateBounds(boundsX, boundsY);
         updateSensorBounds(sensorX, sensorY);
         updateDistanceSensor(super.x,super.y);
     }

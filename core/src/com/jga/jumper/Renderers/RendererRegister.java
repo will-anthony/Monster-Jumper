@@ -12,23 +12,24 @@ import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
 import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
+import com.jga.jumper.Renderers.bear.BearDebugRenderer;
+import com.jga.jumper.Renderers.bear.BearGamePlayRenderer;
 
 public class RendererRegister {
 
     // == attributes ==
     private BackgroundGamePlayRenderer backgroundGamePlayRenderer;
     private MonsterGamePlayRenderer monsterGamePlayRenderer;
-    private CoinGamePlayRenderer coinGamePlayRenderer;
-    private ObstacleGamePlayRenderer obstacleGamePlayRenderer;
     private PlanetGamePlayRenderer planetGamePlayRenderer;
 
     private SlugGamePlayRenderer slugGamePlayRenderer;
+    private BearGamePlayRenderer bearGamePlayRenderer;
 
     private MonsterDebugRenderer monsterDebugRenderer;
-    private ObstacleDebugRenderer obstacleDebugRenderer;
-    private CoinDebugRenderer coinDebugRenderer;
     private PlanetDebugRenderer planetDebugRenderer;
+
     private SlugDebugRenderer slugDebugRenderer;
+    private BearDebugRenderer bearDebugRenderer;
 
     private TextureAtlas gamePlayAtlas;
 
@@ -40,16 +41,14 @@ public class RendererRegister {
     private void init() {
         backgroundGamePlayRenderer = new BackgroundGamePlayRenderer(gamePlayAtlas);
         monsterGamePlayRenderer = new MonsterGamePlayRenderer(gamePlayAtlas);
-        obstacleGamePlayRenderer = new ObstacleGamePlayRenderer(gamePlayAtlas);
-        coinGamePlayRenderer = new CoinGamePlayRenderer(gamePlayAtlas);
         planetGamePlayRenderer = new PlanetGamePlayRenderer(gamePlayAtlas);
         slugGamePlayRenderer = new SlugGamePlayRenderer(gamePlayAtlas);
+        bearGamePlayRenderer = new BearGamePlayRenderer(gamePlayAtlas);
 
         monsterDebugRenderer = new MonsterDebugRenderer();
-        obstacleDebugRenderer = new ObstacleDebugRenderer();
-        coinDebugRenderer = new CoinDebugRenderer();
         planetDebugRenderer = new PlanetDebugRenderer();
         slugDebugRenderer = new SlugDebugRenderer();
+        bearDebugRenderer = new BearDebugRenderer();
     }
 
     public BackgroundGamePlayRenderer getBackgroundGamePlayRenderer() {
@@ -60,32 +59,16 @@ public class RendererRegister {
         return monsterGamePlayRenderer;
     }
 
-    public CoinGamePlayRenderer getCoinGamePlayRenderer() {
-        return coinGamePlayRenderer;
-    }
-
-    public ObstacleGamePlayRenderer getObstacleGamePlayRenderer() {
-        return obstacleGamePlayRenderer;
-    }
-
-    public PlanetGamePlayRenderer getPlanetGamePlayRenderer() {
-        return planetGamePlayRenderer;
-    }
-
     public MonsterDebugRenderer getMonsterDebugRenderer() {
         return monsterDebugRenderer;
     }
 
-    public ObstacleDebugRenderer getObstacleDebugRenderer() {
-        return obstacleDebugRenderer;
-    }
-
-    public CoinDebugRenderer getCoinDebugRenderer() {
-        return coinDebugRenderer;
-    }
-
     public PlanetDebugRenderer getPlanetDebugRenderer() {
         return planetDebugRenderer;
+    }
+
+    public PlanetGamePlayRenderer getPlanetGamePlayRenderer() {
+        return planetGamePlayRenderer;
     }
 
     public SlugGamePlayRenderer getSlugGamePlayRenderer() {
@@ -94,5 +77,13 @@ public class RendererRegister {
 
     public SlugDebugRenderer getSlugDebugRenderer() {
         return slugDebugRenderer;
+    }
+
+    public BearGamePlayRenderer getBearGamePlayRenderer() {
+        return bearGamePlayRenderer;
+    }
+
+    public BearDebugRenderer getBearDebugRenderer() {
+        return bearDebugRenderer;
     }
 }

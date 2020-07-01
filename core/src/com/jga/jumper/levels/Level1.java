@@ -1,5 +1,6 @@
 package com.jga.jumper.levels;
 
+import com.jga.jumper.controllers.BearController;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.controllers.SlugController;
 
@@ -7,6 +8,7 @@ public class Level1 implements Level {
 
     private final ControllerRegister controllerRegister;
     private final SlugController slugController;
+    private final BearController bearController;
 
     private float levelTimer;
 
@@ -22,6 +24,7 @@ public class Level1 implements Level {
     public Level1(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
         slugController = controllerRegister.getSlugController();
+        bearController = controllerRegister.getBearController();
         levelTimer = 0f;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
@@ -34,7 +37,8 @@ public class Level1 implements Level {
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
-            slugController.tryToAddSlugs(1);
+            bearController.tryToAddBears(1);
+            System.out.println(bearController.getBears().size);
             hasFirstWaveSpawned = true;
         }
 

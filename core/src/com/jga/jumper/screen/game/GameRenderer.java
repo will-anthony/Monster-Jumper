@@ -18,9 +18,12 @@ import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
 import com.jga.jumper.Renderers.RendererRegister;
 import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
+import com.jga.jumper.Renderers.bear.BearDebugRenderer;
+import com.jga.jumper.Renderers.bear.BearGamePlayRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Background;
+import com.jga.jumper.entity.Bear;
 import com.jga.jumper.entity.Monster;
 import com.jga.jumper.entity.Planet;
 import com.jga.jumper.entity.Slug;
@@ -37,6 +40,7 @@ public class GameRenderer implements Disposable {
     private Array<Background> backgrounds;
     private Array<Monster> monsters;
     private Array<Slug> slugs;
+    private Array<Bear> bears;
 
     private final SpriteBatch batch;
     private final AssetManager assetManager;
@@ -75,6 +79,7 @@ public class GameRenderer implements Disposable {
         planets = entityProviderRegister.getPlanetEntityProvider().getEntities();
         monsters = entityProviderRegister.getMonsterEntityProvider().getEntities();
         slugs = entityProviderRegister.getSlugEntityProvider().getEntities();
+        bears = entityProviderRegister.getBearEntityProvider().getEntities();
         backgrounds = entityProviderRegister.getBackgroundEntityProvider().getEntities();
 
         spaceDust = assetManager.get(AssetDescriptors.DUST);
@@ -130,6 +135,10 @@ public class GameRenderer implements Disposable {
         // slug
         SlugDebugRenderer slugDebugRenderer = rendererRegister.getSlugDebugRenderer();
         slugDebugRenderer.renderObstacleDebug(renderer, slugs);
+
+        // bear
+        BearDebugRenderer bearDebugRenderer = rendererRegister.getBearDebugRenderer();
+        bearDebugRenderer.renderObstacleDebug(renderer, bears);
     }
 
 
@@ -154,6 +163,10 @@ public class GameRenderer implements Disposable {
         // slug
         SlugGamePlayRenderer slugGamePlayRenderer = rendererRegister.getSlugGamePlayRenderer();
         slugGamePlayRenderer.renderGamePlay(batch, slugs, delta);
+
+        // bear
+        BearGamePlayRenderer bearGamePlayRenderer = rendererRegister.getBearGamePlayRenderer();
+        bearGamePlayRenderer.renderGamePlay(batch, bears, delta);
 
         // planet
         PlanetGamePlayRenderer planetGamePlayRenderer = rendererRegister.getPlanetGamePlayRenderer();

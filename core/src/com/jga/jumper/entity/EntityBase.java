@@ -33,13 +33,11 @@ public abstract class EntityBase {
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
-        updateBounds();
     }
 
     public void setSize(float width, float height) {
         this.width = width;
         this.height = height;
-        updateBounds();
     }
 
     public float getX() {
@@ -112,8 +110,7 @@ public abstract class EntityBase {
 
     public abstract void update(float delta);
 
-    // == private methods ==
-    public void updateBounds() {
+    public void updateBounds(float x, float y) {
         bounds.setPosition(x, y);
     }
 }
