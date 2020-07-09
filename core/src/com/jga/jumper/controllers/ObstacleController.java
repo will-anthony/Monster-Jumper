@@ -88,24 +88,24 @@ public class ObstacleController {
 
     public void checkCollision(EntityBase otherEntity) {
 
-        for (int i = 0; i < obstacles.size; i++) {
-            Obstacle obstacle = obstacles.get(i);
-            Array<Monster> monsters = controllerRegister.getMonsterController().getMonsters();
-            Monster monster = monsters.get(0);
-            if (Intersector.overlaps(otherEntity.getBounds(), obstacle.getSensor())) {
-                GameManager.INSTANCE.addScore(GameConfig.OBSTACLE_SCORE);
-                controllerRegister.getFloatingScoreController().addFloatingScore(GameConfig.OBSTACLE_SCORE);
-                obstaclePool.free(obstacle);
-                obstacles.removeIndex(i);
-
-            } else if (Intersector.overlaps(otherEntity.getBounds(), obstacle.getBounds()) &&
-                    monster.getState() != MonsterState.DASHING) {
-                soundListener.lose();
-
-                monster.dead();
-                controllerRegister.getMasterController().setGameState(GameState.GAME_OVER);
-            }
-        }
+//        for (int i = 0; i < obstacles.size; i++) {
+//            Obstacle obstacle = obstacles.get(i);
+//            Array<Monster> monsters = controllerRegister.getMonsterController().getMonsters();
+//            Monster monster = monsters.get(0);
+//            if (Intersector.overlaps(otherEntity.getBounds(), obstacle.getSensor())) {
+//                GameManager.INSTANCE.addScore(GameConfig.OBSTACLE_SCORE);
+//                controllerRegister.getFloatingScoreController().addFloatingScore(GameConfig.OBSTACLE_SCORE);
+//                obstaclePool.free(obstacle);
+//                obstacles.removeIndex(i);
+//
+//            } else if (Intersector.overlaps(otherEntity.getBounds(), obstacle.getBounds()) &&
+//                    monster.getState() != MonsterState.DASHING) {
+//                soundListener.lose();
+//
+//                monster.dead();
+//                controllerRegister.getMasterController().setGameState(GameState.GAME_OVER);
+//            }
+//        }
     }
 
     public void restart() {

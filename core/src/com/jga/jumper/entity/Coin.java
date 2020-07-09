@@ -1,6 +1,7 @@
 package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
 
@@ -24,6 +25,11 @@ public class Coin extends EntityBase implements Pool.Poolable {
         if (scale < SCALE_MAX) {
             scale += delta;
         }
+    }
+
+    @Override
+    protected Polygon definePolygonCollider() {
+        return null;
     }
 
     public void setAngleDegree(float value) {

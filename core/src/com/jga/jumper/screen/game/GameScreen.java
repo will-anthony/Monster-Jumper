@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.jga.jumper.Renderers.hud.HudRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
+import com.jga.jumper.box2d.Box2DTest;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
@@ -21,6 +23,9 @@ public class GameScreen extends ScreenAdapter {
     private ControllerRegister controllerRegister;
     private GameRenderer gameRenderer;
     private HudRenderer hudRenderer;
+
+    private Box2DTest box2DTest;
+    private Box2DDebugRenderer box2DDebugRenderer;
 
     private Sound coinSound;
     private Sound jumpSound;
@@ -49,7 +54,9 @@ public class GameScreen extends ScreenAdapter {
             }
         };
 
-        this.controllerRegister = new ControllerRegister(this.soundListener);
+        box2DTest = new Box2DTest();
+        this.controllerRegister = new ControllerRegister(this.soundListener, this.box2DTest.getWorld());
+        box2DDebugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
     }
 
     // == public methods ==
@@ -61,7 +68,7 @@ public class GameScreen extends ScreenAdapter {
         loseSound = assetManager.get(AssetDescriptors.LOSE);
 
         final EntityProviderRegister entityProviderRegister = new EntityProviderRegister(controllerRegister);
-        gameRenderer = new GameRenderer(game.getBatch(), assetManager, entityProviderRegister);
+        gameRenderer = new GameRenderer(game.getBatch(), assetManager, entityProviderRegister, box2DTest);
         hudRenderer = new HudRenderer(controllerRegister, game.getBatch(), assetManager);
 
     }
@@ -70,11 +77,11 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         GdxUtils.clearScreen();
 
+        box2DTest.updatePhysics(delta);
         controllerRegister.getMasterController().update(delta);
         gameRenderer.render(delta);
         hudRenderer.render();
-        Gdx.app.log("Java Heap", String.valueOf(Gdx.app.getJavaHeap()));
-        Gdx.app.log("Native Heap", String.valueOf(Gdx.app.getNativeHeap()));
+
     }
 
     @Override

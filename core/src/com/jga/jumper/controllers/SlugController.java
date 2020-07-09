@@ -18,7 +18,6 @@ public class SlugController implements EnemyController<Slug> {
     // == attributes ==
     private final Array<Slug> slugs = new Array<>();
     private final Pool<Slug> slugPool = Pools.get(Slug.class, 10);
-    private float slugSpawnTimer;
     private ControllerRegister controllerRegister;
     private MonsterController monsterController;
 
@@ -81,6 +80,9 @@ public class SlugController implements EnemyController<Slug> {
         enemy.move(delta);
         checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
         checkEnemyCollision(enemy, slugs);
+        if(monsterController.isMonsterNearBy(enemy.getAngleDegrees())) {
+            enemy.setCurrentSlugState(GameConfig.ENEMY_ATTACKING_STATE);
+        }
     }
 
     @Override
@@ -88,6 +90,9 @@ public class SlugController implements EnemyController<Slug> {
         enemy.move(delta);
         checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
         checkEnemyCollision(enemy, slugs);
+        if(!monsterController.isMonsterNearBy(enemy.getAngleDegrees())) {
+            enemy.setCurrentSlugState(GameConfig.ENEMY_WALKING_STATE);
+        }
     }
 
     @Override
@@ -149,15 +154,16 @@ public class SlugController implements EnemyController<Slug> {
     public void checkMonsterCollision(Slug slug, Monster monster) {
 
         // monster kills slug with jump attack
-        if (Intersector.overlaps(monster.getBounds(), slug.getSensor()) && monster.getState() == MonsterState.FALLING) {
+        if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getKillCollider()) && monster.getState() == MonsterState.FALLING) {
             slug.setCurrentSlugState(GameConfig.ENEMY_DYING_STATE);
+            monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
             monster.jump();
 
-        } else if (monster.getState() == MonsterState.DASHING && Intersector.overlaps(monster.getBounds(), slug.getBounds())) {
+        } else if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getKillCollider())) {
             slug.setCurrentSlugState(GameConfig.ENEMY_DYING_STATE);
 
             // slug kills monster
-        } else if (Intersector.overlaps(monster.getBounds(), slug.getBounds()) &&
+        } else if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getPolygonCollider()) &&
                 monster.getState() != MonsterState.DASHING) {
             soundListener.lose();
 
@@ -167,32 +173,32 @@ public class SlugController implements EnemyController<Slug> {
     }
 
     private void checkEnemyDistanceCollision(Monster monster, Slug slug) {
-        if(Intersector.overlaps(monster.getBounds(), slug.getBounds())) {
-            slug.setCurrentSlugState(GameConfig.ENEMY_ATTACKING_STATE);
-        }
+//        if(Intersector.overlaps(monster.getBounds(), slug.getBounds())) {
+//            slug.setCurrentSlugState(GameConfig.ENEMY_ATTACKING_STATE);
+//        }
     }
 
 
     public void checkEnemyCollision(EnemyBase enemyBase1, Array<Slug> enemyBases) {
 
-        for (Slug slug : enemyBases) {
-
-            if (Intersector.overlaps(enemyBase1.getBounds(), slug.getBounds())) {
-
-                // flip
-                if (enemyBase1.isClockWise()) {
-                    enemyBase1.setClockWise(false);
-                } else {
-                    enemyBase1.setClockWise(true);
-                }
-
-                if (slug.isClockWise()) {
-                    slug.setClockWise(false);
-                } else {
-                    slug.setClockWise(true);
-                }
-            }
-        }
+//        for (Slug slug : enemyBases) {
+//
+//            if (Intersector.overlaps(enemyBase1.getBounds(), slug.getBounds())) {
+//
+//                // flip
+//                if (enemyBase1.isClockWise()) {
+//                    enemyBase1.setClockWise(false);
+//                } else {
+//                    enemyBase1.setClockWise(true);
+//                }
+//
+//                if (slug.isClockWise()) {
+//                    slug.setClockWise(false);
+//                } else {
+//                    slug.setClockWise(true);
+//                }
+//            }
+//        }
     }
 }
 

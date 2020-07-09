@@ -16,5 +16,4 @@ public interface EnemyController<T extends EnemyBase> {
     boolean isEnemyNearby(float angle);
     void checkMonsterCollision(T enemy, Monster monster);
     void checkEnemyCollision(EnemyBase thisEnemy, Array<T> otherEnemies);
-
 }

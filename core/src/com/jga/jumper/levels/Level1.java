@@ -2,6 +2,7 @@ package com.jga.jumper.levels;
 
 import com.jga.jumper.controllers.BearController;
 import com.jga.jumper.controllers.ControllerRegister;
+import com.jga.jumper.controllers.MageController;
 import com.jga.jumper.controllers.SlugController;
 
 public class Level1 implements Level {
@@ -9,6 +10,7 @@ public class Level1 implements Level {
     private final ControllerRegister controllerRegister;
     private final SlugController slugController;
     private final BearController bearController;
+    private final MageController mageController;
 
     private float levelTimer;
 
@@ -25,6 +27,7 @@ public class Level1 implements Level {
         this.controllerRegister = controllerRegister;
         slugController = controllerRegister.getSlugController();
         bearController = controllerRegister.getBearController();
+        mageController = controllerRegister.getMageController();
         levelTimer = 0f;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
@@ -37,33 +40,32 @@ public class Level1 implements Level {
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
-            bearController.tryToAddBears(1);
-            System.out.println(bearController.getBears().size);
+            bearController.tryToAddBears(2);
             hasFirstWaveSpawned = true;
         }
 
         if (levelTimer >= 6 && !hasSecondWaveSpawned) {
-            slugController.tryToAddSlugs(2);
+            mageController.tryToAddMages(1);
             hasSecondWaveSpawned = true;
         }
 
         if (levelTimer >= 10 && !hasThirdWaveSpawned) {
-            slugController.tryToAddSlugs(1);
+            mageController.tryToAddMages(1);;
             hasThirdWaveSpawned = true;
         }
 
         if (levelTimer >= 12 && !hasFourthWaveSpawned) {
-            slugController.tryToAddSlugs(1);
+            mageController.tryToAddMages(1);;
             hasFourthWaveSpawned = true;
         }
 
         if (levelTimer >= 16 && !hasFifthWaveSpawned) {
-            slugController.tryToAddSlugs(3);
+            mageController.tryToAddMages(1);;
             hasFifthWaveSpawned = true;
         }
 
         if (levelTimer >= FINAL_WAVE_TIME && !hasSixthWaveSpawned) {
-            slugController.tryToAddSlugs(2);
+            mageController.tryToAddMages(1);;
             hasSixthWaveSpawned = true;
         }
 

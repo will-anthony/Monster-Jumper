@@ -27,7 +27,7 @@ public class MonsterGamePlayRenderer {
 
     private void createAnimations(TextureAtlas textureAtlas) {
         walkingAnimation = new Animation<TextureRegion>(0.08f,
-                textureAtlas.findRegions(RegionNames.WALK),
+                textureAtlas.findRegions(RegionNames.PLAYER_WALK),
                 Animation.PlayMode.LOOP_PINGPONG);
 
         idleAnimation = new Animation<TextureRegion>(0.12f,
@@ -58,7 +58,7 @@ public class MonsterGamePlayRenderer {
             Monster monster = monsters.get(i);
 
             if (monster.getState() == MonsterState.IDLE) {
-                monster.setHasIdleAnimationStarted(checkIfAnimationHasStarted(monster.hasIdleAnimationStarted(), monster));
+                monster.setHasIdleAnimationStarted(checkIfAnimationHasStarted(monster.isHasIdleAnimationStarted(), monster));
                 drawGamePlay(batch, monster, idleAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.DASHING) {
@@ -76,11 +76,11 @@ public class MonsterGamePlayRenderer {
                 drawGamePlay(batch, monster, fallingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.WALKING) {
-                monster.setHasWalkAnimationStarted(checkIfAnimationHasStarted(monster.hasWalkAnimationStarted(), monster));
+                monster.setHasWalkAnimationStarted(checkIfAnimationHasStarted(monster.isHasWalkAnimationStarted(), monster));
                 drawGamePlay(batch, monster, walkingAnimation, delta, 0);
 
             } else if (monster.getState() == MonsterState.DEAD) {
-                monster.setHasDeadAnimationStarted(checkIfAnimationHasStarted(monster.hasDeadAnimationStarted(), monster));
+                monster.setHasDeathAnimationStarted(checkIfAnimationHasStarted(monster.isHasDeathAnimationStarted(), monster));
                 drawGamePlay(batch, monster, deathAnimation, delta, 0);
             }
         }
@@ -89,7 +89,7 @@ public class MonsterGamePlayRenderer {
     protected void setAllAnimationStatesToFalse(Monster monster) {
         monster.setHasIdleAnimationStarted(false);
         monster.setHasWalkAnimationStarted(false);
-        monster.setHasDeadAnimationStarted(false);
+        monster.setHasDeathAnimationStarted(false);
         monster.setHasDashAnimationStarted(false);
         monster.setHasJumpAnimationStarted(false);
         monster.setHasFallAnimationStarted(false);

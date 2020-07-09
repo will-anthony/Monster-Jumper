@@ -5,8 +5,10 @@ import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.controllers.BearController;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.controllers.FloatingScoreController;
+import com.jga.jumper.controllers.MageController;
 import com.jga.jumper.controllers.MonsterController;
 import com.jga.jumper.controllers.SlugController;
+import com.jga.jumper.controllers.projectiles.FireBallController;
 import com.jga.jumper.levels.Level1;
 import com.jga.jumper.levels.Level2;
 import com.jga.jumper.state_machines.GameState;
@@ -25,6 +27,8 @@ public class MasterController {
     private MonsterController monsterController;
     private SlugController slugController;
     private BearController bearController;
+    private MageController mageController;
+    private FireBallController fireBallController;
     private Level1 level1;
     private Level2 level2;
 
@@ -35,6 +39,8 @@ public class MasterController {
         this.floatingScoreController = controllerRegister.getFloatingScoreController();
         this.slugController = controllerRegister.getSlugController();
         this.bearController = controllerRegister.getBearController();
+        this.mageController = controllerRegister.getMageController();
+        this.fireBallController = controllerRegister.getFireBallController();
         this.level1 = new Level1(controllerRegister);
         this.level2 = new Level2(controllerRegister);
         this.gameLevel = 1;
@@ -52,7 +58,9 @@ public class MasterController {
             floatingScoreController.update(delta);
             slugController.update(delta);
             bearController.update(delta);
+            mageController.update(delta);
 
+            fireBallController.update(delta);
 
             gameLevelLogic(delta);
         }
@@ -116,12 +124,17 @@ public class MasterController {
 
         level1.reset();
         level2.reset();
+
+        gameLevel = 1;
     }
 
     private void restartControllers() {
         monsterController.restart();
         floatingScoreController.restart();
         slugController.restart();
+        bearController.restart();
+        mageController.restart();
+        fireBallController.restart();
     }
 
     public float getStartWaitTimer() {

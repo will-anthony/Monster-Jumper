@@ -8,49 +8,46 @@ import com.jga.jumper.config.GameConfig;
 public abstract class EnemyBase extends EntityBase {
 
     // == attributes
-    protected boolean clockWise;
-    protected Rectangle sensor;
-    protected float radius;
+
+    protected boolean hasIdleAnimationStarted;
+    protected boolean hasWalkAnimationStarted;
+    protected boolean hasAttackAnimationStarted;
+    protected boolean hasDeadAnimationStarted;
 
     // == constructors ==
     public EnemyBase() {
-        sensor = new Rectangle(x,y,width,height);
-        radius = GameConfig.PLANET_HALF_SIZE;
+
     }
 
-    public void setStartingPosition(float value) {
-        angleDegrees = value % 360;
-        setAngleDegree();
+    public boolean hasIdleAnimationStarted() {
+        return hasIdleAnimationStarted;
     }
 
-    public void setAngleDegree() {
-
-        float originX = GameConfig.WORLD_CENTER_X;
-        float originY = GameConfig.WORLD_CENTER_Y;
-
-        float newX = originX + MathUtils.cosDeg(-angleDegrees) * radius;
-        float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
-
-        setPosition(newX, newY);
+    public void setHasIdleAnimationStarted(boolean hasIdleAnimationStarted) {
+        this.hasIdleAnimationStarted = hasIdleAnimationStarted;
     }
 
-    public boolean isClockWise() {
-        return clockWise;
+    public boolean hasWalkAnimationStarted() {
+        return hasWalkAnimationStarted;
     }
 
-    public void setClockWise(boolean clockWise) {
-        this.clockWise = clockWise;
+    public void setHasWalkAnimationStarted(boolean hasWalkAnimationStarted) {
+        this.hasWalkAnimationStarted = hasWalkAnimationStarted;
     }
 
-    protected void updateSensorBounds(float x, float y) {
-        sensor.setPosition(x,y);
+    public boolean hasAttackAnimationStarted() {
+        return hasAttackAnimationStarted;
     }
 
-    public float getRadius() {
-        return radius;
+    public void setHasAttackAnimationStarted(boolean hasAttackAnimationStarted) {
+        this.hasAttackAnimationStarted = hasAttackAnimationStarted;
     }
 
-    public void setRadius(float radius) {
-        this.radius = radius;
+    public boolean hasDeadAnimationStarted() {
+        return hasDeadAnimationStarted;
+    }
+
+    public void setHasDeadAnimationStarted(boolean hasDeadAnimationStarted) {
+        this.hasDeadAnimationStarted = hasDeadAnimationStarted;
     }
 }

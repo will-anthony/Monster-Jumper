@@ -1,6 +1,7 @@
 package com.jga.jumper.entity.entity_providers;
 
 import com.jga.jumper.controllers.ControllerRegister;
+import com.jga.jumper.entity.projectiles.FireBall;
 import com.jga.jumper.screen.game.MasterController;
 
 public class EntityProviderRegister {
@@ -12,6 +13,8 @@ public class EntityProviderRegister {
     private PlanetEntityProvider planetEntityProvider;
     private SlugEntityProvider slugEntityProvider;
     private BearEntityProvider bearEntityProvider;
+    private MageEntityProvider mageEntityProvider;
+    private FireBallEntityProvider fireBallEntityProvider;
     private MasterController masterController;
 
     public EntityProviderRegister(ControllerRegister controllerRegister) {
@@ -26,6 +29,8 @@ public class EntityProviderRegister {
         this.planetEntityProvider = new PlanetEntityProvider(controllerRegister.getPlanetController());
         this.slugEntityProvider = new SlugEntityProvider(controllerRegister.getSlugController());
         this.bearEntityProvider = new BearEntityProvider(controllerRegister.getBearController());
+        this.mageEntityProvider = new MageEntityProvider(controllerRegister.getMageController());
+        this.fireBallEntityProvider = new FireBallEntityProvider(controllerRegister.getFireBallController());
     }
 
     public MonsterEntityProvider getMonsterEntityProvider() {
@@ -46,5 +51,13 @@ public class EntityProviderRegister {
 
     public BearEntityProvider getBearEntityProvider() {
         return bearEntityProvider;
+    }
+
+    public MageEntityProvider getMageEntityProvider() {
+        return mageEntityProvider;
+    }
+
+    public FireBallEntityProvider getFireBallEntityProvider() {
+        return fireBallEntityProvider;
     }
 }

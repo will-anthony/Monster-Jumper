@@ -6,11 +6,15 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.jumper.Renderers.Background.BackgroundGamePlayRenderer;
+import com.jga.jumper.Renderers.EntityDebugKillColliderRenderer;
+import com.jga.jumper.Renderers.EntityDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterGamePlayRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
@@ -20,14 +24,21 @@ import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
 import com.jga.jumper.Renderers.bear.BearDebugRenderer;
 import com.jga.jumper.Renderers.bear.BearGamePlayRenderer;
+import com.jga.jumper.Renderers.fireball.FireBallDebugRenderer;
+import com.jga.jumper.Renderers.fireball.FireBallGamePlayRenderer;
+import com.jga.jumper.Renderers.mage.MageDebugRenderer;
+import com.jga.jumper.Renderers.mage.MageGamePlayRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
+import com.jga.jumper.box2d.Box2DTest;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Background;
 import com.jga.jumper.entity.Bear;
+import com.jga.jumper.entity.Mage;
 import com.jga.jumper.entity.Monster;
 import com.jga.jumper.entity.Planet;
 import com.jga.jumper.entity.Slug;
 import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
+import com.jga.jumper.entity.projectiles.FireBall;
 import com.jga.util.ViewportUtils;
 import com.jga.util.debug.DebugCameraController;
 
@@ -41,6 +52,8 @@ public class GameRenderer implements Disposable {
     private Array<Monster> monsters;
     private Array<Slug> slugs;
     private Array<Bear> bears;
+    private Array<Mage> mages;
+    private Array<FireBall> fireBalls;
 
     private final SpriteBatch batch;
     private final AssetManager assetManager;
@@ -54,10 +67,10 @@ public class GameRenderer implements Disposable {
     private ParticleEffect spaceDust;
     private TextureAtlas gamePlayAtlas;
 
-    private boolean debugIsOn;
+    private boolean debugIsOn = true;
 
     // == constructors ==
-    public GameRenderer(SpriteBatch batch, AssetManager assetManager, EntityProviderRegister entityProviderRegister) {
+    public GameRenderer(SpriteBatch batch, AssetManager assetManager, EntityProviderRegister entityProviderRegister, Box2DTest box2DTest) {
         this.batch = batch;
         this.assetManager = assetManager;
         this.entityProviderRegister = entityProviderRegister;
@@ -80,6 +93,8 @@ public class GameRenderer implements Disposable {
         monsters = entityProviderRegister.getMonsterEntityProvider().getEntities();
         slugs = entityProviderRegister.getSlugEntityProvider().getEntities();
         bears = entityProviderRegister.getBearEntityProvider().getEntities();
+        mages = entityProviderRegister.getMageEntityProvider().getEntities();
+        fireBalls = entityProviderRegister.getFireBallEntityProvider().getEntities();
         backgrounds = entityProviderRegister.getBackgroundEntityProvider().getEntities();
 
         spaceDust = assetManager.get(AssetDescriptors.DUST);
@@ -124,21 +139,31 @@ public class GameRenderer implements Disposable {
 
     private void drawDebug() {
 
-        // draw planet
-        PlanetDebugRenderer planetDebugRenderer = rendererRegister.getPlanetDebugRenderer();
-        planetDebugRenderer.renderPlanetDebug(renderer, planets);
+        EntityDebugRenderer entityDebugRenderer = new EntityDebugRenderer();
 
-        // draw player
-        MonsterDebugRenderer monsterDebugRenderer = rendererRegister.getMonsterDebugRenderer();
-        monsterDebugRenderer.renderMonsterDebug(renderer, monsters);
+        // slug polygon debug
+        for (Slug slug : slugs) {
+            entityDebugRenderer.renderEntityDebugLines(renderer, slug.getPolygonCollider().getTransformedVertices());
+            entityDebugRenderer.renderEntityDebugLines(renderer, slug.getKillCollider().getTransformedVertices());
+        }
 
-        // slug
-        SlugDebugRenderer slugDebugRenderer = rendererRegister.getSlugDebugRenderer();
-        slugDebugRenderer.renderObstacleDebug(renderer, slugs);
+        // mage polygon debug
+        for (Mage mage : mages) {
+            entityDebugRenderer.renderEntityDebugLines(renderer, mage.getPolygonCollider().getTransformedVertices());
+            entityDebugRenderer.renderEntityDebugLines(renderer, mage.getKillCollider().getTransformedVertices());
+        }
 
-        // bear
-        BearDebugRenderer bearDebugRenderer = rendererRegister.getBearDebugRenderer();
-        bearDebugRenderer.renderObstacleDebug(renderer, bears);
+        // bear polygon debug
+        for (Bear bear : bears) {
+            entityDebugRenderer.renderEntityDebugLines(renderer, bear.getPolygonCollider().getTransformedVertices());
+            entityDebugRenderer.renderEntityDebugLines(renderer, bear.getKillCollider().getTransformedVertices());
+        }
+
+        // fireball polygon debug
+        for (FireBall fireBall : fireBalls) {
+            entityDebugRenderer.renderEntityDebugLines(renderer, fireBall.getPolygonCollider().getTransformedVertices());
+        }
+
     }
 
 
@@ -168,6 +193,14 @@ public class GameRenderer implements Disposable {
         BearGamePlayRenderer bearGamePlayRenderer = rendererRegister.getBearGamePlayRenderer();
         bearGamePlayRenderer.renderGamePlay(batch, bears, delta);
 
+        // mage
+        MageGamePlayRenderer mageGamePlayRenderer = rendererRegister.getMageGamePlayRenderer();
+        mageGamePlayRenderer.renderGamePlay(batch, mages, delta);
+
+        // fire ball
+        FireBallGamePlayRenderer fireBallGamePlayRenderer = rendererRegister.getFireBallGamePlayRenderer();
+        fireBallGamePlayRenderer.renderGamePlay(batch, fireBalls, delta);
+
         // planet
         PlanetGamePlayRenderer planetGamePlayRenderer = rendererRegister.getPlanetGamePlayRenderer();
         planetGamePlayRenderer.renderPlanetGamePlay(batch, planets);
@@ -175,6 +208,7 @@ public class GameRenderer implements Disposable {
         // monster
         MonsterGamePlayRenderer monsterGamePlayRenderer = rendererRegister.getMonsterGamePlayRenderer();
         monsterGamePlayRenderer.renderGamePlay(batch, monsters, delta);
+
     }
 }
 

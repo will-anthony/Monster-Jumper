@@ -2,6 +2,7 @@ package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
@@ -16,6 +17,10 @@ public class Obstacle extends EntityBase implements Pool.Poolable {
     private float sensorAngleDegree;
     private float scale;
 
+    @Override
+    protected Polygon definePolygonCollider() {
+        return null;
+    }
 
     // == constructors ==
     public Obstacle() {

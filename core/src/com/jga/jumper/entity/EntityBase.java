@@ -1,8 +1,8 @@
 package com.jga.jumper.entity;
 
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Polygon;
+import com.jga.jumper.config.GameConfig;
 
 public abstract class EntityBase {
 
@@ -16,20 +16,36 @@ public abstract class EntityBase {
     protected float angleDegrees;
     private float animationTime;
 
-    protected boolean hasIdleAnimationStarted;
-    protected boolean hasWalkAnimationStarted;
-    protected boolean hasAttackAnimationStarted;
-    protected boolean hasDeadAnimationStarted;
+    protected boolean clockWise;
+    protected float radius;
 
-    protected Rectangle bounds;
+    protected Polygon polygonCollider;
 
     // == constructors ==
     public EntityBase() {
-        bounds = new Rectangle(x,y,width,height);
+
+        polygonCollider = definePolygonCollider();
         animationTime = 0;
+        radius = GameConfig.PLANET_HALF_SIZE;
     }
 
     // == public methods ==
+    public void setStartingPosition(float value) {
+        angleDegrees = value % 360;
+        setAngleDegree();
+    }
+
+    public void setAngleDegree() {
+
+        float originX = GameConfig.WORLD_CENTER_X;
+        float originY = GameConfig.WORLD_CENTER_Y;
+
+        float newX = originX + MathUtils.cosDeg(-angleDegrees) * radius;
+        float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
+
+        setPosition(newX, newY);
+    }
+
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
@@ -39,6 +55,8 @@ public abstract class EntityBase {
         this.width = width;
         this.height = height;
     }
+
+    protected abstract Polygon definePolygonCollider();
 
     public float getX() {
         return x;
@@ -56,8 +74,8 @@ public abstract class EntityBase {
         return height;
     }
 
-    public Rectangle getBounds() {
-        return bounds;
+    public Polygon getPolygonCollider() {
+        return polygonCollider;
     }
 
     public float getAngleDegrees() {
@@ -76,41 +94,21 @@ public abstract class EntityBase {
         this.animationTime = animationTime;
     }
 
-    public boolean hasIdleAnimationStarted() {
-        return hasIdleAnimationStarted;
+    public boolean isClockWise() {
+        return clockWise;
     }
 
-    public void setHasIdleAnimationStarted(boolean hasIdleAnimationStarted) {
-        this.hasIdleAnimationStarted = hasIdleAnimationStarted;
+    public void setClockWise(boolean clockWise) {
+        this.clockWise = clockWise;
     }
 
-    public boolean hasWalkAnimationStarted() {
-        return hasWalkAnimationStarted;
+    public float getRadius() {
+        return radius;
     }
 
-    public void setHasWalkAnimationStarted(boolean hasWalkAnimationStarted) {
-        this.hasWalkAnimationStarted = hasWalkAnimationStarted;
-    }
-
-    public boolean hasAttackAnimationStarted() {
-        return hasAttackAnimationStarted;
-    }
-
-    public void setHasAttackAnimationStarted(boolean hasAttackAnimationStarted) {
-        this.hasAttackAnimationStarted = hasAttackAnimationStarted;
-    }
-
-    public boolean hasDeadAnimationStarted() {
-        return hasDeadAnimationStarted;
-    }
-
-    public void setHasDeadAnimationStarted(boolean hasDeadAnimationStarted) {
-        this.hasDeadAnimationStarted = hasDeadAnimationStarted;
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 
     public abstract void update(float delta);
-
-    public void updateBounds(float x, float y) {
-        bounds.setPosition(x, y);
-    }
 }

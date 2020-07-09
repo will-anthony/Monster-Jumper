@@ -1,11 +1,12 @@
 package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
 
-public class Slug extends EnemyBase implements Pool.Poolable {
+public class Slug extends EnemyBase implements Pool.Poolable, KillCollider {
 
     private float angleDegreeSpeed;
     private float sensorAngleDegree;
@@ -13,15 +14,51 @@ public class Slug extends EnemyBase implements Pool.Poolable {
     private float deathTimer;
     private Rectangle distanceSensor;
 
+    private Polygon killCollider;
+
+
     public Slug() {
         angleDegreeSpeed = GameConfig.SLUG_START_ANGULAR_SPEED;
         setSize(GameConfig.SLUG_SIZE, GameConfig.SLUG_SIZE);
         super.setRadius(GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE);
         deathTimer = 0.5f;
+        this.killCollider = defineKillCollider();
 
-        int directionMultiplier = clockWise ? 1:-1;
-        distanceSensor = new Rectangle(x,y,directionMultiplier * 3f,3f);
+        int directionMultiplier = clockWise ? 1 : -1;
+        distanceSensor = new Rectangle(x, y, directionMultiplier * 3f, 3f);
     }
+
+    @Override
+    protected Polygon definePolygonCollider() {
+
+        float[] polygonCoordinates = {0, 0,
+                0, GameConfig.SLUG_SIZE / 2,
+                GameConfig.SLUG_SIZE - 0.4f, GameConfig.SLUG_SIZE /2,
+                GameConfig.SLUG_SIZE - 0.4f, 0};
+
+        Polygon polygon = new Polygon(polygonCoordinates);
+        polygon.setOrigin(0, 0);
+
+        return polygon;
+
+    }
+
+
+    @Override
+    public Polygon defineKillCollider() {
+
+        float[] polygonCoordinates = {0,GameConfig.SLUG_SIZE / 2,
+                0, GameConfig.SLUG_SIZE / 2 + 0.1f,
+                GameConfig.SLUG_SIZE - 0.4f, GameConfig.SLUG_SIZE / 2 + 0.1f,
+                GameConfig.SLUG_SIZE - 0.4f, GameConfig.SLUG_SIZE / 2 };
+
+        Polygon polygon = new Polygon(polygonCoordinates);
+        polygon.setOrigin(0, 0);
+
+        return polygon;
+
+    }
+
 
     public void update(float delta) {
     }
@@ -42,6 +79,7 @@ public class Slug extends EnemyBase implements Pool.Poolable {
         setAngleDegree();
     }
 
+
     @Override
     public void setAngleDegree() {
 
@@ -52,15 +90,16 @@ public class Slug extends EnemyBase implements Pool.Poolable {
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
-        float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius - 0.2f);
-        float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius - 0.2f);
+        float newX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius);
+        float newY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius);
 
-        float boundsX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius - 0.4f);
-        float boundsY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius - 0.4f);
+        polygonCollider.setPosition(newX, newY);
+        polygonCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - 10f);
 
-        updateBounds(boundsX, boundsY);
-        updateSensorBounds(sensorX, sensorY);
-        updateDistanceSensor(super.x,super.y);
+        killCollider.setPosition(newX, newY);
+        killCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - 10f);
+
+        updateDistanceSensor(super.x, super.y);
     }
 
     @Override
@@ -70,10 +109,6 @@ public class Slug extends EnemyBase implements Pool.Poolable {
         radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE;
         deathTimer = 0.5f;
         super.clockWise = MathUtils.randomBoolean();
-    }
-
-    public Rectangle getSensor() {
-        return sensor;
     }
 
     public Rectangle getDistanceSensor() {
@@ -106,6 +141,11 @@ public class Slug extends EnemyBase implements Pool.Poolable {
     }
 
     private void updateDistanceSensor(float x, float y) {
-        distanceSensor.setPosition(x,y);
+        distanceSensor.setPosition(x, y);
+    }
+
+    @Override
+    public Polygon getKillCollider() {
+        return killCollider;
     }
 }

@@ -83,9 +83,6 @@ public class BearController implements EnemyController<Bear> {
         bear.move(delta);
         checkMonsterCollision(bear, monsterController.getMonsters().get(0));
         checkEnemyCollision(bear, bears);
-        if(monsterController.isMonsterNearBy(bear.getAngleDegrees())) {
-            bear.setCurrentBearState(GameConfig.ENEMY_ATTACKING_STATE);
-        }
     }
 
     @Override
@@ -93,9 +90,6 @@ public class BearController implements EnemyController<Bear> {
         bear.charge(delta);
         checkMonsterCollision(bear, monsterController.getMonsters().get(0));
         checkEnemyCollision(bear, bears);
-        if(!monsterController.isMonsterNearBy(bear.getAngleDegrees())) {
-            bear.setCurrentBearState(GameConfig.ENEMY_WALKING_STATE);
-        }
     }
 
     @Override
@@ -119,8 +113,11 @@ public class BearController implements EnemyController<Bear> {
 
     public void bearDamagedLogic(Bear bear, float delta) {
         bear.setBearDamagedTimer(bear.getBearDamagedTimer() - delta);
-        if(bear.getBearDamagedTimer() <= 0) {
+        if (bear.getBearDamagedTimer() <= 0 && bear.getHitPoints() != 0) {
             bear.setCurrentBearState(GameConfig.ENEMY_WALKING_STATE);
+        }
+        if (bear.getBearDamagedTimer() <= 0 && bear.getHitPoints() == 0) {
+            bear.setCurrentBearState(GameConfig.ENEMY_ATTACKING_STATE);
         }
     }
 
@@ -164,25 +161,26 @@ public class BearController implements EnemyController<Bear> {
     public void checkMonsterCollision(Bear bear, Monster monster) {
 
         // monster kills bear with jump attack
-        if (Intersector.overlaps(monster.getBounds(), bear.getSensor()) && monster.getState() == MonsterState.FALLING) {
-            if(bear.getHitPoints() > 0) {
-                bear.setHitPoints(bear.getHitPoints() -1);
+        if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), bear.getKillCollider()) && monster.getState() == MonsterState.FALLING) {
+            if (bear.getHitPoints() > 0) {
+                bear.setHitPoints(bear.getHitPoints() - 1);
                 bear.setCurrentBearState(GameConfig.ENEMY_DAMAGED_STATE);
             } else {
                 bear.setCurrentBearState(GameConfig.ENEMY_DYING_STATE);
             }
+            monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
             monster.jump();
 
-        } else if (monster.getState() == MonsterState.DASHING && Intersector.overlaps(monster.getBounds(), bear.getBounds())) {
-            if(bear.getHitPoints() > 0) {
-                bear.setHitPoints(bear.getHitPoints() -1);
+        } else if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), bear.getPolygonCollider())) {
+            if (bear.getHitPoints() > 0) {
+                bear.setHitPoints(bear.getHitPoints() - 1);
                 bear.setCurrentBearState(GameConfig.ENEMY_DAMAGED_STATE);
             } else {
                 bear.setCurrentBearState(GameConfig.ENEMY_DYING_STATE);
             }
 
             // bear kills monster
-        } else if (Intersector.overlaps(monster.getBounds(), bear.getBounds()) &&
+        } else if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), bear.getPolygonCollider()) &&
                 monster.getState() != MonsterState.DASHING) {
             soundListener.lose();
 
@@ -191,32 +189,25 @@ public class BearController implements EnemyController<Bear> {
         }
     }
 
-    private void checkEnemyDistanceCollision(Monster monster, Bear bear) {
-        if(Intersector.overlaps(monster.getBounds(), bear.getBounds())) {
-            bear.setCurrentBearState(GameConfig.ENEMY_ATTACKING_STATE);
-        }
-    }
-
-
     public void checkEnemyCollision(EnemyBase enemyBase1, Array<Bear> enemyBases) {
-
-        for (Bear bear : enemyBases) {
-
-            if (Intersector.overlaps(enemyBase1.getBounds(), bear.getBounds())) {
-
-                // flip
-                if (enemyBase1.isClockWise()) {
-                    enemyBase1.setClockWise(false);
-                } else {
-                    enemyBase1.setClockWise(true);
-                }
-
-                if (bear.isClockWise()) {
-                    bear.setClockWise(false);
-                } else {
-                    bear.setClockWise(true);
-                }
-            }
-        }
+//
+//        for (Bear bear : enemyBases) {
+//
+//            if (Intersector.overlaps(enemyBase1.getBounds(), bear.getBounds())) {
+//
+//                // flip
+//                if (enemyBase1.isClockWise()) {
+//                    enemyBase1.setClockWise(false);
+//                } else {
+//                    enemyBase1.setClockWise(true);
+//                }
+//
+//                if (bear.isClockWise()) {
+//                    bear.setClockWise(false);
+//                } else {
+//                    bear.setClockWise(true);
+//                }
+//            }
+//        }
     }
 }

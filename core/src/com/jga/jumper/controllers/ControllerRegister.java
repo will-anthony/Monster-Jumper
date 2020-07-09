@@ -1,6 +1,9 @@
 package com.jga.jumper.controllers;
 
+import com.badlogic.gdx.physics.box2d.World;
+import com.jga.jumper.box2d.Box2DTest;
 import com.jga.jumper.common.SoundListener;
+import com.jga.jumper.controllers.projectiles.FireBallController;
 import com.jga.jumper.screen.game.MasterController;
 import com.jga.jumper.utils.BackgroundController;
 
@@ -14,13 +17,17 @@ public class ControllerRegister {
     private PlanetController planetController;
     private SlugController slugController;
     private BearController bearController;
+    private MageController mageController;
+    private FireBallController fireBallController;
     private OverlayCallbackController overlayCallbackController;
 
     private MasterController masterController;
-// make this class instantiate all controllers. Instantiate this in screen. Pass all info to master
 
-    public ControllerRegister(SoundListener soundListener) {
-        this.monsterController = new MonsterController(soundListener);
+    private World world;
+    // make this class instantiate all controllers. Instantiate this in screen. Pass all info to master
+
+    public ControllerRegister(SoundListener soundListener, World world) {
+        this.monsterController = new MonsterController(soundListener, world);
         this.coinController = new CoinController(this, soundListener);
         this.obstacleController = new ObstacleController(this, soundListener);
         this.floatingScoreController = new FloatingScoreController();
@@ -28,6 +35,8 @@ public class ControllerRegister {
         this.planetController = new PlanetController();
         this.slugController = new SlugController(this, soundListener);
         this.bearController = new BearController(this, soundListener);
+        this.mageController = new MageController(this, soundListener);
+        this.fireBallController = new FireBallController(this, soundListener);
         this.overlayCallbackController = new OverlayCallbackController(this);
         this.masterController = new MasterController(this);
     }
@@ -70,5 +79,13 @@ public class ControllerRegister {
 
     public BearController getBearController() {
         return bearController;
+    }
+
+    public MageController getMageController() {
+        return mageController;
+    }
+
+    public FireBallController getFireBallController() {
+        return fireBallController;
     }
 }

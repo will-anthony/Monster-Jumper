@@ -16,13 +16,13 @@ public class ObstacleDebugRenderer {
 
     // == public methods ==
     public void renderObstacleDebug(ShapeRenderer renderer, Array<Obstacle> obstacles) {
-        for (Obstacle obstacle : obstacles) {
-            Rectangle obstacleBounds = obstacle.getBounds();
-            renderer.rect(obstacleBounds.x, obstacleBounds.y, obstacleBounds.width, obstacleBounds.height);
-
-            renderer.setColor(Color.WHITE);
-            Rectangle sensorBounds = obstacle.getSensor();
-            renderer.rect(sensorBounds.x, sensorBounds.y, sensorBounds.width, sensorBounds.height);
-        }
+//        for (Obstacle obstacle : obstacles) {
+//            Rectangle obstacleBounds = obstacle.getBounds();
+//            renderer.rect(obstacleBounds.x, obstacleBounds.y, obstacleBounds.width, obstacleBounds.height);
+//
+//            renderer.setColor(Color.WHITE);
+//            Rectangle sensorBounds = obstacle.getSensor();
+//            renderer.rect(sensorBounds.x, sensorBounds.y, sensorBounds.width, sensorBounds.height);
+//        }
     }
 }

@@ -1,27 +1,66 @@
 package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
 
-public class Bear extends EnemyBase {
+public class Bear extends EnemyBase implements Pool.Poolable, KillCollider {
 
     private float angleDegreeSpeed;
-    private float sensorAngleDegree;
     private float boundsAngleDegree;
     private int currentBearState;
     private float deathTimer;
     private int hitPoints;
     private float bearDamagedTimer;
     private boolean hasDamageAnimationStarted;
+    private Polygon killCollider;
 
     public Bear() {
         angleDegreeSpeed = GameConfig.BEAR_START_ANGULAR_SPEED;
-        super.setSize(GameConfig.BEAR_SIZE, GameConfig.BEAR_SIZE);
-        super.setRadius(GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE);
-        deathTimer = 0.5f;
+        setSize(GameConfig.BEAR_SIZE, GameConfig.BEAR_SIZE);
+        killCollider = defineKillCollider();
+        setRadius(GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE);
+        deathTimer = 1f;
         hitPoints = 1;
         bearDamagedTimer = 1f;
+    }
+
+    @Override
+    protected Polygon definePolygonCollider() {
+
+        float[] polygonCoordinates = {0, 0,
+                0, GameConfig.BEAR_SIZE - 0.55f,
+                GameConfig.BEAR_SIZE - 0.65f, GameConfig.BEAR_SIZE - 0.55f,
+                GameConfig.BEAR_SIZE - 0.65f, 0};
+
+        Polygon polygon = new Polygon(polygonCoordinates);
+        polygon.setOrigin(0, 0);
+
+        polygon.setRotation(GameConfig.START_ANGLE - angleDegrees);
+
+        return polygon;
+    }
+
+    @Override
+    public Polygon defineKillCollider() {
+
+        float[] polygonCoordinates = {0, GameConfig.BEAR_SIZE - 0.55f,
+                0, GameConfig.BEAR_SIZE - 0.45f,
+                GameConfig.BEAR_SIZE - 0.65f, GameConfig.BEAR_SIZE - 0.45f,
+                GameConfig.BEAR_SIZE - 0.65f, GameConfig.BEAR_SIZE - 0.55f};
+
+        Polygon polygon = new Polygon(polygonCoordinates);
+        polygon.setOrigin(0, 0);
+
+        polygon.setRotation(GameConfig.START_ANGLE - angleDegrees);
+
+        return polygon;
+    }
+
+    @Override
+    public Polygon getKillCollider() {
+        return this.killCollider;
     }
 
     public void update(float delta) {
@@ -29,16 +68,20 @@ public class Bear extends EnemyBase {
     }
 
     public void move(float delta) {
+
         int directionalMultiplier = 1;
 
         if (clockWise) {
             directionalMultiplier = -1;
         }
         angleDegrees -= (angleDegreeSpeed * directionalMultiplier) * delta;
-        if(angleDegreeSpeed > GameConfig.BEAR_START_ANGULAR_SPEED) {
+
+        if (angleDegreeSpeed > GameConfig.BEAR_START_ANGULAR_SPEED) {
             angleDegreeSpeed -= 0.5f;
         }
+
         setAngleDegree();
+
     }
 
     public void charge(float delta) {
@@ -48,7 +91,7 @@ public class Bear extends EnemyBase {
             directionalMultiplier = -1;
         }
         angleDegrees -= (angleDegreeSpeed * directionalMultiplier) * delta;
-        if(angleDegreeSpeed < GameConfig.BEAR_CHARGE_SPEED) {
+        if (angleDegreeSpeed < GameConfig.BEAR_CHARGE_SPEED) {
             angleDegreeSpeed += 0.5f;
         }
         setAngleDegree();
@@ -64,35 +107,32 @@ public class Bear extends EnemyBase {
     public void setAngleDegree() {
 
         boundsAngleDegree = angleDegrees + 7f;
-        sensorAngleDegree = angleDegrees + 7f;
 
         super.setAngleDegree();
 
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
-        float boundsX = originX + MathUtils.cosDeg(-boundsAngleDegree) * (radius);
-        float boundsY = originY + MathUtils.sinDeg(-boundsAngleDegree) * (radius);
+        float newX = originX + MathUtils.cosDeg(-boundsAngleDegree) * (radius);
+        float newY = originY + MathUtils.sinDeg(-boundsAngleDegree) * (radius);
 
-        float sensorX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius + 0.2f);
-        float sensorY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius + 0.2f);
+        polygonCollider.setPosition(newX, newY);
+        polygonCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - 10f);
 
-        updateBounds(boundsX, boundsY);
-        updateSensorBounds(sensorX, sensorY);
+        killCollider.setPosition(newX, newY);
+        killCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - 10f);
+
     }
 
     public void reset() {
         setPosition(0, 0);
         currentBearState = GameConfig.ENEMY_SPAWNING_STATE;
+        angleDegreeSpeed = GameConfig.BEAR_START_ANGULAR_SPEED;
         radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE;
         deathTimer = 0.5f;
         super.clockWise = MathUtils.randomBoolean();
         hitPoints = 1;
         bearDamagedTimer = 1f;
-    }
-
-    public Rectangle getSensor() {
-        return sensor;
     }
 
     public float getRadius() {

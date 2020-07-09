@@ -74,11 +74,11 @@ public class BearGamePlayRenderer extends EntityGamePlayRenderer<Bear> {
                 createFlippedTextures(damagedKeyframes),
                 Animation.PlayMode.LOOP);
 
-        super.deathAnimation = new Animation<TextureRegion>(0.09f,
+        super.deathAnimation = new Animation<TextureRegion>(0.11f,
                 deathKeyframes,
                 Animation.PlayMode.NORMAL);
 
-        super.deathAnimationReversed = new Animation<TextureRegion>(0.09f,
+        super.deathAnimationReversed = new Animation<TextureRegion>(0.11f,
                 createFlippedTextures(deathKeyframes),
                 Animation.PlayMode.NORMAL);
     }

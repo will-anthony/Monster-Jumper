@@ -14,6 +14,10 @@ import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
 import com.jga.jumper.Renderers.Slug.SlugGamePlayRenderer;
 import com.jga.jumper.Renderers.bear.BearDebugRenderer;
 import com.jga.jumper.Renderers.bear.BearGamePlayRenderer;
+import com.jga.jumper.Renderers.fireball.FireBallDebugRenderer;
+import com.jga.jumper.Renderers.fireball.FireBallGamePlayRenderer;
+import com.jga.jumper.Renderers.mage.MageDebugRenderer;
+import com.jga.jumper.Renderers.mage.MageGamePlayRenderer;
 
 public class RendererRegister {
 
@@ -24,12 +28,16 @@ public class RendererRegister {
 
     private SlugGamePlayRenderer slugGamePlayRenderer;
     private BearGamePlayRenderer bearGamePlayRenderer;
+    private MageGamePlayRenderer mageGamePlayRenderer;
+    private FireBallGamePlayRenderer fireBallGamePlayRenderer;
 
     private MonsterDebugRenderer monsterDebugRenderer;
     private PlanetDebugRenderer planetDebugRenderer;
 
     private SlugDebugRenderer slugDebugRenderer;
     private BearDebugRenderer bearDebugRenderer;
+    private MageDebugRenderer mageDebugRenderer;
+    private FireBallDebugRenderer fireBallDebugRenderer;
 
     private TextureAtlas gamePlayAtlas;
 
@@ -44,11 +52,15 @@ public class RendererRegister {
         planetGamePlayRenderer = new PlanetGamePlayRenderer(gamePlayAtlas);
         slugGamePlayRenderer = new SlugGamePlayRenderer(gamePlayAtlas);
         bearGamePlayRenderer = new BearGamePlayRenderer(gamePlayAtlas);
+        mageGamePlayRenderer = new MageGamePlayRenderer(gamePlayAtlas);
+        fireBallGamePlayRenderer = new FireBallGamePlayRenderer(gamePlayAtlas);
 
         monsterDebugRenderer = new MonsterDebugRenderer();
         planetDebugRenderer = new PlanetDebugRenderer();
         slugDebugRenderer = new SlugDebugRenderer();
         bearDebugRenderer = new BearDebugRenderer();
+        mageDebugRenderer = new MageDebugRenderer();
+        fireBallDebugRenderer = new FireBallDebugRenderer();
     }
 
     public BackgroundGamePlayRenderer getBackgroundGamePlayRenderer() {
@@ -85,5 +97,21 @@ public class RendererRegister {
 
     public BearDebugRenderer getBearDebugRenderer() {
         return bearDebugRenderer;
+    }
+
+    public MageGamePlayRenderer getMageGamePlayRenderer() {
+        return mageGamePlayRenderer;
+    }
+
+    public MageDebugRenderer getMageDebugRenderer() {
+        return mageDebugRenderer;
+    }
+
+    public FireBallGamePlayRenderer getFireBallGamePlayRenderer() {
+        return fireBallGamePlayRenderer;
+    }
+
+    public FireBallDebugRenderer getFireBallDebugRenderer() {
+        return fireBallDebugRenderer;
     }
 }

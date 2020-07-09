@@ -14,9 +14,9 @@ public class CoinDebugRenderer {
 
     // == public methods ==
     public void renderDebug(ShapeRenderer renderer, Array<Coin> coins) {
-        for (Coin coin : coins) {
-            Rectangle coinBounds = coin.getBounds();
-            renderer.rect(coinBounds.x, coinBounds.y, coinBounds.width, coinBounds.height);
-        }
+//        for (Coin coin : coins) {
+//            Rectangle coinBounds = coin.getBounds();
+//            renderer.rect(coinBounds.x, coinBounds.y, coinBounds.width, coinBounds.height);
+//        }
     }
 }

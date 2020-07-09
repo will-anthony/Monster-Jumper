@@ -91,16 +91,16 @@ public class CoinController {
     }
 
     public void checkCollision(EntityBase otherEntity) {
-        // player <-> coins
-        for (int i = 0; i < coins.size; i++) {
-            Coin coin = coins.get(i);
-            if (Intersector.overlaps(otherEntity.getBounds(), coin.getBounds())) {
-                GameManager.INSTANCE.addScore(GameConfig.COIN_SCORE);
-                controllerRegister.getFloatingScoreController().addFloatingScore(GameConfig.COIN_SCORE);
-                coinPool.free(coin);
-                coins.removeIndex(i);
-                soundListener.hitCoin();
-            }
-        }
+//        // player <-> coins
+//        for (int i = 0; i < coins.size; i++) {
+//            Coin coin = coins.get(i);
+//            if (Intersector.overlaps(otherEntity.getBounds(), coin.getBounds())) {
+//                GameManager.INSTANCE.addScore(GameConfig.COIN_SCORE);
+//                controllerRegister.getFloatingScoreController().addFloatingScore(GameConfig.COIN_SCORE);
+//                coinPool.free(coin);
+//                coins.removeIndex(i);
+//                soundListener.hitCoin();
+//            }
+//        }
     }
 }

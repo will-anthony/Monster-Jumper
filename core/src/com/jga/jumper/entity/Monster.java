@@ -1,51 +1,85 @@
 package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
+import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
 import com.jga.jumper.state_machines.MonsterState;
 
 public class Monster extends EntityBase implements Pool.Poolable {
 
     // == attributes ==
-    private float angleDegreeSpeed = GameConfig.MONSTER_START_ANGULAR_SPEED;
-    private float jumpingSpeed;
-    private float dashSpeed = 0;
-    private float dashDuration = 0.16f;
-    private float dashTimer = 0;
-    private float dashInterval = 0;
-    private float acceleration = GameConfig.MONSTER_START_ACCELERATION;
+//    private Body monsterBody;
+//    private World world;
+
+    private float monsterVelocityX = GameConfig.MONSTER_START_ANGULAR_SPEED;
+    private float monsterVelocityY;
+    private float gravity = GameConfig.MONSTER_GRAVITY;
+    private float acceleration = 0;
+//    private float acceleration = GameConfig.MONSTER_START_ACCELERATION;
+//
     private MonsterState state = MonsterState.IDLE;
 
+    private float dashSpeed = 0;
+    private float dashDuration = GameConfig.MONSTER_DASH_DURATION;
+    private float dashTimer = 0;
+    private float dashInterval = 0;
 
+    private boolean hasIdleAnimationStarted;
+    private boolean hasDeathAnimationStarted;
+    private boolean hasWalkAnimationStarted;
     private boolean hasDashAnimationStarted;
     private boolean hasJumpAnimationStarted;
     private boolean hasFallAnimationStarted;
 
     // == constructors ==
-    public Monster() {
+    public Monster(World world) {
+//        this.world = world;
         angleDegrees = GameConfig.START_ANGLE;
         setSize(GameConfig.MONSTER_SIZE, GameConfig.MONSTER_SIZE);
+//        monsterBody = createMonsterBody();
+    }
+
+    @Override
+    protected Polygon definePolygonCollider() {
+
+        float[] polygonCoordinates = {0.5f, 0,
+                0.5f, GameConfig.MONSTER_SIZE - 0.5f,
+                GameConfig.MONSTER_SIZE - 0.5f, GameConfig.MONSTER_SIZE - 0.5f,
+                GameConfig.MONSTER_SIZE - 0.5f, 0};
+
+        Polygon polygon = new Polygon(polygonCoordinates);
+        polygon.setOrigin(0, 0);
+
+        return polygon;
+
     }
 
     public void update(float delta) {
         switch (state) {
             case JUMPING:
-                jumpingSpeed += acceleration * delta;
-                if (jumpingSpeed >= GameConfig.MONSTER_MAX_SPEED) {
+                monsterVelocityY += acceleration * delta;
+                acceleration -= gravity;
+                if(acceleration <= 0) {
                     fall();
                 }
                 break;
+
             case FALLING:
-                jumpingSpeed -= acceleration * delta;
-                if (jumpingSpeed <= 0) {
-                    jumpingSpeed = 0;
+                monsterVelocityY += acceleration * delta;
+                acceleration -= gravity;
+                if (monsterVelocityY <= 0) {
+                    monsterVelocityY = 0;
                     walk();
                 }
                 break;
+
             case IDLE:
-                angleDegreeSpeed = 0;
+                monsterVelocityX = 0;
                 break;
+
             case DASHING:
                 dashSpeed = 150;
                 dashTimer += delta;
@@ -53,9 +87,11 @@ public class Monster extends EntityBase implements Pool.Poolable {
                     dashSpeed = 0;
                     dashInterval = 2f;
                     dashTimer = 0;
+                    acceleration = 0;
                     fall();
                 }
                 break;
+
         }
 
         reduceDashInterval(delta);
@@ -71,11 +107,12 @@ public class Monster extends EntityBase implements Pool.Poolable {
     }
 
     private void move(float delta) {
-        angleDegrees += (angleDegreeSpeed + dashSpeed) * delta;
+
+        angleDegrees += (monsterVelocityX + dashSpeed) * delta;
         angleDegrees = angleDegrees % 360;
         dashSpeed = 0;
 
-        float radius = GameConfig.PLANET_HALF_SIZE + jumpingSpeed;
+        float radius = GameConfig.PLANET_HALF_SIZE + monsterVelocityY;
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
@@ -83,12 +120,13 @@ public class Monster extends EntityBase implements Pool.Poolable {
         float newY = originY + MathUtils.sinDeg(-angleDegrees) * radius;
 
         setPosition(newX, newY);
-        updateBounds(newX, newY);
+        polygonCollider.setPosition(newX, newY);
+        polygonCollider.setRotation(GameConfig.START_ANGLE - angleDegrees);
     }
 
     public void reset() {
         angleDegrees = GameConfig.START_ANGLE;
-        jumpingSpeed = 0;
+        monsterVelocityY = 0;
         idle();
     }
 
@@ -118,9 +156,11 @@ public class Monster extends EntityBase implements Pool.Poolable {
 
     public void dead() {
         state = MonsterState.DEAD;
+
     }
 
     public void walk() {
+        acceleration = GameConfig.MONSTER_START_ACCELERATION;
         state = MonsterState.WALKING;
     }
 
@@ -146,5 +186,37 @@ public class Monster extends EntityBase implements Pool.Poolable {
 
     public void setHasFallAnimationStarted(boolean hasFallAnimationStarted) {
         this.hasFallAnimationStarted = hasFallAnimationStarted;
+    }
+
+    public boolean isHasIdleAnimationStarted() {
+        return hasIdleAnimationStarted;
+    }
+
+    public void setHasIdleAnimationStarted(boolean hasIdleAnimationStarted) {
+        this.hasIdleAnimationStarted = hasIdleAnimationStarted;
+    }
+
+    public boolean isHasDeathAnimationStarted() {
+        return hasDeathAnimationStarted;
+    }
+
+    public void setHasDeathAnimationStarted(boolean hasDeathAnimationStarted) {
+        this.hasDeathAnimationStarted = hasDeathAnimationStarted;
+    }
+
+    public boolean isHasWalkAnimationStarted() {
+        return hasWalkAnimationStarted;
+    }
+
+    public void setHasWalkAnimationStarted(boolean hasWalkAnimationStarted) {
+        this.hasWalkAnimationStarted = hasWalkAnimationStarted;
+    }
+
+    public void setAcceleration(float acceleration) {
+        this.acceleration = acceleration;
+    }
+
+    public float getAcceleration() {
+        return acceleration;
     }
 }
