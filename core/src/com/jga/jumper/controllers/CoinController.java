@@ -9,16 +9,14 @@ import com.jga.jumper.common.GameManager;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.Coin;
-import com.jga.jumper.entity.EntityBase;
-import com.jga.jumper.object_distance_checker.DistanceChecker;
-import com.jga.jumper.screen.game.MasterController;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EntityBase;
+import com.jga.jumper.entity.Monster;
 
-public class CoinController {
+public class CoinController<T extends EntityBase> {
 
     // == attributes ==
     private final Array<Coin> coins = new Array<>();
     private final Pool<Coin> coinPool = Pools.get(Coin.class, 10);
-    private float coinTimer;
 
     private ControllerRegister controllerRegister;
     private SoundListener soundListener;
@@ -31,12 +29,14 @@ public class CoinController {
 
     // == public methods ==
     public void update(float delta) {
-
         for (Coin coin : coins) {
             coin.update(delta);
+            checkCollision(controllerRegister.getMonsterController().getMonsters().get(0), coin);
+            if(coin.getCoinState() == GameConfig.COIN_DEAD) {
+                coinPool.free(coin);
+                coins.removeValue(coin, true);
+            }
         }
-
-        spawnCoins(delta);
     }
 
     public Array<Coin> getCoins() {
@@ -48,59 +48,30 @@ public class CoinController {
         coins.clear();
     }
 
-    public void spawnCoins(float delta) {
-        coinTimer += delta;
+    public void spawnCoins(T coinParent, int amount) {
 
-        if (coinTimer < GameConfig.COIN_SPAWN_TIME) {
-            return;
-        }
-
-        coinTimer = 0;
-
-        if (coins.size == 0) {
-            addCoins();
+        for (int i = 0; i < amount; i++) {
+            Coin coin = coinPool.obtain();
+            coin.setStartingPosition(coinParent);
+            coin.setAccelerationY(MathUtils.random(1f, 10f));
+            coin.setAccelerationX(MathUtils.random(-30f, 30f));
+            coins.add(coin);
         }
     }
 
-    private void addCoins() {
 
-        int count = MathUtils.random(GameConfig.MAX_COINS);
+    public void checkCollision(Monster monster, Coin coin) {
+//        // player <-> coins
+        if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), coin.getPolygonCollider())) {
+            if(!coin.isCoinCollected()) {
+                coin.setCoinCollected(true);
+                GameManager.INSTANCE.addScore(GameConfig.COIN_SCORE);
+                controllerRegister.getFloatingScoreController().addFloatingScore(GameConfig.COIN_SCORE);
+                coin.setCoinState(GameConfig.COIN_COLLECTED);
 
-        for (int i = 0; i < count; i++) {
-            float randomAngle = MathUtils.random(360);
-
-            boolean canSpawn = !isCoinNearby(randomAngle)
-                    && !controllerRegister.getMonsterController().isMonsterNearBy(randomAngle);
-
-            if (canSpawn) {
-                Coin coin = coinPool.obtain();
-
-                if (controllerRegister.getObstacleController().isObstacleNearby(randomAngle)) {
-                    coin.setOffset(true);
-                }
-
-                coin.setAngleDegree(randomAngle);
-                coins.add(coin);
+                soundListener.hitCoin();
             }
         }
     }
-
-    public boolean isCoinNearby(float angle) {
-        DistanceChecker<Coin> coinDistanceChecker = new DistanceChecker<>(this.coins);
-        return coinDistanceChecker.isEntityNearBy(angle);
-    }
-
-    public void checkCollision(EntityBase otherEntity) {
-//        // player <-> coins
-//        for (int i = 0; i < coins.size; i++) {
-//            Coin coin = coins.get(i);
-//            if (Intersector.overlaps(otherEntity.getBounds(), coin.getBounds())) {
-//                GameManager.INSTANCE.addScore(GameConfig.COIN_SCORE);
-//                controllerRegister.getFloatingScoreController().addFloatingScore(GameConfig.COIN_SCORE);
-//                coinPool.free(coin);
-//                coins.removeIndex(i);
-//                soundListener.hitCoin();
-//            }
-//        }
-    }
 }
+

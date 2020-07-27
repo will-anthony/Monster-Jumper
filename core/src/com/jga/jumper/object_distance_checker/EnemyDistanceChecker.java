@@ -1,6 +1,6 @@
 //package com.jga.jumper.object_distance_checker;
 //
-//import com.jga.jumper.entity.EnemyBase;
+//import com.jga.jumper.entity.abstract_classes_and_interfaces.EnemyBase;
 //import com.jga.jumper.entity.Monster;
 //
 //public class EnemyDistanceChecker<T extends EnemyBase>  {

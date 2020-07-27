@@ -8,8 +8,8 @@ import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.controllers.MonsterController;
-import com.jga.jumper.entity.Mage;
 import com.jga.jumper.entity.Monster;
+import com.jga.jumper.entity.Red;
 import com.jga.jumper.entity.projectiles.FireBall;
 import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.state_machines.MonsterState;
@@ -40,14 +40,14 @@ public class FireBallController {
                 case 0:
                     // spawning
                     projectileSpawnLogic(fireBall, delta);
-                    if(fireBall.getMageParent().getCurrentMageState() == GameConfig.ENEMY_DYING_STATE) {
+                    if(fireBall.getRedParent().getCurrentRedState() == GameConfig.ENEMY_DYING_STATE) {
                         fireBall.setCurrentFireBallState(GameConfig.PROJECTILE_DYING_STATE);
                     }
                     break;
                 case 1:
                     // moving
                     projectileMoveLogic(fireBall, delta);
-                    if(fireBall.getMageParent().getCurrentMageState() == GameConfig.ENEMY_DYING_STATE) {
+                    if(fireBall.getRedParent().getCurrentRedState() == GameConfig.ENEMY_DYING_STATE) {
                         fireBall.setCurrentFireBallState(GameConfig.PROJECTILE_DYING_STATE);
                     }
                     break;
@@ -105,25 +105,20 @@ public class FireBallController {
         fireBalls.removeValue(fireBall, true);
     }
 
-//    public boolean isEnemyNearby(float angle) {
-//        DistanceChecker<Slug> slugDistanceChecker = new DistanceChecker<>(slugs);
-//        return slugDistanceChecker.isEntityNearBy(angle);
-//    }
-
-    public void spawnProjectile(Mage mage) {
+    public void spawnProjectile(Red enemy) {
 
         // set fire ball direction
-        boolean isClockWise = mage.isClockWise();
+        boolean isClockWise = enemy.isClockWise();
         float fireBallSpawnOffset;
 
         fireBallSpawnOffset = (isClockWise) ? 20 : -3;
 
-        float spawnAngle = mage.getAngleDegrees() + (fireBallSpawnOffset);
+        float spawnAngle = enemy.getAngleDegrees() + (fireBallSpawnOffset);
 
         FireBall fireBall = fireBallPool.obtain();
         fireBall.setStartingPosition(spawnAngle);
         fireBall.setClockWise(isClockWise);
-        fireBall.setMageParent(mage);
+        fireBall.setRedParent(enemy);
         fireBalls.add(fireBall);
     }
 
@@ -148,10 +143,4 @@ public class FireBallController {
             controllerRegister.getMasterController().setGameState(GameState.GAME_OVER);
         }
     }
-
-//    private void checkEnemyDistanceCollision(Monster monster, Slug slug) {
-//        if (Intersector.overlaps(monster.getBounds(), slug.getBounds())) {
-//            slug.setCurrentSlugState(GameConfig.ENEMY_ATTACKING_STATE);
-//        }
-//    }
 }

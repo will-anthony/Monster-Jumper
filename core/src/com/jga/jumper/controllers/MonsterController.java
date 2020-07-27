@@ -20,6 +20,8 @@ public class MonsterController {
     private final Array<Monster> monsters;
     private final MonsterPool monsterPool;
 
+    private ControllerRegister controllerRegister;
+
     private float monsterStartX;
     private float monsterStartY;
 
@@ -29,12 +31,11 @@ public class MonsterController {
 
     private SoundListener soundListener;
 
-    private int jumPhase;
-
     // == constructors ==
-    public MonsterController(SoundListener soundListener, World world) {
+    public MonsterController(SoundListener soundListener, World world, ControllerRegister controllerRegister) {
         this.soundListener = soundListener;
         this.world = world;
+        this.controllerRegister = controllerRegister;
         this.monsters = new Array<>();
         this.monsterPool = new MonsterPool(1, 4, world);
         init();
@@ -58,7 +59,6 @@ public class MonsterController {
         }
     }
 
-
     private void checkInput(float delta){
 
         // input which allows minimum jump height when key is first pressed
@@ -67,10 +67,13 @@ public class MonsterController {
             soundListener.jump();
             isJumping = true;
             monster.setAcceleration(GameConfig.MONSTER_START_ACCELERATION);
+            controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                    monster, 0, 0,
+                    GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE);
             monster.jump();
         }
 
-        // input which checks for how long the key is held and increases jump height up to a max
+        // input which checks how long the key is held and increases jump height up to a max
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && isJumping && jumpTimeCounter < maxJumpTime ) {
             float currentMonsterAcceleration = monster.getAcceleration();
             monster.setAcceleration(currentMonsterAcceleration + 0.2f);

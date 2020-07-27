@@ -1,7 +1,6 @@
 package com.jga.jumper.entity.projectiles;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.jga.jumper.entity.EntityBase;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EntityBase;
 
 public abstract class ProjectileBase extends EntityBase {
 

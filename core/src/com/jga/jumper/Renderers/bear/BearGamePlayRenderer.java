@@ -15,6 +15,10 @@ public class BearGamePlayRenderer extends EntityGamePlayRenderer<Bear> {
     private Animation<TextureRegion> damageAnimationReversed;
     private Array<TextureAtlas.AtlasRegion> damagedKeyframes;
 
+    private Animation<TextureRegion> summonBeginAnimation;
+    private Animation<TextureRegion> summonBeginAnimationReversed;
+    private Array<TextureAtlas.AtlasRegion> summonBeginKeyframes;
+
     public BearGamePlayRenderer(TextureAtlas textureAtlas) {
         super(textureAtlas);
     }
@@ -35,6 +39,7 @@ public class BearGamePlayRenderer extends EntityGamePlayRenderer<Bear> {
         walkingKeyframes = textureAtlas.findRegions(RegionNames.BEAR_WALK);
         idleKeyframes = textureAtlas.findRegions(RegionNames.BEAR_IDLE);
         damagedKeyframes = textureAtlas.findRegions(RegionNames.BEAR_DAMAGE);
+        summonBeginKeyframes = textureAtlas.findRegions(RegionNames.BEAR_SUMMON_BEGIN);
 //        attackKeyframes = textureAtlas.findRegions(RegionNames.BEAR_ATTACK);
         deathKeyframes = textureAtlas.findRegions(RegionNames.BEAR_DEATH);
     }
@@ -73,6 +78,14 @@ public class BearGamePlayRenderer extends EntityGamePlayRenderer<Bear> {
         damageAnimationReversed = new Animation<TextureRegion>(0.06f,
                 createFlippedTextures(damagedKeyframes),
                 Animation.PlayMode.LOOP);
+
+        summonBeginAnimation = new Animation<TextureRegion>(0.2f,
+                summonBeginKeyframes,
+                Animation.PlayMode.NORMAL);
+
+        summonBeginAnimationReversed = new Animation<TextureRegion>(0.1f,
+                createFlippedTextures(summonBeginKeyframes),
+                Animation.PlayMode.NORMAL);
 
         super.deathAnimation = new Animation<TextureRegion>(0.11f,
                 deathKeyframes,
@@ -116,38 +129,53 @@ public class BearGamePlayRenderer extends EntityGamePlayRenderer<Bear> {
                     // damaged
                     drawDamageAnimation(batch, bear, delta);
                     break;
+                case 7:
+                    // stomp attack
+                    drawSummonBeginAnimation(batch, bear, delta);
+                    break;
             }
         }
     }
 
     private void drawSpawningAnimation(SpriteBatch batch, Bear bear, float delta) {
         bear.setHasIdleAnimationStarted(checkIfAnimationHasStarted(bear.hasIdleAnimationStarted(), bear));
-        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.idleAnimationReversed : super.idleAnimation, delta, 12);
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.idleAnimationReversed : super.idleAnimation, delta, 20);
     }
 
     private void drawIdleAnimation(SpriteBatch batch, Bear bear, float delta) {
         bear.setHasIdleAnimationStarted(checkIfAnimationHasStarted(bear.hasIdleAnimationStarted(), bear));
-        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.idleAnimationReversed : super.idleAnimation, delta, 12);
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.idleAnimationReversed : super.idleAnimation, delta, 20);
     }
 
     private void drawWalkingAnimation(SpriteBatch batch, Bear bear, float delta) {
         bear.setHasWalkAnimationStarted(checkIfAnimationHasStarted(bear.hasWalkAnimationStarted(), bear));
-        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.walkingAnimationReversed : super.walkingAnimation, delta, 12);
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.walkingAnimationReversed : super.walkingAnimation, delta, 20);
     }
 
     private void drawAttackingAnimation(SpriteBatch batch, Bear bear, float delta) {
         bear.setHasAttackAnimationStarted(checkIfAnimationHasStarted(bear.hasAttackAnimationStarted(), bear));
-        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.walkingAnimationReversed : super.walkingAnimation, delta, 12);
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.walkingAnimationReversed : super.walkingAnimation, delta, 20);
+    }
+
+    private void drawSummonBeginAnimation(SpriteBatch batch, Bear bear, float delta) {
+        bear.setHasSummonBeginAnimationStarted(checkIfAnimationHasStarted(bear.hasSummonBeginAnimationStarted(), bear));
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? summonBeginAnimationReversed : summonBeginAnimation, delta, 20);
     }
 
     private void drawDeathAnimation(SpriteBatch batch, Bear bear, float delta) {
         bear.setHasDeadAnimationStarted(checkIfAnimationHasStarted(bear.hasDeadAnimationStarted(), bear));
-        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.deathAnimationReversed : super.deathAnimation, delta, 12);
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? super.deathAnimationReversed : super.deathAnimation, delta, 20);
     }
 
     private void drawDamageAnimation(SpriteBatch batch, Bear bear, float delta) {
-        bear.setHasDamageAnimationStarted(checkIfAnimationHasStarted(bear.isHasDamageAnimationStarted(), bear));
-        super.drawGamePlay(batch, bear, bear.isClockWise() ? damageAnimationReversed : damageAnimation, delta, 12);
+        bear.setHasDamageAnimationStarted(checkIfAnimationHasStarted(bear.hasDamageAnimationStarted(), bear));
+        super.drawGamePlay(batch, bear, bear.isClockWise() ? damageAnimationReversed : damageAnimation, delta, 20);
     }
 
+    @Override
+    protected void setAllAnimationStatesToFalse(Bear entity) {
+        super.setAllAnimationStatesToFalse(entity);
+        entity.setHasSummonBeginAnimationStarted(false);
+        entity.setHasDamageAnimationStarted(false);
+    }
 }

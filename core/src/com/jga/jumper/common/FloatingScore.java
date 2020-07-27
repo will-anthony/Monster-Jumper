@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
+import com.jga.jumper.entity.Monster;
 
 public class FloatingScore implements Pool.Poolable {
 

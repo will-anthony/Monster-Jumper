@@ -3,14 +3,20 @@ package com.jga.jumper.levels;
 import com.jga.jumper.controllers.BearController;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.controllers.MageController;
+import com.jga.jumper.controllers.RedController;
+import com.jga.jumper.controllers.SkullController;
+import com.jga.jumper.controllers.SlugBossController;
 import com.jga.jumper.controllers.SlugController;
 
 public class Level1 implements Level {
 
     private final ControllerRegister controllerRegister;
     private final SlugController slugController;
+    private final SlugBossController slugBossController;
     private final BearController bearController;
+    private final SkullController skullController;
     private final MageController mageController;
+    private final RedController redController;
 
     private float levelTimer;
 
@@ -28,6 +34,10 @@ public class Level1 implements Level {
         slugController = controllerRegister.getSlugController();
         bearController = controllerRegister.getBearController();
         mageController = controllerRegister.getMageController();
+        skullController = controllerRegister.getSkullController();
+        slugBossController = controllerRegister.getSlugBossController();
+        redController = controllerRegister.getRedController();
+
         levelTimer = 0f;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
@@ -40,32 +50,35 @@ public class Level1 implements Level {
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
-            bearController.tryToAddBears(2);
+            mageController.tryToAddMages(1);
+            slugController.tryToAddSlugs(2);
+            skullController.tryToAddSkulls(1);
             hasFirstWaveSpawned = true;
         }
 
         if (levelTimer >= 6 && !hasSecondWaveSpawned) {
-            mageController.tryToAddMages(1);
+//            slugController.tryToAddSlugs(2);
+
             hasSecondWaveSpawned = true;
         }
 
         if (levelTimer >= 10 && !hasThirdWaveSpawned) {
-            mageController.tryToAddMages(1);;
+//            slugBossController.tryToAddSlugBosses(1);
             hasThirdWaveSpawned = true;
         }
 
         if (levelTimer >= 12 && !hasFourthWaveSpawned) {
-            mageController.tryToAddMages(1);;
+//            mageController.tryToAddMages(1);;
             hasFourthWaveSpawned = true;
         }
 
         if (levelTimer >= 16 && !hasFifthWaveSpawned) {
-            mageController.tryToAddMages(1);;
+//            mageController.tryToAddMages(1);;
             hasFifthWaveSpawned = true;
         }
 
         if (levelTimer >= FINAL_WAVE_TIME && !hasSixthWaveSpawned) {
-            mageController.tryToAddMages(1);;
+//            mageController.tryToAddMages(1);;
             hasSixthWaveSpawned = true;
         }
 

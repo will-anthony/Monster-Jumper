@@ -7,16 +7,20 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EnemyBase;
 import com.jga.jumper.entity.Mage;
 import com.jga.jumper.entity.Monster;
+import com.jga.jumper.entity.Red;
+import com.jga.jumper.entity.Skull;
+import com.jga.jumper.entity.Slug;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EnemyBase;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.SmallEnemyBase;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
 import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.state_machines.MonsterState;
 
-import java.util.Random;
+import java.util.List;
 
-public class MageController implements EnemyController<Mage> {
+public class MageController<T extends SmallEnemyBase> implements EnemyController<Mage> {
 
     // == attributes ==
     private final Array<Mage> mages = new Array<>();
@@ -82,41 +86,40 @@ public class MageController implements EnemyController<Mage> {
     @Override
     public void enemyWalkLogic(Mage enemy, float delta) {
 
+        enemy.setCastingShield(false);
+
         float mageWalkTimer = enemy.getMageWalkTimer();
 
-        enemy.setMageAttackTimer(1f);
-        enemy.setHasMageThrownFireBall(false);
+        enemy.setMageAttackTimer(2f);
+        enemy.setCastingShield(false);
 
         enemy.move(delta);
 
         checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
         checkEnemyCollision(enemy, mages);
-
-        enemy.setMageWalkTimer(mageWalkTimer -= delta);
-
-        if (mageWalkTimer <= 0) {
-            enemy.setCurrentMageState(GameConfig.ENEMY_ATTACKING_STATE);
-        }
+        checkAwarenessCollision(enemy);
     }
 
     @Override
     public void enemyAttackLogic(Mage enemy, float delta) {
 
-        float mageAttackTimer = enemy.getMageAttackTimer();
+        SmallEnemyBase enemyBeingShielded = enemy.getEnemyBeingShielded();
+        enemy.setCastingShield(true);
 
-        enemy.setMageWalkTimer((float) enemy.generateRandomWalkStateTime());
+        float mageAttackTimer = enemy.getMageAttackTimer();
 
         checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
         checkEnemyCollision(enemy, mages);
 
         enemy.setMageAttackTimer(mageAttackTimer -= delta);
-        if (!enemy.isHasMageThrownFireBall()) {
-            enemy.setHasMageThrownFireBall(true);
-            controllerRegister.getFireBallController().spawnProjectile(enemy);
+
+        if (!enemy.isHasCastShield()) {
+            enemy.setHasCastShield(true);
+            controllerRegister.getShieldController().spawnShield(enemy, enemyBeingShielded);
+
         }
 
         if (mageAttackTimer <= 0) {
-            changeDirection(enemy);
             enemy.setCurrentMageState(2);
         }
     }
@@ -130,6 +133,7 @@ public class MageController implements EnemyController<Mage> {
         }
 
         if (deathTimer <= 0) {
+            controllerRegister.getCoinController().spawnCoins(enemy, 3);
             enemy.setCurrentMageState(GameConfig.ENEMY_DEAD_STATE);
         }
     }
@@ -199,33 +203,36 @@ public class MageController implements EnemyController<Mage> {
         }
     }
 
-    private void changeDirection(Mage mage) {
+    @Override
+    public void checkEnemyCollision(EnemyBase thisEnemy, Array<Mage> otherEnemies) {
 
-        if (mage.isClockWise()) {
-            mage.setClockWise(false);
-        } else {
-            mage.setClockWise(true);
+    }
+
+    public void checkAwarenessCollision(Mage mage) {
+
+        Array<Slug> slugs = controllerRegister.getSlugController().getSlugs();
+        Array<Skull> skulls = controllerRegister.getSkullController().getSkulls();
+        Array<Red> reds = controllerRegister.getRedController().getReds();
+
+        for (Slug slug : slugs) {
+            checkAwarenessColliderOverlaps(mage, slug);
+        }
+        for (Skull skull : skulls) {
+            checkAwarenessColliderOverlaps(mage, skull);
+        }
+        for (Red red : reds) {
+            checkAwarenessColliderOverlaps(mage, red);
         }
     }
 
+    private void checkAwarenessColliderOverlaps(Mage mage, SmallEnemyBase smallEnemyBase) {
 
-    public void checkEnemyCollision(EnemyBase enemyBase1, Array<Mage> enemyBases) {
-
-        for (Mage mage : enemyBases) {
-
-            if (Intersector.overlapConvexPolygons(enemyBase1.getPolygonCollider(), mage.getPolygonCollider())) {
-
-                // flip
-                if (enemyBase1.isClockWise()) {
-                    enemyBase1.setClockWise(false);
-                } else {
-                    enemyBase1.setClockWise(true);
-                }
-
-                if (mage.isClockWise()) {
-                    mage.setClockWise(false);
-                } else {
-                    mage.setClockWise(true);
+        if (Intersector.overlapConvexPolygons(mage.getAwarenessCollider(), smallEnemyBase.getPolygonCollider())
+                && !smallEnemyBase.isShielded() && mage.getCurrentMageState() == GameConfig.ENEMY_WALKING_STATE) {
+            if (!mage.isCastingShield()) {
+                if(smallEnemyBase.getCurrentState() == GameConfig.ENEMY_WALKING_STATE) {
+                    mage.setEnemyBeingShielded(smallEnemyBase);
+                    mage.setCurrentMageState(GameConfig.ENEMY_ATTACKING_STATE);
                 }
             }
         }

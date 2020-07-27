@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.jga.jumper.assets.RegionNames;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EnemyBase;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EnemyBase;
 
 public abstract class EntityGamePlayRenderer<T extends EnemyBase> {
     // == attributes ==

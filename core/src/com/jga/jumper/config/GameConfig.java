@@ -29,7 +29,7 @@ public class GameConfig {
     public static final float MONSTER_START_ANGULAR_SPEED = 40f;
     public static final float START_ANGLE = -90f;
     public static final float MONSTER_MAX_SPEED = 2f;
-    public static final float MONSTER_START_ACCELERATION = 7f;
+    public static final float MONSTER_START_ACCELERATION = 6.5f;
     public static final float MONSTER_BOUNCE_ACCELERATION = 6.3f;
     public static final float MONSTER_GRAVITY = 0.4f;
     public static final float MONSTER_DASH_DURATION = 0.16f;
@@ -50,13 +50,36 @@ public class GameConfig {
     public static final int PROJECTILE_DYING_STATE = 2;
     public static final int PROJECTILE_DEATH_STATE = 3;
 
+    // skull
+    public static final float SKULL_SIZE = 1.25f;
+    public static final float SKULL_START_ANGULAR_SPEED = 40f;
+
 
     // slug
     public static final float SLUG_SIZE = 1.25f;
     public static final float SLUG_START_ANGULAR_SPEED = 8f;
+    public static final float SPAWNED_SLUG_SPEED = 14f;
+
+    // slug boss
+    public static final float SLUG_BOSS_SIZE = 4f;
+    public static final float SLUG_BOSS_START_ANGULAR_SPEED = 2f;
+    public static final float SLUG_BOSS_ANIMATION_ROTATION_OFFSET = 32;
+    public static final float SLUG_BOSS_ANIMATION_ADDITIONAL_RADIUS = 0.5f;
+
+    public static final int SLUG_BOSS_SPAWNING_STATE = 0;
+    public static final int SLUG_BOSS_IDLE_STATE = 1;
+    public static final int SLUG_BOSS_WALKING_STATE = 2;
+    public static final int SLUG_BOSS_ATTACKING_HIGH_STATE = 3;
+    public static final int SLUG_BOSS_ATTACKING_LOW_STATE = 4;
+    public static final int SLUG_BOSS_SUMMON_STATE = 5;
+    public static final int SLUG_BOSS_DAMAGED_STATE = 6;
+    public static final int SLUG_BOSS_DYING_STATE = 7;
+    public static final int SLUG_BOSS_DEAD_STATE = 8;
+
 
     // bear
-    public static final float BEAR_SIZE = 2f;
+    public static final int BEAR_CHARGE_ATTACK_STATE = 7;
+    public static final float BEAR_SIZE = 2.8f;
     public static final float BEAR_START_ANGULAR_SPEED = 3f;
     public static final float BEAR_CHARGE_SPEED = 30f;
 
@@ -65,16 +88,40 @@ public class GameConfig {
     public static final float MAGE_START_ANGULAR_SPEED = 4f;
     public static final float MAGE_POLYGON_ROTATION_OFFSET = 16f;
 
+    // trap warning smoke
+    public static final int TRAP_WARNING_SMOKE_SPAWN_STATE = 0;
+    public static final int TRAP_WARNING_SMOKE_WITHDRAW_STATE = 1;
+    public static final int TRAP_WARNING_SMOKE_DEAD_STATE = 2;
+    public static final float TRAP_WARNING_SMOKE_SPAWN_TIME = 1f;
+
+    // shield
+    public static final int SHIELD_SPAWN_STATE = 0;
+    public static final int SHIELD_IDLE_STATE = 1;
+    public static final int SHIELD_WITHDRAW_STATE = 2;
+    public static final int SHIELD_DEAD_STATE = 3;
+
+    // red
+    public static final float RED_SIZE = 1.5f;
+    public static final float RED_START_ANGULAR_SPEED = 30f;
+    public static final float RED_POLYGON_ROTATION_OFFSET = 16f;
+
     // fire ball
     public static final float FIRE_BALL_SIZE = 0.5f;
     public static final float FIRE_BALL_START_ANGULAR_SPEED = 50f;
 
+    public static final int SPIKE_TRAP_SPAWNING_STATE = 0;
+    public static final int SPIKE_TRAP_IDLE_STATE = 1;
+    public static final int SPIKE_TRAP_WITHDRAW_STATE = 2;
+
     // coin
-    public static final float COIN_SIZE = 1f;
+    public static final float COIN_SIZE = 0.8f;
     public static final float COIN_HALF_SIZE = COIN_SIZE / 2f;
-    public static final float COIN_SPAWN_TIME = 1.25f;
-    public static final int MAX_COINS = 2;
-    public static final int COIN_SCORE = 10;
+    public static final int COIN_SCORE = 1;
+    public static final int COIN_RISING = 0;
+    public static final int COIN_FALLING = 1;
+    public static final int COIN_IDLE = 2;
+    public static final int COIN_COLLECTED = 3;
+    public static final int COIN_DEAD = 4;
 
     // obstacle
     public static final float OBSTACLE_SIZE = 1f; // world units

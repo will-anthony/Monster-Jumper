@@ -75,7 +75,7 @@ public class SlugGamePlayRenderer extends EntityGamePlayRenderer<Slug> {
         for (int i = 0; i < slugs.size; i++) {
             Slug slug = slugs.get(i);
 
-            switch (slug.getCurrentSlugState()) {
+            switch (slug.getCurrentState()) {
                 case 0:
                     // spawning
                     drawSpawningAnimation(batch, slug, delta);

@@ -2,13 +2,15 @@ package com.jga.jumper.entity;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.AwarenessCollider;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.KillCollider;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.SmallEnemyBase;
 
 import java.util.Random;
 
-public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
+public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider, AwarenessCollider {
 
     private float angleDegreeSpeed;
     private float boundsAngleDegree;
@@ -20,7 +22,7 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
 
     private float mageWalkTimer;
     private float mageAttackTimer;
-    private boolean hasMageThrownFireBall;
+    private boolean hasCastShield;
 
     private Random random;
 
@@ -28,6 +30,12 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
     private boolean hasDamageAnimationStarted;
 
     private Polygon killCollider;
+    private Polygon awarenessCollider;
+
+    private boolean castingShield;
+
+    private boolean shielded;
+    private SmallEnemyBase enemyBeingShielded;
 
     public Mage() {
         angleDegreeSpeed = GameConfig.MAGE_START_ANGULAR_SPEED;
@@ -37,20 +45,24 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
         hitPoints = 1;
         mageDamagedTimer = 1f;
         killCollider = defineKillCollider();
+        awarenessCollider = defineAwarenessCollider();
 
         random = new Random();
         mageWalkTimer = random.nextInt(3) + 1;
-        mageAttackTimer = 1f;
+        mageAttackTimer = 2f;
+
+        this.shielded = false;
+        this.castingShield = false;
     }
 
     @Override
-    protected Polygon definePolygonCollider() {
+    public Polygon definePolygonCollider() {
 
         Polygon polygon;
 
         float[] polygonCoordinates = {0, 0,
-                0, GameConfig.MAGE_SIZE - 0.6f,
-                GameConfig.MAGE_SIZE - 0.7f, GameConfig.MAGE_SIZE - 0.6f,
+                0, GameConfig.MAGE_SIZE - 0.7f,
+                GameConfig.MAGE_SIZE - 0.7f, GameConfig.MAGE_SIZE - 0.7f,
                 GameConfig.MAGE_SIZE - 0.7f, 0};
 
         polygon = new Polygon(polygonCoordinates);
@@ -64,10 +76,10 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
 
         Polygon polygon;
 
-        float[] polygonCoordinates = {0, GameConfig.MAGE_SIZE - 0.6f,
+        float[] polygonCoordinates = {0, GameConfig.MAGE_SIZE - 0.7f,
                 0, GameConfig.MAGE_SIZE - 0.50f,
                 GameConfig.MAGE_SIZE - 0.7f, GameConfig.MAGE_SIZE - 0.50f,
-                GameConfig.MAGE_SIZE - 0.7f, GameConfig.MAGE_SIZE - 0.6f};
+                GameConfig.MAGE_SIZE - 0.7f, GameConfig.MAGE_SIZE - 0.7f};
 
         polygon = new Polygon(polygonCoordinates);
         polygon.setOrigin(0, 0);
@@ -76,12 +88,47 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
     }
 
     @Override
-    public Polygon getKillCollider() {
-        return this.killCollider;
+    public Polygon defineAwarenessCollider() {
+        float[] polygonCoordinatesClockwise = {1.35f, -2,
+                1.35f, 3,
+                8.35f, 3,
+                8.35f, -2};
+
+        float[] polygonCoordinatesAntiClockwise = {0, -2,
+                0, 3,
+                -6, 3,
+                -6, -2};
+
+
+        Polygon polygon = new Polygon(clockWise ? polygonCoordinatesClockwise : polygonCoordinatesAntiClockwise);
+        polygon.setOrigin(0, 0);
+
+//        float rotationModifier = clockWise ? 40f : -40f;
+
+        polygon.setRotation(GameConfig.START_ANGLE -100);
+
+        return polygon;
+
     }
 
-    public void update(float delta) {
+    @Override
+    public boolean isShielded() {
+        return this.shielded;
+    }
 
+    @Override
+    public void setShielded(boolean shielded) {
+        this.shielded = shielded;
+    }
+
+    @Override
+    public Polygon getAwarenessCollider() {
+        return this.awarenessCollider;
+    }
+
+    @Override
+    public Polygon getKillCollider() {
+        return this.killCollider;
     }
 
     public void move(float delta) {
@@ -94,16 +141,16 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
 
         angleDegrees -= (angleDegreeSpeed * directionalMultiplier) * delta;
         setAngleDegree();
-
-    }
-
-    public double generateRandomWalkStateTime() {
-        return random.nextInt(4) + 2;
     }
 
     public void setStartingPosition(float value) {
         angleDegrees = value % 360;
         setAngleDegree();
+    }
+
+    @Override
+    public void assignShieldProperties() {
+
     }
 
     @Override
@@ -125,17 +172,25 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
         killCollider.setPosition(boundsX, boundsY);
         killCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - GameConfig.MAGE_POLYGON_ROTATION_OFFSET);
 
+        awarenessCollider.setPosition(boundsX, boundsY);
+
+
+        float rotationOffset = clockWise ? -60 : 40;
+        awarenessCollider.setRotation(GameConfig.START_ANGLE - angleDegrees + rotationOffset);
+
     }
 
     public void reset() {
-        setPosition(0, 0);
-        currentMageState = GameConfig.ENEMY_SPAWNING_STATE;
-        radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MAGE_SIZE;
-
-        deathTimer = 0.5f;
+        super.setPosition(0, 0);
+        super.radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MAGE_SIZE;
         super.clockWise = MathUtils.randomBoolean();
-        hitPoints = 1;
-        mageDamagedTimer = 1f;
+
+        this.currentMageState = GameConfig.ENEMY_SPAWNING_STATE;
+        this.deathTimer = 0.5f;
+        this.awarenessCollider = defineAwarenessCollider();
+        this.hitPoints = 1;
+        this.mageDamagedTimer = 1f;
+        this.shielded = false;
     }
 
     public float getRadius() {
@@ -203,11 +258,27 @@ public class Mage extends EnemyBase implements Pool.Poolable, KillCollider {
         this.mageAttackTimer = mageAttackTimer;
     }
 
-    public boolean isHasMageThrownFireBall() {
-        return hasMageThrownFireBall;
+    public boolean isHasCastShield() {
+        return hasCastShield;
     }
 
-    public void setHasMageThrownFireBall(boolean hasMageThrownFireBall) {
-        this.hasMageThrownFireBall = hasMageThrownFireBall;
+    public void setHasCastShield(boolean hasCastShield) {
+        this.hasCastShield = hasCastShield;
+    }
+
+    public SmallEnemyBase getEnemyBeingShielded() {
+        return enemyBeingShielded;
+    }
+
+    public void setEnemyBeingShielded(SmallEnemyBase enemyBeingShielded) {
+        this.enemyBeingShielded = enemyBeingShielded;
+    }
+
+    public boolean isCastingShield() {
+        return castingShield;
+    }
+
+    public void setCastingShield(boolean castingShield) {
+        this.castingShield = castingShield;
     }
 }

@@ -1,9 +1,8 @@
 package com.jga.jumper.controllers;
 
 import com.badlogic.gdx.utils.Array;
-import com.jga.jumper.entity.EnemyBase;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EnemyBase;
 import com.jga.jumper.entity.Monster;
-import com.jga.jumper.entity.Slug;
 
 public interface EnemyController<T extends EnemyBase> {
 

@@ -2,7 +2,7 @@ package com.jga.jumper.object_distance_checker;
 
 import com.badlogic.gdx.utils.Array;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EntityBase;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EntityBase;
 
 public class DistanceChecker<T extends EntityBase> {
 

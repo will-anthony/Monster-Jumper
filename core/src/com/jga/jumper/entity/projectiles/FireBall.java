@@ -4,8 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.KillCollider;
-import com.jga.jumper.entity.Mage;
+import com.jga.jumper.entity.Red;
 
 public class FireBall extends ProjectileBase implements Pool.Poolable {
 
@@ -15,7 +14,7 @@ public class FireBall extends ProjectileBase implements Pool.Poolable {
     private float deathTimer;
     private float lifeTimer;
 
-    private Mage mageParent;
+    private Red redParent;
 
     public FireBall() {
         angleDegreeSpeed = GameConfig.FIRE_BALL_START_ANGULAR_SPEED;
@@ -28,7 +27,7 @@ public class FireBall extends ProjectileBase implements Pool.Poolable {
     }
 
     @Override
-    protected Polygon definePolygonCollider() {
+    public Polygon definePolygonCollider() {
 
         float[] polygonCoordinates = {0, 0.1f,
                 0, GameConfig.FIRE_BALL_SIZE,
@@ -39,10 +38,6 @@ public class FireBall extends ProjectileBase implements Pool.Poolable {
         polygon.setOrigin(0, 0);
 
         return polygon;
-
-    }
-
-    public void update(float delta) {
 
     }
 
@@ -124,11 +119,11 @@ public class FireBall extends ProjectileBase implements Pool.Poolable {
         this.lifeTimer = lifeTimer;
     }
 
-    public Mage getMageParent() {
-        return mageParent;
+    public Red getRedParent() {
+        return redParent;
     }
 
-    public void setMageParent(Mage mageParent) {
-        this.mageParent = mageParent;
+    public void setRedParent(Red redParent) {
+        this.redParent = redParent;
     }
 }

@@ -3,7 +3,7 @@ package com.jga.jumper.Renderers;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.Array;
-import com.jga.jumper.entity.KillCollider;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.KillCollider;
 
 public class EntityDebugKillColliderRenderer<T extends KillCollider>  {
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.jga.jumper.common.FloatingScore;
 import com.jga.jumper.config.GameConfig;
+import com.jga.jumper.entity.Monster;
 
 public class FloatingScoreController {
 

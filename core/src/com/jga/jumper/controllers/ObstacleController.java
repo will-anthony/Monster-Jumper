@@ -1,17 +1,11 @@
 package com.jga.jumper.controllers;
 
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import com.jga.jumper.common.GameManager;
-import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EntityBase;
-import com.jga.jumper.entity.Monster;
-import com.jga.jumper.state_machines.MonsterState;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EntityBase;
 import com.jga.jumper.entity.Obstacle;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
 
@@ -60,24 +54,24 @@ public class ObstacleController {
 
     public void addObstacles() {
 
-        MonsterController monsterController = controllerRegister.getMonsterController();
-
-        int count = MathUtils.random(2, GameConfig.MAX_OBSTACLES);
-        Monster monster = monsterController.getMonsters().get(0);
-
-        for (int i = 0; i < count; i++) {
-            float randomAngle = monster.getAngleDegrees()
-                    - i * GameConfig.MIN_ANG_DIST - MathUtils.random(60, 80);
-
-            boolean canSpawn = !isObstacleNearby(randomAngle)
-                    && !controllerRegister.getCoinController().isCoinNearby((randomAngle))
-                    && !monsterController.isMonsterNearBy(randomAngle);
-            if (canSpawn) {
-                Obstacle obstacle = obstaclePool.obtain();
-                obstacle.setAngleDegree(randomAngle);
-                obstacles.add(obstacle);
-            }
-        }
+//        MonsterController monsterController = controllerRegister.getMonsterController();
+//
+//        int count = MathUtils.random(2, GameConfig.MAX_OBSTACLES);
+//        Monster monster = monsterController.getMonsters().get(0);
+//
+//        for (int i = 0; i < count; i++) {
+//            float randomAngle = monster.getAngleDegrees()
+//                    - i * GameConfig.MIN_ANG_DIST - MathUtils.random(60, 80);
+//
+//            boolean canSpawn = !isObstacleNearby(randomAngle)
+//                    && !controllerRegister.getCoinController().isCoinNearby((randomAngle))
+//                    && !monsterController.isMonsterNearBy(randomAngle);
+//            if (canSpawn) {
+//                Obstacle obstacle = obstaclePool.obtain();
+//                obstacle.setAngleDegree(randomAngle);
+//                obstacles.add(obstacle);
+//            }
+//        }
     }
 
 

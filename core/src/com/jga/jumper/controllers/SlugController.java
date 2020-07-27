@@ -7,9 +7,10 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.EnemyBase;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EnemyBase;
 import com.jga.jumper.entity.Monster;
 import com.jga.jumper.entity.Slug;
+import com.jga.jumper.entity.SlugBoss;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
 import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.state_machines.MonsterState;
@@ -35,7 +36,7 @@ public class SlugController implements EnemyController<Slug> {
 
         for (int i = 0; i < slugs.size; i++) {
             slug = slugs.get(i);
-            switch (slug.getCurrentSlugState()) {
+            switch (slug.getCurrentState()) {
                 case 0:
                     // spawning
                     enemySpawnLogic(slug);
@@ -71,27 +72,38 @@ public class SlugController implements EnemyController<Slug> {
         }
         if (enemy.getRadius() >= GameConfig.PLANET_HALF_SIZE) {
             enemy.setRadius(GameConfig.PLANET_HALF_SIZE);
-            enemy.setCurrentSlugState(GameConfig.ENEMY_WALKING_STATE);
+            enemy.setCurrentState(GameConfig.ENEMY_WALKING_STATE);
         }
     }
 
     @Override
     public void enemyWalkLogic(Slug enemy, float delta) {
         enemy.move(delta);
-        checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
-        checkEnemyCollision(enemy, slugs);
+
+        // check collision detection only if enemy is not currently shielded
+        if(!enemy.isShielded()) {
+            checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
+            checkEnemyCollision(enemy, slugs);
+        }
+
+
         if(monsterController.isMonsterNearBy(enemy.getAngleDegrees())) {
-            enemy.setCurrentSlugState(GameConfig.ENEMY_ATTACKING_STATE);
+            enemy.setCurrentState(GameConfig.ENEMY_ATTACKING_STATE);
         }
     }
 
     @Override
     public void enemyAttackLogic(Slug enemy, float delta) {
         enemy.move(delta);
-        checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
-        checkEnemyCollision(enemy, slugs);
+
+        // check collision detection only if enemy is not currently shielded
+        if(!enemy.isShielded()) {
+            checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
+            checkEnemyCollision(enemy, slugs);
+        }
+
         if(!monsterController.isMonsterNearBy(enemy.getAngleDegrees())) {
-            enemy.setCurrentSlugState(GameConfig.ENEMY_WALKING_STATE);
+            enemy.setCurrentState(GameConfig.ENEMY_WALKING_STATE);
         }
     }
 
@@ -104,7 +116,8 @@ public class SlugController implements EnemyController<Slug> {
         }
 
         if (deathTimer <= 0) {
-            enemy.setCurrentSlugState(GameConfig.ENEMY_DEAD_STATE);
+            controllerRegister.getCoinController().spawnCoins(enemy, 2);
+            enemy.setCurrentState(GameConfig.ENEMY_DEAD_STATE);
         }
     }
 
@@ -118,6 +131,17 @@ public class SlugController implements EnemyController<Slug> {
     public boolean isEnemyNearby(float angle) {
         DistanceChecker<Slug> slugDistanceChecker = new DistanceChecker<>(slugs);
         return slugDistanceChecker.isEntityNearBy(angle);
+    }
+
+    public void spawnSingleSlugAtLocation(SlugBoss slugBoss) {
+
+        Slug slug = slugPool.obtain();
+        slug.setStartingPosition(slugBoss.getAngleDegrees());
+        slug.setClockWise(false);
+        slug.setCurrentState(GameConfig.ENEMY_WALKING_STATE);
+        slug.setRadius(GameConfig.PLANET_HALF_SIZE);
+        slug.setAngleDegreesSpeed(GameConfig.SPAWNED_SLUG_SPEED);
+        slugs.add(slug);
     }
 
     public void tryToAddSlugs(int numberOfEnemies) {
@@ -155,12 +179,15 @@ public class SlugController implements EnemyController<Slug> {
 
         // monster kills slug with jump attack
         if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getKillCollider()) && monster.getState() == MonsterState.FALLING) {
-            slug.setCurrentSlugState(GameConfig.ENEMY_DYING_STATE);
+            slug.setCurrentState(GameConfig.ENEMY_DYING_STATE);
             monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
+            controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                    monster,0,0, GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE,
+                    GameConfig.PLANET_HALF_SIZE + GameConfig.SLUG_SIZE / 2);
             monster.jump();
 
         } else if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getKillCollider())) {
-            slug.setCurrentSlugState(GameConfig.ENEMY_DYING_STATE);
+            slug.setCurrentState(GameConfig.ENEMY_DYING_STATE);
 
             // slug kills monster
         } else if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getPolygonCollider()) &&

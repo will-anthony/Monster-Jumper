@@ -18,6 +18,7 @@ public class GameManager {
     private int displayScore;
     private int highScore;
     private int displayHighScore;
+    private int currentLevel;
 
     private Preferences prefs;
 

@@ -5,21 +5,16 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.EntityBase;
 import com.jga.jumper.state_machines.MonsterState;
 
 public class Monster extends EntityBase implements Pool.Poolable {
-
-    // == attributes ==
-//    private Body monsterBody;
-//    private World world;
 
     private float monsterVelocityX = GameConfig.MONSTER_START_ANGULAR_SPEED;
     private float monsterVelocityY;
     private float gravity = GameConfig.MONSTER_GRAVITY;
     private float acceleration = 0;
-//    private float acceleration = GameConfig.MONSTER_START_ACCELERATION;
-//
+
     private MonsterState state = MonsterState.IDLE;
 
     private float dashSpeed = 0;
@@ -43,7 +38,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
     }
 
     @Override
-    protected Polygon definePolygonCollider() {
+    public Polygon definePolygonCollider() {
 
         float[] polygonCoordinates = {0.5f, 0,
                 0.5f, GameConfig.MONSTER_SIZE - 0.5f,
@@ -148,6 +143,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
 
     public void jump() {
         state = MonsterState.JUMPING;
+
     }
 
     public void dash() {
