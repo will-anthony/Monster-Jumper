@@ -8,9 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.jga.jumper.Renderers.EntityGamePlayRenderer;
 import com.jga.jumper.assets.RegionNames;
 import com.jga.jumper.config.GameConfig;
-import com.jga.jumper.entity.Mage;
 import com.jga.jumper.entity.Red;
-import com.jga.jumper.entity.entity_providers.EntityProvider;
 
 public class RedGamePlayRenderer extends EntityGamePlayRenderer<Red> {
 
@@ -113,7 +111,7 @@ public class RedGamePlayRenderer extends EntityGamePlayRenderer<Red> {
         for (int i = 0; i < reds.size; i++) {
             Red red = reds.get(i);
 
-            switch (red.getCurrentRedState()) {
+            switch (red.getCurrentState()) {
                 case 0:
                     // spawning
                     drawSpawningAnimation(batch, red, delta);

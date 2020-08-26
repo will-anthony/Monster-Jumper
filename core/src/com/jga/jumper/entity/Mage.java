@@ -8,51 +8,39 @@ import com.jga.jumper.entity.abstract_classes_and_interfaces.AwarenessCollider;
 import com.jga.jumper.entity.abstract_classes_and_interfaces.KillCollider;
 import com.jga.jumper.entity.abstract_classes_and_interfaces.SmallEnemyBase;
 
-import java.util.Random;
-
 public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider, AwarenessCollider {
-
-    private float angleDegreeSpeed;
-    private float boundsAngleDegree;
 
     private int currentMageState;
 
-    private float deathTimer;
-    private int hitPoints;
-
-    private float mageWalkTimer;
     private float mageAttackTimer;
+    private float deathTimer;
+
     private boolean hasCastShield;
+    private boolean castingShield;
+    private boolean shielded;
+    private SmallEnemyBase enemyBeingShielded;
 
-    private Random random;
-
-    private float mageDamagedTimer;
     private boolean hasDamageAnimationStarted;
 
     private Polygon killCollider;
     private Polygon awarenessCollider;
 
-    private boolean castingShield;
-
-    private boolean shielded;
-    private SmallEnemyBase enemyBeingShielded;
-
     public Mage() {
-        angleDegreeSpeed = GameConfig.MAGE_START_ANGULAR_SPEED;
+
+        super.angleDegreesSpeed = GameConfig.MAGE_START_ANGULAR_SPEED;
         super.setSize(GameConfig.MAGE_SIZE, GameConfig.MAGE_SIZE);
         super.setRadius(GameConfig.PLANET_HALF_SIZE - GameConfig.MAGE_SIZE);
-        deathTimer = 0.5f;
-        hitPoints = 1;
-        mageDamagedTimer = 1f;
-        killCollider = defineKillCollider();
-        awarenessCollider = defineAwarenessCollider();
+        super.changedDirection = false;
+        super.moving = false;
 
-        random = new Random();
-        mageWalkTimer = random.nextInt(3) + 1;
-        mageAttackTimer = 2f;
-
+        this.deathTimer = 0.5f;
+        this.killCollider = defineKillCollider();
+        this.awarenessCollider = defineAwarenessCollider();
+        this.mageAttackTimer = GameConfig.MAGE_ATTACK_TIMER;
         this.shielded = false;
         this.castingShield = false;
+
+        assignShieldProperties();
     }
 
     @Override
@@ -99,36 +87,17 @@ public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider,
                 -6, 3,
                 -6, -2};
 
-
         Polygon polygon = new Polygon(clockWise ? polygonCoordinatesClockwise : polygonCoordinatesAntiClockwise);
         polygon.setOrigin(0, 0);
 
-//        float rotationModifier = clockWise ? 40f : -40f;
-
-        polygon.setRotation(GameConfig.START_ANGLE -100);
+        polygon.setRotation(GameConfig.START_ANGLE - 100);
 
         return polygon;
-
     }
 
     @Override
     public boolean isShielded() {
         return this.shielded;
-    }
-
-    @Override
-    public void setShielded(boolean shielded) {
-        this.shielded = shielded;
-    }
-
-    @Override
-    public Polygon getAwarenessCollider() {
-        return this.awarenessCollider;
-    }
-
-    @Override
-    public Polygon getKillCollider() {
-        return this.killCollider;
     }
 
     public void move(float delta) {
@@ -139,7 +108,7 @@ public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider,
             directionalMultiplier = -1;
         }
 
-        angleDegrees -= (angleDegreeSpeed * directionalMultiplier) * delta;
+        angleDegrees -= (angleDegreesSpeed * directionalMultiplier) * delta;
         setAngleDegree();
     }
 
@@ -150,13 +119,32 @@ public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider,
 
     @Override
     public void assignShieldProperties() {
+        super.shieldPolygonColliderCoordinates = new float[]{0.42f, 0.8f,
+                0.3f, 1.3f,
+                1.65f, 1.3f,
+                1.53f, 0.8f};
 
+        super.shieldKillColliderCoordinates = new float[]{0.3f, 1.3f,
+                0.38f, 1.5f,
+                0.55f, 1.8f,
+                0.7f, 1.9f,
+                1.15f, 1.9f,
+                1.3f, 1.8f,
+                1.57f, 1.5f,
+                1.65f, 1.3f
+        };
+
+        super.shieldSize = 2.2f;
+        super.shieldOrbitRadius = GameConfig.PLANET_HALF_SIZE - 0.5f;
+        super.shieldAngleDegrees = this.angleDegrees;
+        super.shieldClockWiseOffset = -3.2f;
+        super.shieldAntiClockWiseOffset = -4f;
     }
 
     @Override
     public void setAngleDegree() {
 
-        boundsAngleDegree = angleDegrees + 7f;
+        float boundsAngleDegree = angleDegrees + 7f;
 
         super.setAngleDegree();
 
@@ -174,35 +162,26 @@ public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider,
 
         awarenessCollider.setPosition(boundsX, boundsY);
 
-
         float rotationOffset = clockWise ? -60 : 40;
         awarenessCollider.setRotation(GameConfig.START_ANGLE - angleDegrees + rotationOffset);
-
     }
 
     public void reset() {
         super.setPosition(0, 0);
         super.radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MAGE_SIZE;
         super.clockWise = MathUtils.randomBoolean();
+        super.moving = false;
 
         this.currentMageState = GameConfig.ENEMY_SPAWNING_STATE;
         this.deathTimer = 0.5f;
         this.awarenessCollider = defineAwarenessCollider();
-        this.hitPoints = 1;
-        this.mageDamagedTimer = 1f;
         this.shielded = false;
+        this.mageAttackTimer = GameConfig.MAGE_ATTACK_TIMER;
+        this.castingShield = false;
     }
 
     public float getRadius() {
         return radius;
-    }
-
-    public int getHitPoints() {
-        return hitPoints;
-    }
-
-    public void setHitPoints(int hitPoints) {
-        this.hitPoints = hitPoints;
     }
 
     public void setRadius(float radius) {
@@ -226,28 +205,12 @@ public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider,
         this.currentMageState = currentMageState;
     }
 
-    public float getMageDamagedTimer() {
-        return mageDamagedTimer;
-    }
-
-    public void setMageDamagedTimer(float mageDamagedTimer) {
-        this.mageDamagedTimer = mageDamagedTimer;
-    }
-
     public boolean isHasDamageAnimationStarted() {
         return hasDamageAnimationStarted;
     }
 
     public void setHasDamageAnimationStarted(boolean hasDamageAnimationStarted) {
         this.hasDamageAnimationStarted = hasDamageAnimationStarted;
-    }
-
-    public float getMageWalkTimer() {
-        return mageWalkTimer;
-    }
-
-    public void setMageWalkTimer(float mageWalkTimer) {
-        this.mageWalkTimer = mageWalkTimer;
     }
 
     public float getMageAttackTimer() {
@@ -281,4 +244,20 @@ public class Mage extends SmallEnemyBase implements Pool.Poolable, KillCollider,
     public void setCastingShield(boolean castingShield) {
         this.castingShield = castingShield;
     }
+
+    @Override
+    public void setShielded(boolean shielded) {
+        this.shielded = shielded;
+    }
+
+    @Override
+    public Polygon getAwarenessCollider() {
+        return this.awarenessCollider;
+    }
+
+    @Override
+    public Polygon getKillCollider() {
+        return this.killCollider;
+    }
+
 }

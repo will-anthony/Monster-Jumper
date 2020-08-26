@@ -141,6 +141,9 @@ public class SkullSpikeTrapController {
 
     public void checkMonsterCollision(SkullSpikeTrap spikeTrap, Monster monster) {
 
+        if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), spikeTrap.getPolygonCollider())) {
+            spikeTrap.setCurrentSpikeTrapState(GameConfig.SPIKE_TRAP_WITHDRAW_STATE);
+        }
         // spike trap kills monster
         if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), spikeTrap.getPolygonCollider()) &&
                 monster.getState() != MonsterState.DASHING) {

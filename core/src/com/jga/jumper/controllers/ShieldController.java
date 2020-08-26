@@ -61,24 +61,48 @@ public class ShieldController<T extends SmallEnemyBase> {
         float increasedAlpha = currentAlpha + (0.4f * delta);
         shield.setShieldAlphaPercentage(increasedAlpha);
 
-        if (increasedAlpha >= 1) {
-            shield.setShieldAlphaPercentage(1);
+        if (increasedAlpha >= 0.8f) {
+            shield.setShieldAlphaPercentage(0.8f);
             shield.setCurrentState(GameConfig.SHIELD_IDLE_STATE);
         }
+        checkMonsterCollision(shield, monsterController.getMonsters().get(0));
 
         moveLogic(shield, delta);
         shield.checkForDirectionChange();
     }
+
 
     private void idleLogic(Shield shield, float delta) {
 
         checkMonsterCollision(shield, monsterController.getMonsters().get(0));
         moveLogic(shield, delta);
         shield.checkForDirectionChange();
+        shieldPulse(shield, delta);
+    }
+
+    private void shieldPulse(Shield shield, float delta) {
+
+        float currentAlpha = shield.getShieldAlphaPercentage();
+        float increasedAlpha = currentAlpha + (0.6f * delta);
+        float decreaseAlpha = currentAlpha - (0.6f * delta);
+
+        if (shield.isAlphaIncreasing()) {
+            shield.setShieldAlphaPercentage(increasedAlpha);
+            if (shield.getShieldAlphaPercentage() >= 1) {
+                shield.setAlphaIncreasing(false);
+            }
+        } else if (!shield.isAlphaIncreasing()) {
+            shield.setShieldAlphaPercentage(decreaseAlpha);
+            if (shield.getShieldAlphaPercentage() <= 0.35f) {
+                shield.setAlphaIncreasing(true);
+            }
+        }
+        System.out.println(shield.getShieldAlphaPercentage());
     }
 
     private void withdrawLogic(Shield shield, float delta) {
 
+        soundListener.pop();
         float currentAlpha = shield.getShieldAlphaPercentage();
         float decreasedAlpha = currentAlpha + (2f * delta);
         shield.setShieldAlphaPercentage(decreasedAlpha);
@@ -93,7 +117,7 @@ public class ShieldController<T extends SmallEnemyBase> {
     }
 
     private void moveLogic(Shield shield, float delta) {
-        if(shield.getShieldParent().isMoving()) {
+        if (shield.getShieldParent().isMoving()) {
             shield.move(delta);
         }
     }

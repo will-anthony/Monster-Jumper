@@ -19,6 +19,7 @@ public class EntityProviderRegister {
     private MageEntityProvider mageEntityProvider;
     private FireBallEntityProvider fireBallEntityProvider;
     private SpikeTrapEntityProvider spikeTrapEntityProvider;
+    private SparkEffectEntityProvider sparkEffectEntityProvider;
     private SkullSpikeTrapEntityProvider skullSpikeTrapEntityProvider;
     private ShieldEntityProvider shieldEntityProvider;
     private CoinEntityProvider coinEntityProvider;
@@ -44,6 +45,7 @@ public class EntityProviderRegister {
         this.fireBallEntityProvider = new FireBallEntityProvider(controllerRegister.getFireBallController());
         this.spikeTrapEntityProvider = new SpikeTrapEntityProvider(controllerRegister.getSpikeTrapController());
         this.skullSpikeTrapEntityProvider = new SkullSpikeTrapEntityProvider(controllerRegister.getSkullSpikeTrapController());
+        this.sparkEffectEntityProvider = new SparkEffectEntityProvider(controllerRegister.getSparkEffectController());
         this.redEntityProvider = new RedEntityProvider(controllerRegister.getRedController());
         this.shieldEntityProvider = new ShieldEntityProvider(controllerRegister.getShieldController());
     }
@@ -106,5 +108,9 @@ public class EntityProviderRegister {
 
     public ShieldEntityProvider getShieldEntityProvider() {
         return shieldEntityProvider;
+    }
+
+    public SparkEffectEntityProvider getSparkEffectEntityProvider() {
+        return sparkEffectEntityProvider;
     }
 }

@@ -6,6 +6,8 @@ public interface SoundListener {
 
     void jump();
 
+    void pop();
+
     void lose();
 
 }

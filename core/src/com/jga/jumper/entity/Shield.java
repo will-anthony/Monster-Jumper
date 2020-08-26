@@ -22,17 +22,13 @@ public class Shield implements KillCollider {
 
     protected boolean clockWise;
     protected float orbitalRadius;
+    private boolean increasingAlpha;
 
     protected Polygon polygonCollider;
     private Polygon killCollider;
 
     private int currentState;
-    private float spawnTimer;
-    private float withdrawTimer;
     private float shieldAlphaPercentage;
-
-    private boolean hasSpawnAnimationStarted;
-    private boolean hasWithdrawAnimationStarted;
 
     private SmallEnemyBase shieldParent;
 
@@ -46,6 +42,7 @@ public class Shield implements KillCollider {
         this.clockWiseOffset = shieldParent.getShieldClockWiseOffset();
         this.antiClockWiseOffset = shieldParent.getShieldAntiClockWiseOffset();
         this.angleDegrees = shieldParent.getAngleDegrees();
+        this.increasingAlpha = false;
 
         this.angleDegreesSpeed = shieldParent.getAngleDegreesSpeed();
         this.clockWise = shieldParent.isClockWise();
@@ -55,6 +52,7 @@ public class Shield implements KillCollider {
         this.shieldAlphaPercentage = 0;
 
         setInitialDirectionOffset();
+        setAngleDegree();
     }
 
     private void setInitialDirectionOffset() {
@@ -98,13 +96,11 @@ public class Shield implements KillCollider {
 
     public void checkForDirectionChange() {
 
-//        shieldClockWiseOffset = -10f;
-//        shieldAntiClockWiseOffset = -5f;
         if (shieldParent.isChangedDirection()) {
             angleDegrees += shieldParent.isClockWise() ?
-                    (-antiClockWiseOffset + clockWiseOffset + 2) : (-clockWiseOffset + antiClockWiseOffset - 2);
+                    (-antiClockWiseOffset + clockWiseOffset + 2):
+                    (-clockWiseOffset + antiClockWiseOffset - 2);
         }
-
     }
 
 
@@ -134,46 +130,9 @@ public class Shield implements KillCollider {
         this.currentState = currentState;
     }
 
-    public void setOrbitalRadius(float orbitalRadius) {
-        this.orbitalRadius = orbitalRadius;
-        setAngleDegree();
-    }
-
-    public float getSpawnTimer() {
-        return spawnTimer;
-    }
-
-    public void setSpawnTimer(float spawnTimer) {
-        this.spawnTimer = spawnTimer;
-    }
-
-    public float getWithdrawTimer() {
-        return withdrawTimer;
-    }
-
     @Override
     public Polygon getKillCollider() {
         return this.killCollider;
-    }
-
-    public void setWithdrawTimer(float withdrawTimer) {
-        this.withdrawTimer = withdrawTimer;
-    }
-
-    public boolean hasSpawnAnimationStarted() {
-        return hasSpawnAnimationStarted;
-    }
-
-    public void setHasSpawnAnimationStarted(boolean hasSpawnAnimationStarted) {
-        this.hasSpawnAnimationStarted = hasSpawnAnimationStarted;
-    }
-
-    public boolean hasWithdrawAnimationStarted() {
-        return hasWithdrawAnimationStarted;
-    }
-
-    public void setHasWithdrawAnimationStarted(boolean hasWithdrawAnimationStarted) {
-        this.hasWithdrawAnimationStarted = hasWithdrawAnimationStarted;
     }
 
     public float getShieldAlphaPercentage() {
@@ -186,10 +145,6 @@ public class Shield implements KillCollider {
 
     public SmallEnemyBase getShieldParent() {
         return shieldParent;
-    }
-
-    public void setKillCollider(Polygon killCollider) {
-        this.killCollider = killCollider;
     }
 
     public void setStartingPosition(float value) {
@@ -247,24 +202,16 @@ public class Shield implements KillCollider {
         return clockWise;
     }
 
-    public void setClockWise(boolean clockWise) {
-        this.clockWise = clockWise;
-    }
-
-    public float getOrbitalRadius() {
-        return orbitalRadius;
-    }
-
-    public float getAngleDegreesSpeed() {
-        return angleDegreesSpeed;
-    }
-
-    public void setAngleDegreesSpeed(float angleDegreeSpeed) {
-        this.angleDegreesSpeed = angleDegreeSpeed;
-    }
-
     public void setPolygonCollider(Polygon polygonCollider) {
         this.polygonCollider = polygonCollider;
+    }
+
+    public boolean isAlphaIncreasing() {
+        return increasingAlpha;
+    }
+
+    public void setAlphaIncreasing(boolean increasingAlpha) {
+        this.increasingAlpha = increasingAlpha;
     }
 }
 

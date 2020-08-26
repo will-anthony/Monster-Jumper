@@ -30,11 +30,9 @@ public class Monster extends EntityBase implements Pool.Poolable {
     private boolean hasFallAnimationStarted;
 
     // == constructors ==
-    public Monster(World world) {
-//        this.world = world;
+    public Monster() {
         angleDegrees = GameConfig.START_ANGLE;
         setSize(GameConfig.MONSTER_SIZE, GameConfig.MONSTER_SIZE);
-//        monsterBody = createMonsterBody();
     }
 
     @Override
@@ -76,11 +74,11 @@ public class Monster extends EntityBase implements Pool.Poolable {
                 break;
 
             case DASHING:
-                dashSpeed = 150;
+                dashSpeed = 160;
                 dashTimer += delta;
                 if (dashTimer >= dashDuration) {
                     dashSpeed = 0;
-                    dashInterval = 2f;
+                    dashInterval = 1f;
                     dashTimer = 0;
                     acceleration = 0;
                     fall();
@@ -122,6 +120,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
     public void reset() {
         angleDegrees = GameConfig.START_ANGLE;
         monsterVelocityY = 0;
+        dashInterval = 0;
         idle();
     }
 

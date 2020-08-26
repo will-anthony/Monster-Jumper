@@ -36,10 +36,10 @@ public class GameOverOverlay extends Table {
         scoreTable.defaults().pad(10);
         scoreTable.setBackground(RegionNames.PANEL);
 
-        scoreTable.add("SCORE: ").row();
+        scoreTable.add("SCORE ").row();
         scoreLabel = new Label("", getSkin());
         scoreTable.add(scoreLabel).row();
-        scoreTable.add("BEST: ").row();
+        scoreTable.add("BEST ").row();
         highScoreLabel = new Label("", getSkin());
         scoreTable.add(highScoreLabel);
 
@@ -64,12 +64,12 @@ public class GameOverOverlay extends Table {
             }
         });
 
-        buttonTable.add(homeButton).left().expandX();
-        buttonTable.add(restartButton).right().expandX();
+        buttonTable.add(homeButton).left().expandX().padRight(60);
+        buttonTable.add(restartButton).right().expandX().padLeft(60);
 
         add(gameOverImage).row();
         add(scoreTable).row();
-        add(buttonTable).grow().center();
+        add(buttonTable).expand().bottom();
 
         center();
         setFillParent(true);

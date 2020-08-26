@@ -46,10 +46,13 @@ public class FloatingScoreController {
             floatingScore.setStartPosition(GameConfig.HUD_WIDTH / 2f, GameConfig.HUD_HEIGHT / 2f);
             floatingScore.setScore(score);
             floatingScores.add(floatingScore);
-            System.out.println(score);
         } else {
-            FloatingScore currentFloatingScore = floatingScores.get(0);
-            currentFloatingScore.addToScore(score);
+            int currentScore = floatingScores.get(0).getScore();
+            floatingScores.removeAll(floatingScores, true);
+            FloatingScore floatingScore = floatingScorePool.obtain();
+            floatingScore.setStartPosition(GameConfig.HUD_WIDTH / 2f, GameConfig.HUD_HEIGHT / 2f);
+            floatingScore.setScore(currentScore + score);
+            floatingScores.add(floatingScore);
         }
     }
 }

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.jga.jumper.Renderers.hud.HudRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
@@ -24,10 +26,8 @@ public class GameScreen extends ScreenAdapter {
     private GameRenderer gameRenderer;
     private HudRenderer hudRenderer;
 
-    private Box2DTest box2DTest;
-    private Box2DDebugRenderer box2DDebugRenderer;
-
     private Sound coinSound;
+    private Sound popSound;
     private Sound jumpSound;
     private Sound loseSound;
 
@@ -35,7 +35,6 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen(GameBase game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
-
 
         soundListener = new SoundListener() {
             @Override
@@ -49,14 +48,17 @@ public class GameScreen extends ScreenAdapter {
             }
 
             @Override
+            public void pop() {
+                popSound.play();
+            }
+
+            @Override
             public void lose() {
                 loseSound.play();
             }
         };
 
-        box2DTest = new Box2DTest();
-        this.controllerRegister = new ControllerRegister(this.soundListener, this.box2DTest.getWorld());
-        box2DDebugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
+        this.controllerRegister = new ControllerRegister(this.soundListener);
     }
 
     // == public methods ==
@@ -64,11 +66,12 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
 
         coinSound = assetManager.get(AssetDescriptors.COIN);
+//        popSound = assetManager.get(AssetDescriptors.POP);
         jumpSound = assetManager.get(AssetDescriptors.JUMP);
         loseSound = assetManager.get(AssetDescriptors.LOSE);
 
         final EntityProviderRegister entityProviderRegister = new EntityProviderRegister(controllerRegister);
-        gameRenderer = new GameRenderer(game.getBatch(), assetManager, entityProviderRegister, box2DTest);
+        gameRenderer = new GameRenderer(game.getBatch(), assetManager, entityProviderRegister);
         hudRenderer = new HudRenderer(controllerRegister, game.getBatch(), assetManager);
 
     }
@@ -77,7 +80,6 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         GdxUtils.clearScreen();
 
-        box2DTest.updatePhysics(delta);
         controllerRegister.getMasterController().update(delta);
         gameRenderer.render(delta);
         hudRenderer.render();

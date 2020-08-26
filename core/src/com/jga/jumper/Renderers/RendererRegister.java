@@ -3,11 +3,8 @@ package com.jga.jumper.Renderers;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.jga.jumper.Renderers.Background.BackgroundGamePlayRenderer;
 import com.jga.jumper.Renderers.Coin.CoinGamePlayRenderer;
-import com.jga.jumper.Renderers.Coin.CoinDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterDebugRenderer;
 import com.jga.jumper.Renderers.Monster.MonsterGamePlayRenderer;
-import com.jga.jumper.Renderers.Obstacle.ObstacleDebugRenderer;
-import com.jga.jumper.Renderers.Obstacle.ObstacleGamePlayRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetDebugRenderer;
 import com.jga.jumper.Renderers.Planet.PlanetGamePlayRenderer;
 import com.jga.jumper.Renderers.Slug.SlugDebugRenderer;
@@ -23,9 +20,9 @@ import com.jga.jumper.Renderers.shield.ShieldGamePlayRenderer;
 import com.jga.jumper.Renderers.skull.SkullGamePlayRenderer;
 import com.jga.jumper.Renderers.skull_spike_trap.SkullSpikeTrapGamePlayRenderer;
 import com.jga.jumper.Renderers.slugBoss.SlugBossGamePlayRenderer;
+import com.jga.jumper.Renderers.sparks.SparkGamePlayRenderer;
 import com.jga.jumper.Renderers.spike_trap.SpikeTrapGamePlayRenderer;
 import com.jga.jumper.Renderers.trap_warning_smoke.TrapWarningSmokeGamePlayRenderer;
-import com.jga.jumper.entity.Shield;
 
 public class RendererRegister {
 
@@ -40,6 +37,7 @@ public class RendererRegister {
     private SkullGamePlayRenderer skullGamePlayRenderer;
     private SkullSpikeTrapGamePlayRenderer skullSpikeTrapGamePlayRenderer;
     private TrapWarningSmokeGamePlayRenderer trapWarningSmokeGamePlayRenderer;
+    private SparkGamePlayRenderer sparkGamePlayRenderer;
     private RedGamePlayRenderer redGamePlayRenderer;
     private BearGamePlayRenderer bearGamePlayRenderer;
     private MageGamePlayRenderer mageGamePlayRenderer;
@@ -72,6 +70,7 @@ public class RendererRegister {
         skullGamePlayRenderer = new SkullGamePlayRenderer(gamePlayAtlas);
         skullSpikeTrapGamePlayRenderer = new SkullSpikeTrapGamePlayRenderer(gamePlayAtlas);
         trapWarningSmokeGamePlayRenderer = new TrapWarningSmokeGamePlayRenderer(gamePlayAtlas);
+        sparkGamePlayRenderer = new SparkGamePlayRenderer(gamePlayAtlas);
         redGamePlayRenderer = new RedGamePlayRenderer(gamePlayAtlas);
         bearGamePlayRenderer = new BearGamePlayRenderer(gamePlayAtlas);
         mageGamePlayRenderer = new MageGamePlayRenderer(gamePlayAtlas);
@@ -170,5 +169,9 @@ public class RendererRegister {
 
     public ShieldGamePlayRenderer getShieldGamePlayRenderer() {
         return shieldGamePlayRenderer;
+    }
+
+    public SparkGamePlayRenderer getSparkGamePlayRenderer() {
+        return sparkGamePlayRenderer;
     }
 }

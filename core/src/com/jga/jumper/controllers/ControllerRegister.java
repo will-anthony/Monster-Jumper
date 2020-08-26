@@ -3,9 +3,9 @@ package com.jga.jumper.controllers;
 import com.badlogic.gdx.physics.box2d.World;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.controllers.projectiles.FireBallController;
+import com.jga.jumper.controllers.projectiles.SparkEffectController;
 import com.jga.jumper.controllers.projectiles.SpikeTrapController;
 import com.jga.jumper.controllers.projectiles.TrapWarningSmokeController;
-import com.jga.jumper.entity.smoke_effects.TrapWarningSmoke;
 import com.jga.jumper.screen.game.MasterController;
 import com.jga.jumper.utils.BackgroundController;
 
@@ -22,6 +22,7 @@ public class ControllerRegister {
     private SkullController skullController;
     private SkullSpikeTrapController skullSpikeTrapController;
     private TrapWarningSmokeController trapWarningSmokeController;
+    private SparkEffectController sparkEffectController;
     private ShieldController shieldController;
     private RedController redController;
     private BearController bearController;
@@ -32,11 +33,10 @@ public class ControllerRegister {
 
     private MasterController masterController;
 
-    private World world;
     // make this class instantiate all controllers. Instantiate this in screen. Pass all info to master
 
-    public ControllerRegister(SoundListener soundListener, World world) {
-        this.monsterController = new MonsterController(soundListener, world, this);
+    public ControllerRegister(SoundListener soundListener) {
+        this.monsterController = new MonsterController(soundListener, this);
         this.coinController = new CoinController(this, soundListener);
         this.obstacleController = new ObstacleController(this, soundListener);
         this.floatingScoreController = new FloatingScoreController();
@@ -47,6 +47,7 @@ public class ControllerRegister {
         this.skullController = new SkullController(this, soundListener);
         this.skullSpikeTrapController = new SkullSpikeTrapController(this, soundListener);
         this.trapWarningSmokeController = new TrapWarningSmokeController(this, soundListener);
+        this.sparkEffectController = new SparkEffectController(this, soundListener);
         this.redController = new RedController(this, soundListener);
         this.bearController = new BearController(this, soundListener);
 
@@ -133,5 +134,9 @@ public class ControllerRegister {
 
     public ShieldController getShieldController() {
         return shieldController;
+    }
+
+    public SparkEffectController getSparkEffectController() {
+        return sparkEffectController;
     }
 }

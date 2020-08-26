@@ -36,7 +36,7 @@ public class RedController implements EnemyController<Red> {
 
         for (int i = 0; i < reds.size; i++) {
             red = reds.get(i);
-            switch (red.getCurrentRedState()) {
+            switch (red.getCurrentState()) {
                 case 0:
                     // spawning
                     enemySpawnLogic(red);
@@ -67,17 +67,21 @@ public class RedController implements EnemyController<Red> {
     @Override
     public void enemySpawnLogic(Red enemy) {
 
+        enemy.setMoving(false);
+
         if (enemy.getRadius() < GameConfig.PLANET_HALF_SIZE) {
             enemy.setRadius(enemy.getRadius() + 0.01f);
         }
         if (enemy.getRadius() >= GameConfig.PLANET_HALF_SIZE) {
             enemy.setRadius(GameConfig.PLANET_HALF_SIZE);
-            enemy.setCurrentRedState(GameConfig.ENEMY_WALKING_STATE);
+            enemy.setCurrentState(GameConfig.ENEMY_WALKING_STATE);
         }
     }
 
     @Override
     public void enemyWalkLogic(Red enemy, float delta) {
+
+        enemy.setMoving(true);
 
         float redWalkTimer = enemy.getRedWalkTimer();
 
@@ -92,12 +96,14 @@ public class RedController implements EnemyController<Red> {
         enemy.setRedWalkTimer(redWalkTimer -= delta);
 
         if (redWalkTimer <= 0) {
-            enemy.setCurrentRedState(GameConfig.ENEMY_ATTACKING_STATE);
+            enemy.setCurrentState(GameConfig.ENEMY_ATTACKING_STATE);
         }
     }
 
     @Override
     public void enemyAttackLogic(Red enemy, float delta) {
+
+        enemy.setMoving(false);
 
         float redAttackTimer = enemy.getRedAttackTimer();
 
@@ -113,13 +119,13 @@ public class RedController implements EnemyController<Red> {
         }
 
         if (redAttackTimer <= 0) {
-            enemy.setClockWise(MathUtils.randomBoolean());
-            enemy.setCurrentRedState(2);
+            enemy.setCurrentState(2);
         }
     }
 
     @Override
     public void enemyDyingLogic(Red enemy, float delta) {
+        enemy.setMoving(false);
         float deathTimer = enemy.getDeathTimer();
         System.out.println(deathTimer);
         if (deathTimer > 0) {
@@ -128,7 +134,7 @@ public class RedController implements EnemyController<Red> {
 
         if (deathTimer <= 0) {
             controllerRegister.getCoinController().spawnCoins(enemy, 3);
-            enemy.setCurrentRedState(GameConfig.ENEMY_DEAD_STATE);
+            enemy.setCurrentState(GameConfig.ENEMY_DEAD_STATE);
         }
     }
 
@@ -178,7 +184,7 @@ public class RedController implements EnemyController<Red> {
     public void checkMonsterCollision(Red red, Monster monster) {
 
         if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), red.getPolygonCollider())) {
-            red.setCurrentRedState(GameConfig.ENEMY_DYING_STATE);
+            red.setCurrentState(GameConfig.ENEMY_DYING_STATE);
 
         } else if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), red.getPolygonCollider()) &&
                 monster.getState() != MonsterState.DASHING) {
@@ -202,23 +208,23 @@ public class RedController implements EnemyController<Red> {
 
     public void checkEnemyCollision(EnemyBase enemyBase1, Array<Red> enemyBases) {
 
-        for (Red red : enemyBases) {
-
-            if (Intersector.overlapConvexPolygons(enemyBase1.getPolygonCollider(), red.getPolygonCollider())) {
-
-                // flip
-                if (enemyBase1.isClockWise()) {
-                    enemyBase1.setClockWise(false);
-                } else {
-                    enemyBase1.setClockWise(true);
-                }
-
-                if (red.isClockWise()) {
-                    red.setClockWise(false);
-                } else {
-                    red.setClockWise(true);
-                }
-            }
-        }
+//        for (Red red : enemyBases) {
+//
+//            if (Intersector.overlapConvexPolygons(enemyBase1.getPolygonCollider(), red.getPolygonCollider())) {
+//
+//                // flip
+//                if (enemyBase1.isClockWise()) {
+//                    enemyBase1.setClockWise(false);
+//                } else {
+//                    enemyBase1.setClockWise(true);
+//                }
+//
+//                if (red.isClockWise()) {
+//                    red.setClockWise(false);
+//                } else {
+//                    red.setClockWise(true);
+//                }
+//            }
+//        }
     }
 }

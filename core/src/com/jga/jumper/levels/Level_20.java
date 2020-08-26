@@ -1,12 +1,14 @@
 package com.jga.jumper.levels;
 
 import com.jga.jumper.controllers.ControllerRegister;
+import com.jga.jumper.controllers.MageController;
 import com.jga.jumper.controllers.SlugController;
 
-public class Level2 implements Level {
+public class Level_20 implements Level {
 
     private final ControllerRegister controllerRegister;
     private final SlugController slugController;
+    private final MageController mageController;
 
     private float levelTimer;
 
@@ -19,9 +21,10 @@ public class Level2 implements Level {
 
     private static final float FINAL_WAVE_TIME = 20f;
 
-    public Level2(ControllerRegister controllerRegister) {
+    public Level_20(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
         slugController = controllerRegister.getSlugController();
+        mageController = controllerRegister.getMageController();
         levelTimer = 0f;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
@@ -40,7 +43,8 @@ public class Level2 implements Level {
         }
 
         if (levelTimer >= 6 && !hasSecondWaveSpawned) {
-            slugController.tryToAddSlugs(2);
+            mageController.tryToAddMages(1);
+            slugController.tryToAddSlugs(1);
             hasSecondWaveSpawned = true;
         }
 
@@ -55,12 +59,13 @@ public class Level2 implements Level {
         }
 
         if (levelTimer >= 16 && !hasFifthWaveSpawned) {
-            slugController.tryToAddSlugs(3);
+            slugController.tryToAddSlugs(1);
             hasFifthWaveSpawned = true;
         }
 
         if (levelTimer >= FINAL_WAVE_TIME && !hasSixthWaveSpawned) {
-            slugController.tryToAddSlugs(2);
+            mageController.tryToAddMages(1);
+            slugController.tryToAddSlugs(1);
             hasSixthWaveSpawned = true;
         }
 
@@ -70,7 +75,7 @@ public class Level2 implements Level {
 
     @Override
     public boolean hasLevelFinished() {
-        if(levelTimer >= FINAL_WAVE_TIME && slugController.getSlugs().size == 0) {
+        if (levelTimer >= FINAL_WAVE_TIME && slugController.getSlugs().size == 0) {
             System.out.println("Level completed");
             return true;
         } else {

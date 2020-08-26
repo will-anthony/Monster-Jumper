@@ -56,6 +56,10 @@ public class FloatingScore implements Pool.Poolable {
         this.score += score;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public float getX() {
         return x;
     }

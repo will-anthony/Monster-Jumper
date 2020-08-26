@@ -6,10 +6,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.entity.abstract_classes_and_interfaces.KillCollider;
-import com.jga.jumper.entity.abstract_classes_and_interfaces.Shieldable;
 import com.jga.jumper.entity.abstract_classes_and_interfaces.SmallEnemyBase;
 
-public class Slug extends SmallEnemyBase implements Pool.Poolable, KillCollider, Shieldable {
+public class Slug extends SmallEnemyBase implements Pool.Poolable, KillCollider {
 
     private float sensorAngleDegree;
     private float deathTimer;
@@ -114,17 +113,17 @@ public class Slug extends SmallEnemyBase implements Pool.Poolable, KillCollider,
     public void assignShieldProperties() {
         super.shieldPolygonColliderCoordinates = new float[] {0.42f, 0.8f,
                 0.3f, 1.3f,
-                0.38f, 1.5f,
-                1.57f, 1.5f,
                 1.65f, 1.3f,
                 1.53f, 0.8f};
 
-        super.shieldKillColliderCoordinates = new float[] { 0.38f, 1.5f,
+        super.shieldKillColliderCoordinates = new float[] { 0.3f, 1.3f,
+                0.38f, 1.5f,
                 0.55f, 1.8f,
                 0.7f, 1.9f,
                 1.15f, 1.9f,
                 1.3f, 1.8f,
                 1.57f, 1.5f,
+                1.65f, 1.3f,
         };
 
         super.shieldSize = 2.2f;
@@ -132,10 +131,6 @@ public class Slug extends SmallEnemyBase implements Pool.Poolable, KillCollider,
         super.shieldAngleDegrees = this.angleDegrees;
         super.shieldClockWiseOffset = -7f;
         super.shieldAntiClockWiseOffset = -7f;
-    }
-
-    public Rectangle getDistanceSensor() {
-        return distanceSensor;
     }
 
     public float getRadius() {

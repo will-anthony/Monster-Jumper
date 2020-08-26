@@ -43,6 +43,9 @@ public class RegionNames {
     public static final String TRAP_WARNING_SMOKE_SPAWN = "trap_warning_smoke_spawn";
     public static final String TRAP_WARNING_SMOKE_WITHDRAW = "trap_warning_smoke_withdraw";
 
+    // spark
+    public static final String SPARK = "spark";
+
     // red
     public static final String RED_IDLE = "red_idle";
     public static final String RED_WALK = "red_walk";

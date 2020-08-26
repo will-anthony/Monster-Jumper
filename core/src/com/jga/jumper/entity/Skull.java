@@ -4,9 +4,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.Pool;
 import com.jga.jumper.config.GameConfig;
+import com.jga.jumper.entity.abstract_classes_and_interfaces.Shieldable;
 import com.jga.jumper.entity.abstract_classes_and_interfaces.SmallEnemyBase;
 
-public class Skull extends SmallEnemyBase implements Pool.Poolable {
+public class Skull extends SmallEnemyBase implements Pool.Poolable{
 
     private float timeBetweenAttacks;
     private float timeInAttackState;
@@ -37,9 +38,9 @@ public class Skull extends SmallEnemyBase implements Pool.Poolable {
     public Polygon definePolygonCollider() {
 
         float[] polygonCoordinates = {0.4f, 0,
-                0.4f, 1,
-                GameConfig.SKULL_SIZE - 0.2f, 1,
-                GameConfig.SKULL_SIZE - 0.2f, 0};
+                0.4f, 0.85f,
+                GameConfig.SKULL_SIZE - 0.3f, 0.85f,
+                GameConfig.SKULL_SIZE - 0.3f, 0};
 
         Polygon polygon = new Polygon(polygonCoordinates);
         polygon.setOrigin(0, 0);
@@ -52,17 +53,17 @@ public class Skull extends SmallEnemyBase implements Pool.Poolable {
     public void assignShieldProperties() {
         super.shieldPolygonColliderCoordinates = new float[] {0.42f, 0.8f,
                 0.3f, 1.3f,
-                0.38f, 1.5f,
-                1.57f, 1.5f,
                 1.65f, 1.3f,
                 1.53f, 0.8f};
 
-        super.shieldKillColliderCoordinates = new float[] { 0.38f, 1.5f,
+        super.shieldKillColliderCoordinates = new float[] { 0.3f, 1.3f,
+                0.38f, 1.5f,
                 0.55f, 1.8f,
                 0.7f, 1.9f,
                 1.15f, 1.9f,
                 1.3f, 1.8f,
                 1.57f, 1.5f,
+                1.65f, 1.3f
         };
 
         super.shieldSize = 2.2f;

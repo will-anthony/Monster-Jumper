@@ -9,7 +9,7 @@ public class GameConfig {
     public static final float HEIGHT = 800f;
 
     public static final float WORLD_WIDTH = 16f;
-    public static final float WORLD_HEIGHT = 24f;
+    public static final float WORLD_HEIGHT = 29f;
 
     public static final float HUD_WIDTH = 480f; // world units
     public static final float HUD_HEIGHT = 800f; // world units
@@ -32,7 +32,7 @@ public class GameConfig {
     public static final float MONSTER_START_ACCELERATION = 6.5f;
     public static final float MONSTER_BOUNCE_ACCELERATION = 6.3f;
     public static final float MONSTER_GRAVITY = 0.4f;
-    public static final float MONSTER_DASH_DURATION = 0.16f;
+    public static final float MONSTER_DASH_DURATION = 0.2f;
     public static final float MONSTER_MAX_JUMP_TIME = 0.7f;
 
     // enemy
@@ -87,6 +87,7 @@ public class GameConfig {
     public static final float MAGE_SIZE = 1.5f;
     public static final float MAGE_START_ANGULAR_SPEED = 4f;
     public static final float MAGE_POLYGON_ROTATION_OFFSET = 16f;
+    public static final float MAGE_ATTACK_TIMER = 2f;
 
     // trap warning smoke
     public static final int TRAP_WARNING_SMOKE_SPAWN_STATE = 0;
@@ -102,7 +103,7 @@ public class GameConfig {
 
     // red
     public static final float RED_SIZE = 1.5f;
-    public static final float RED_START_ANGULAR_SPEED = 30f;
+    public static final float RED_START_ANGULAR_SPEED = 10f;
     public static final float RED_POLYGON_ROTATION_OFFSET = 16f;
 
     // fire ball

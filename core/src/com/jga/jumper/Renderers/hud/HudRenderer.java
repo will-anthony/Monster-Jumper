@@ -14,11 +14,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.jumper.assets.AssetDescriptors;
 import com.jga.jumper.common.FloatingScore;
 import com.jga.jumper.common.GameManager;
-import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.config.GameConfig;
 import com.jga.jumper.controllers.ControllerRegister;
 import com.jga.jumper.screen.menu.GameOverOverlay;
 import com.jga.jumper.screen.menu.MenuOverlay;
+import com.jga.jumper.state_machines.GameState;
 
 public class HudRenderer implements Disposable {
 
@@ -108,14 +108,14 @@ public class HudRenderer implements Disposable {
         // level
         String levelString = "LEVEL: " + controllerRegister.getMasterController().getGameLevel();
         layout.setText(font, levelString);
-        font.draw(spriteBatch, layout, padding, GameConfig.HUD_HEIGHT - layout.height);
+        font.draw(spriteBatch, layout, padding, GameConfig.HUD_HEIGHT);
 
         // score
         String scoreString = "SCORE: " + GameManager.INSTANCE.getDisplayScore();
         layout.setText(font, scoreString);
         font.draw(spriteBatch, layout,
                 GameConfig.HUD_WIDTH - layout.width - padding,
-                GameConfig.HUD_HEIGHT - layout.height
+                GameConfig.HUD_HEIGHT
         );
 
         float startWaitTimer = controllerRegister.getMasterController().getStartWaitTimer();

@@ -67,6 +67,8 @@ public class SlugController implements EnemyController<Slug> {
     @Override
     public void enemySpawnLogic(Slug enemy) {
         // slug emerges from planet
+
+        enemy.setMoving(false);
         if (enemy.getRadius() < GameConfig.PLANET_HALF_SIZE) {
             enemy.setRadius(enemy.getRadius() + 0.01f);
         }
@@ -74,10 +76,12 @@ public class SlugController implements EnemyController<Slug> {
             enemy.setRadius(GameConfig.PLANET_HALF_SIZE);
             enemy.setCurrentState(GameConfig.ENEMY_WALKING_STATE);
         }
+        checkMonsterCollision(enemy, monsterController.getMonsters().get(0));
     }
 
     @Override
     public void enemyWalkLogic(Slug enemy, float delta) {
+        enemy.setMoving(true);
         enemy.move(delta);
 
         // check collision detection only if enemy is not currently shielded
@@ -94,7 +98,9 @@ public class SlugController implements EnemyController<Slug> {
 
     @Override
     public void enemyAttackLogic(Slug enemy, float delta) {
+
         enemy.move(delta);
+        enemy.setMoving(true);
 
         // check collision detection only if enemy is not currently shielded
         if(!enemy.isShielded()) {
@@ -109,6 +115,7 @@ public class SlugController implements EnemyController<Slug> {
 
     @Override
     public void enemyDyingLogic(Slug enemy, float delta) {
+        enemy.setMoving(false);
         float deathTimer = enemy.getDeathTimer();
         System.out.println(deathTimer);
         if (deathTimer > 0) {
@@ -191,7 +198,7 @@ public class SlugController implements EnemyController<Slug> {
 
             // slug kills monster
         } else if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getPolygonCollider()) &&
-                monster.getState() != MonsterState.DASHING) {
+                monster.getState() != MonsterState.DASHING && slug.getCurrentState() != GameConfig.ENEMY_SPAWNING_STATE) {
             soundListener.lose();
 
             monster.dead();

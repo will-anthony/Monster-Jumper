@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.jumper.Renderers.Background.BackgroundGamePlayRenderer;
 import com.jga.jumper.Renderers.Coin.CoinGamePlayRenderer;
@@ -25,6 +26,7 @@ import com.jga.jumper.Renderers.shield.ShieldGamePlayRenderer;
 import com.jga.jumper.Renderers.skull.SkullGamePlayRenderer;
 import com.jga.jumper.Renderers.skull_spike_trap.SkullSpikeTrapGamePlayRenderer;
 import com.jga.jumper.Renderers.slugBoss.SlugBossGamePlayRenderer;
+import com.jga.jumper.Renderers.sparks.SparkGamePlayRenderer;
 import com.jga.jumper.Renderers.spike_trap.SpikeTrapGamePlayRenderer;
 import com.jga.jumper.Renderers.trap_warning_smoke.TrapWarningSmokeGamePlayRenderer;
 import com.jga.jumper.assets.AssetDescriptors;
@@ -45,6 +47,7 @@ import com.jga.jumper.entity.entity_providers.EntityProviderRegister;
 import com.jga.jumper.entity.projectiles.FireBall;
 import com.jga.jumper.entity.projectiles.SkullSpikeTrap;
 import com.jga.jumper.entity.projectiles.SpikeTrap;
+import com.jga.jumper.entity.smoke_effects.SparkEffect;
 import com.jga.jumper.entity.smoke_effects.TrapWarningSmoke;
 import com.jga.util.ViewportUtils;
 import com.jga.util.debug.DebugCameraController;
@@ -62,6 +65,7 @@ public class GameRenderer implements Disposable {
     private Array<Skull> skulls;
     private Array<SkullSpikeTrap> skullSpikeTraps;
     private Array<TrapWarningSmoke> smokes;
+    private Array<SparkEffect> sparks;
     private Array<Red> reds;
     private Array<Bear> bears;
     private Array<Mage> mages;
@@ -82,10 +86,10 @@ public class GameRenderer implements Disposable {
     private ParticleEffect spaceDust;
     private TextureAtlas gamePlayAtlas;
 
-    private boolean debugIsOn = true;
+    private boolean debugIsOn;
 
     // == constructors ==
-    public GameRenderer(SpriteBatch batch, AssetManager assetManager, EntityProviderRegister entityProviderRegister, Box2DTest box2DTest) {
+    public GameRenderer(SpriteBatch batch, AssetManager assetManager, EntityProviderRegister entityProviderRegister) {
         this.batch = batch;
         this.assetManager = assetManager;
         this.entityProviderRegister = entityProviderRegister;
@@ -104,12 +108,14 @@ public class GameRenderer implements Disposable {
         gamePlayAtlas = assetManager.get(AssetDescriptors.GAME_PLAY);
         rendererRegister = new RendererRegister(gamePlayAtlas);
 
+        shields = entityProviderRegister.getShieldEntityProvider().getEntities();
         planets = entityProviderRegister.getPlanetEntityProvider().getEntities();
         monsters = entityProviderRegister.getMonsterEntityProvider().getEntities();
         slugs = entityProviderRegister.getSlugEntityProvider().getEntities();
         slugBosses = entityProviderRegister.getSlugBossEntityProvider().getEntities();
         skulls = entityProviderRegister.getSkullEntityProvider().getEntities();
         skullSpikeTraps = entityProviderRegister.getSkullSpikeTrapEntityProvider().getEntities();
+        sparks = entityProviderRegister.getSparkEffectEntityProvider().getEntities();
         smokes = entityProviderRegister.getSmokeEntityProvider().getEntities();
         reds = entityProviderRegister.getRedEntityProvider().getEntities();
         bears = entityProviderRegister.getBearEntityProvider().getEntities();
@@ -118,7 +124,7 @@ public class GameRenderer implements Disposable {
         spikeTraps = entityProviderRegister.getSpikeTrapEntityProvider().getEntities();
         backgrounds = entityProviderRegister.getBackgroundEntityProvider().getEntities();
         coins = entityProviderRegister.getCoinEntityProvider().getEntities();
-        shields = entityProviderRegister.getShieldEntityProvider().getEntities();
+
 
         spaceDust = assetManager.get(AssetDescriptors.DUST);
         spaceDust.getEmitters().first().setPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_HEIGHT);
@@ -228,10 +234,10 @@ public class GameRenderer implements Disposable {
             entityDebugRenderer.renderEntityDebugLines(renderer, coin.getPolygonCollider().getTransformedVertices());
         }
 
-
-
+        for(SparkEffect sparkEffect : sparks) {
+            entityDebugRenderer.renderEntityDebugLines(renderer, sparkEffect.getPolygonCollider().getTransformedVertices());
+        }
     }
-
 
     private void renderGamePlay(float delta) {
         viewport.apply();
@@ -278,6 +284,9 @@ public class GameRenderer implements Disposable {
         // mage
         MageGamePlayRenderer mageGamePlayRenderer = rendererRegister.getMageGamePlayRenderer();
         mageGamePlayRenderer.renderGamePlay(batch, mages, delta);
+        // shield
+        ShieldGamePlayRenderer shieldGamePlayRenderer = rendererRegister.getShieldGamePlayRenderer();
+        shieldGamePlayRenderer.renderGamePlay(batch, shields, delta);
 
         // fire ball
         FireBallGamePlayRenderer fireBallGamePlayRenderer = rendererRegister.getFireBallGamePlayRenderer();
@@ -299,13 +308,13 @@ public class GameRenderer implements Disposable {
         MonsterGamePlayRenderer monsterGamePlayRenderer = rendererRegister.getMonsterGamePlayRenderer();
         monsterGamePlayRenderer.renderGamePlay(batch, monsters, delta);
 
-        // shield
-        ShieldGamePlayRenderer shieldGamePlayRenderer = rendererRegister.getShieldGamePlayRenderer();
-        shieldGamePlayRenderer.renderGamePlay(batch, shields, delta);
-
         // trap warning smoke
         TrapWarningSmokeGamePlayRenderer trapWarningSmokeGamePlayRenderer = rendererRegister.getTrapWarningSmokeGamePlayRenderer();
         trapWarningSmokeGamePlayRenderer.renderGamePlay(batch, smokes, delta);
+
+        // sparks
+        SparkGamePlayRenderer sparkGamePlayRenderer = rendererRegister.getSparkGamePlayRenderer();
+        sparkGamePlayRenderer.renderGamePlay(batch, sparks, delta);
 
     }
 

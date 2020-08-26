@@ -52,17 +52,17 @@ public class MenuOverlay extends Table {
         });
 
         Table scoreTable = new Table(getSkin());
-        scoreTable.add("BEST: ").row();
+        scoreTable.add("BEST").row();
         highScoreLabel = new Label("", getSkin());
         updateLabel();
         scoreTable.add(highScoreLabel);
 
         buttonTable.add(playButton).left().expandX();
-        buttonTable.add(scoreTable).bottom().expandX();
+        buttonTable.add(scoreTable).bottom().expandX().pad(0,40,0,40);
         buttonTable.add(quitButton).right().expandX();
 
         add(logoTable).top().grow().row();
-        add(buttonTable).bottom().grow().row();
+        add(buttonTable).bottom();
         center();
         setFillParent(true);
         pack();

@@ -21,6 +21,9 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Skin> SKIN =
             new AssetDescriptor<Skin>(AssetPaths.SKIN, Skin.class);
 
+//    public static final AssetDescriptor<Sound> POP =
+//            new AssetDescriptor<Sound>(AssetPaths.POP_SOUND, Sound.class);
+
     public static final AssetDescriptor<Sound> COIN =
             new AssetDescriptor<Sound>(AssetPaths.COIN_SOUND, Sound.class);
 

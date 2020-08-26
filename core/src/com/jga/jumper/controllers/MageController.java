@@ -74,24 +74,25 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
     public void enemySpawnLogic(Mage enemy) {
 
         // Mage rises from the planet. Once at final height, switch to walking state
+        enemy.setMoving(false);
         if (enemy.getRadius() < GameConfig.PLANET_HALF_SIZE) {
             enemy.setRadius(enemy.getRadius() + 0.01f);
         }
         if (enemy.getRadius() >= GameConfig.PLANET_HALF_SIZE) {
             enemy.setRadius(GameConfig.PLANET_HALF_SIZE);
-            enemy.setCurrentMageState(GameConfig.ENEMY_WALKING_STATE);
+            castShieldOnSelf(enemy);
         }
     }
 
     @Override
     public void enemyWalkLogic(Mage enemy, float delta) {
 
+        enemy.setMoving(true);
         enemy.setCastingShield(false);
-
-        float mageWalkTimer = enemy.getMageWalkTimer();
 
         enemy.setMageAttackTimer(2f);
-        enemy.setCastingShield(false);
+
+        enemy.setHasCastShield(false);
 
         enemy.move(delta);
 
@@ -102,6 +103,8 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
 
     @Override
     public void enemyAttackLogic(Mage enemy, float delta) {
+
+        enemy.setMoving(false);
 
         SmallEnemyBase enemyBeingShielded = enemy.getEnemyBeingShielded();
         enemy.setCastingShield(true);
@@ -120,6 +123,7 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
         }
 
         if (mageAttackTimer <= 0) {
+            controllerRegister.getSparkEffectController().spawnSparks(enemy, 0,0, enemy.getAngleDegrees());
             enemy.setCurrentMageState(2);
         }
     }
@@ -230,11 +234,17 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
         if (Intersector.overlapConvexPolygons(mage.getAwarenessCollider(), smallEnemyBase.getPolygonCollider())
                 && !smallEnemyBase.isShielded() && mage.getCurrentMageState() == GameConfig.ENEMY_WALKING_STATE) {
             if (!mage.isCastingShield()) {
-                if(smallEnemyBase.getCurrentState() == GameConfig.ENEMY_WALKING_STATE) {
+                if(smallEnemyBase.getCurrentState() == GameConfig.ENEMY_WALKING_STATE ||
+                smallEnemyBase.getCurrentState() == GameConfig.ENEMY_ATTACKING_STATE) {
                     mage.setEnemyBeingShielded(smallEnemyBase);
                     mage.setCurrentMageState(GameConfig.ENEMY_ATTACKING_STATE);
                 }
             }
         }
+    }
+
+    private void castShieldOnSelf(Mage mage) {
+        mage.setEnemyBeingShielded(mage);
+        mage.setCurrentMageState(GameConfig.ENEMY_ATTACKING_STATE);
     }
 }

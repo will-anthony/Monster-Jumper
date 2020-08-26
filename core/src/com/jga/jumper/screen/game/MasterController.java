@@ -17,16 +17,26 @@ import com.jga.jumper.controllers.SlugController;
 import com.jga.jumper.controllers.projectiles.FireBallController;
 import com.jga.jumper.controllers.projectiles.SpikeTrapController;
 import com.jga.jumper.controllers.projectiles.TrapWarningSmokeController;
-import com.jga.jumper.levels.Level1;
-import com.jga.jumper.levels.Level2;
+import com.jga.jumper.levels.Level;
+import com.jga.jumper.levels.Level_1;
+import com.jga.jumper.levels.Level_2;
+import com.jga.jumper.levels.Level_3;
+import com.jga.jumper.levels.Level_4;
+import com.jga.jumper.levels.Level_5;
 import com.jga.jumper.state_machines.GameState;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MasterController {
 
     // == attributes ==
     private float startWaitTimer = GameConfig.START_WAIT_TIME;
-    //private boolean gameStarted;
     private int gameLevel;
+    private List<Integer> levels;
 
     private GameState gameState = GameState.MENU;
 
@@ -45,8 +55,12 @@ public class MasterController {
     private ShieldController shieldController;
     private TrapWarningSmokeController trapWarningSmokeController;
     private CoinController coinController;
-    private Level1 level1;
-    private Level2 level2;
+
+    private Level_1 level_1;
+    private Level_2 level_2;
+    private Level_3 level_3;
+    private Level_4 level_4;
+    private Level_5 level_5;
 
     // == constructors ==
     public MasterController(ControllerRegister controllerRegister) {
@@ -65,9 +79,19 @@ public class MasterController {
         this.trapWarningSmokeController = controllerRegister.getTrapWarningSmokeController();
         this.shieldController = controllerRegister.getShieldController();
         this.coinController = controllerRegister.getCoinController();
-        this.level1 = new Level1(controllerRegister);
-        this.level2 = new Level2(controllerRegister);
+
+        this.level_1 = new Level_1(controllerRegister);
+        this.level_2 = new Level_2(controllerRegister);
+        this.level_3 = new Level_3(controllerRegister);
+        this.level_4 = new Level_4(controllerRegister);
+        this.level_5 = new Level_5(controllerRegister);
+
         this.gameLevel = 1;
+        this.levels = new ArrayList<>();
+        levels.add(2);
+        levels.add(3);
+        levels.add(4);
+        levels.add(5);
     }
 
     // == public methods ==
@@ -117,25 +141,48 @@ public class MasterController {
         }
     }
 
+    private int setGameLevel() {
+
+        Integer nextLevel = 1;
+        if (!levels.isEmpty()) {
+            Collections.shuffle(levels);
+            nextLevel = levels.get(0);
+            levels.remove(nextLevel);
+        }
+        return nextLevel;
+    }
+
     private void gameLevelLogic(float delta) {
         switch (gameLevel) {
             case 1:
-                level1.update(delta);
-                if(level1.hasLevelFinished()) {
-                    gameLevel ++;
+                level_1.update(delta);
+                if (level_1.hasLevelFinished()) {
+                    gameLevel = setGameLevel();
                 }
                 break;
             case 2:
-                level2.update(delta);
-                if(level2.hasLevelFinished()) {
-                    gameLevel ++;
+                level_2.update(delta);
+                if (level_2.hasLevelFinished()) {
+                    gameLevel = setGameLevel();
                 }
                 break;
             case 3:
+                level_3.update(delta);
+                if (level_3.hasLevelFinished()) {
+                    gameLevel = setGameLevel();
+                }
                 break;
             case 4:
+                level_4.update(delta);
+                if (level_4.hasLevelFinished()) {
+                    gameLevel = setGameLevel();
+                }
                 break;
             case 5:
+                level_5.update(delta);
+                if (level_5.hasLevelFinished()) {
+                    gameLevel = setGameLevel();
+                }
                 break;
         }
     }
@@ -149,11 +196,20 @@ public class MasterController {
         GameManager.INSTANCE.updateHighScore();
         GameManager.INSTANCE.reset();
         startWaitTimer = GameConfig.START_WAIT_TIME;
-        //gameStarted = false;
         gameState = GameState.READY;
 
-        level1.reset();
-        level2.reset();
+        level_1.reset();
+        level_2.reset();
+        level_3.reset();
+        level_4.reset();
+        level_5.reset();
+
+        levels.add(2);
+        levels.add(3);
+        levels.add(4);
+        levels.add(5);
+
+
 
         gameLevel = 1;
     }

@@ -50,6 +50,7 @@ public class LoadingScreen extends ScreenAdapter {
         assetManager.load(AssetDescriptors.JUMP);
         assetManager.load(AssetDescriptors.COIN);
         assetManager.load(AssetDescriptors.LOSE);
+//        assetManager.load(AssetDescriptors.POP);
         assetManager.load(AssetDescriptors.DUST);
         assetManager.load(AssetDescriptors.GAME_PLAY_NEW);
 

@@ -40,14 +40,14 @@ public class FireBallController {
                 case 0:
                     // spawning
                     projectileSpawnLogic(fireBall, delta);
-                    if(fireBall.getRedParent().getCurrentRedState() == GameConfig.ENEMY_DYING_STATE) {
+                    if(fireBall.getRedParent().getCurrentState() == GameConfig.ENEMY_DYING_STATE) {
                         fireBall.setCurrentFireBallState(GameConfig.PROJECTILE_DYING_STATE);
                     }
                     break;
                 case 1:
                     // moving
                     projectileMoveLogic(fireBall, delta);
-                    if(fireBall.getRedParent().getCurrentRedState() == GameConfig.ENEMY_DYING_STATE) {
+                    if(fireBall.getRedParent().getCurrentState() == GameConfig.ENEMY_DYING_STATE) {
                         fireBall.setCurrentFireBallState(GameConfig.PROJECTILE_DYING_STATE);
                     }
                     break;

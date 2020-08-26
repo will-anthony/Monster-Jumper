@@ -2,8 +2,7 @@ package com.jga.jumper.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.Array;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
@@ -12,16 +11,14 @@ import com.jga.jumper.entity.MonsterPool;
 import com.jga.jumper.object_distance_checker.DistanceChecker;
 import com.jga.jumper.state_machines.MonsterState;
 
-public class MonsterController {
+public class MonsterController{
 
     // == attributes ==
-    private World world;
     private Monster monster;
     private final Array<Monster> monsters;
     private final MonsterPool monsterPool;
 
     private ControllerRegister controllerRegister;
-
     private float monsterStartX;
     private float monsterStartY;
 
@@ -32,17 +29,17 @@ public class MonsterController {
     private SoundListener soundListener;
 
     // == constructors ==
-    public MonsterController(SoundListener soundListener, World world, ControllerRegister controllerRegister) {
+    public MonsterController(SoundListener soundListener, ControllerRegister controllerRegister) {
         this.soundListener = soundListener;
-        this.world = world;
         this.controllerRegister = controllerRegister;
         this.monsters = new Array<>();
-        this.monsterPool = new MonsterPool(1, 4, world);
+        this.monsterPool = new MonsterPool(1, 4);
         init();
     }
 
     // == init ==
     private void init() {
+
         monsterStartX = GameConfig.WORLD_CENTER_X - GameConfig.MONSTER_HALF_SIZE;
         monsterStartY = GameConfig.WORLD_CENTER_Y + GameConfig.PLANET_HALF_SIZE;
 
@@ -74,7 +71,7 @@ public class MonsterController {
         }
 
         // input which checks how long the key is held and increases jump height up to a max
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && isJumping && jumpTimeCounter < maxJumpTime ) {
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) || (Gdx.input.isTouched() && isJumping && jumpTimeCounter < maxJumpTime )) {
             float currentMonsterAcceleration = monster.getAcceleration();
             monster.setAcceleration(currentMonsterAcceleration + 0.2f);
             jumpTimeCounter += delta;
@@ -86,7 +83,7 @@ public class MonsterController {
             jumpTimeCounter = 0;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) && monster.getDashInterval() <= 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || (Gdx.input.getRoll() > 30) && monster.getDashInterval() <= 0) {
             monster.dash();
         }
     }

@@ -11,9 +11,6 @@ import java.util.Random;
 public class Red extends SmallEnemyBase implements Pool.Poolable {
 
     private float boundsAngleDegree;
-    private float angleDegreeSpeed;
-
-    private int currentRedState;
 
     private float deathTimer;
     private int hitPoints;
@@ -30,7 +27,7 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
     private boolean shielded;
 
     public Red() {
-        angleDegreeSpeed = GameConfig.RED_START_ANGULAR_SPEED;
+        super.angleDegreesSpeed = GameConfig.RED_START_ANGULAR_SPEED;
         super.setSize(GameConfig.RED_SIZE, GameConfig.RED_SIZE);
         super.setRadius(GameConfig.PLANET_HALF_SIZE - GameConfig.RED_SIZE);
         super.clockWise = MathUtils.randomBoolean();
@@ -39,9 +36,11 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
         this.redDamagedTimer = 1f;
 
         this.random = new Random();
-        this.redWalkTimer = MathUtils.random(1,5);
+        this.redWalkTimer = MathUtils.random(1,3);
         this.redAttackTimer = 1f;
         this.shielded = false;
+
+        assignShieldProperties();
     }
 
     @Override
@@ -60,6 +59,30 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
         return polygon;
     }
 
+    @Override
+    public void assignShieldProperties() {
+        super.shieldPolygonColliderCoordinates = new float[] {0.42f, 0.8f,
+                0.3f, 1.3f,
+                1.65f, 1.3f,
+                1.53f, 0.8f};
+
+        super.shieldKillColliderCoordinates = new float[] { 0.3f, 1.3f,
+                0.38f, 1.5f,
+                0.55f, 1.8f,
+                0.7f, 1.9f,
+                1.15f, 1.9f,
+                1.3f, 1.8f,
+                1.57f, 1.5f,
+                1.65f, 1.3f
+        };
+
+        super.shieldSize = 2.2f;
+        super.shieldOrbitRadius = GameConfig.PLANET_HALF_SIZE - 0.4f;
+        super.shieldAngleDegrees = this.angleDegrees;
+        super.shieldClockWiseOffset = -5f;
+        super.shieldAntiClockWiseOffset = -3f;
+    }
+
     public void move(float delta) {
 
         int directionalMultiplier = 1;
@@ -68,13 +91,8 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
             directionalMultiplier = -1;
         }
 
-        angleDegrees -= (angleDegreeSpeed * directionalMultiplier) * delta;
+        angleDegrees -= (angleDegreesSpeed * directionalMultiplier) * delta;
         setAngleDegree();
-    }
-
-    @Override
-    public void assignShieldProperties() {
-
     }
 
     @Override
@@ -116,7 +134,7 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
 
     public void reset() {
         setPosition(0, 0);
-        currentRedState = GameConfig.ENEMY_SPAWNING_STATE;
+        currentState = GameConfig.ENEMY_SPAWNING_STATE;
         radius = GameConfig.PLANET_HALF_SIZE - GameConfig.MAGE_SIZE;
 
         deathTimer = 0.5f;
@@ -124,6 +142,7 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
         hitPoints = 1;
         redDamagedTimer = 1f;
         this.shielded = false;
+        super.moving = false;
     }
 
     public float getRadius() {
@@ -149,14 +168,6 @@ public class Red extends SmallEnemyBase implements Pool.Poolable {
 
     public void setDeathTimer(float deathTimer) {
         this.deathTimer = deathTimer;
-    }
-
-    public int getCurrentRedState() {
-        return currentRedState;
-    }
-
-    public void setCurrentRedState(int currentRedState) {
-        this.currentRedState = currentRedState;
     }
 
     public float getRedDamagedTimer() {
