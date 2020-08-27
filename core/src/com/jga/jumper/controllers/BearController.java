@@ -118,6 +118,9 @@ public class BearController implements EnemyController<Bear> {
     }
         @Override
         public void enemyDeathLogic (Bear bear){
+            controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                    bear, 0,0,
+                    GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE - 0.1f);
             bearPool.free(bear);
             bears.removeValue(bear, true);
         }
@@ -139,6 +142,9 @@ public class BearController implements EnemyController<Bear> {
 
             bear.setSummonLogicTimer(bearSummonLogicTimer - delta);
             if (!bear.isHasSpawnedSpikes()) {
+                controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                        bear, 24, -8,
+                        GameConfig.TRAP_WARNING_SMOKE_SPAWN_STATE, GameConfig.PLANET_HALF_SIZE - 0.1f);
                 bear.setHasSpawnedSpikes(true);
                 controllerRegister.getSpikeTrapController().spawnSpikeTrap(bear);
             }

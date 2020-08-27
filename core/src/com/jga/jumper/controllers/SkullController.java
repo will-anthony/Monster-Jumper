@@ -149,6 +149,9 @@ public class SkullController implements EnemyController<Skull> {
 
     @Override
     public void enemyDeathLogic(Skull enemy) {
+        controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                enemy, 0,0,
+                GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE - 0.1f);
         skullPool.free(enemy);
         skulls.removeValue(enemy, true);
     }

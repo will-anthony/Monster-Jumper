@@ -130,6 +130,9 @@ public class SlugController implements EnemyController<Slug> {
 
     @Override
     public void enemyDeathLogic(Slug enemy) {
+        controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                enemy, 0,0,
+                GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE + 0f);
         slugPool.free(enemy);
         slugs.removeValue(enemy, true);
     }

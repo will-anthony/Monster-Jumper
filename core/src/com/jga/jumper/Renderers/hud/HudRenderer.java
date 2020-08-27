@@ -106,7 +106,7 @@ public class HudRenderer implements Disposable {
         float padding = 20f;
 
         // level
-        String levelString = "LEVEL: " + controllerRegister.getMasterController().getGameLevel();
+        String levelString = "LEVEL: " + controllerRegister.getMasterController().getGameLevelDisplay();
         layout.setText(font, levelString);
         font.draw(spriteBatch, layout, padding, GameConfig.HUD_HEIGHT);
 

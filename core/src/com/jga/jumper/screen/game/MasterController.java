@@ -36,6 +36,7 @@ public class MasterController {
     // == attributes ==
     private float startWaitTimer = GameConfig.START_WAIT_TIME;
     private int gameLevel;
+    private int gameLevelDisplay;
     private List<Integer> levels;
 
     private GameState gameState = GameState.MENU;
@@ -87,6 +88,7 @@ public class MasterController {
         this.level_5 = new Level_5(controllerRegister);
 
         this.gameLevel = 1;
+        this.gameLevelDisplay = 1;
         this.levels = new ArrayList<>();
         levels.add(2);
         levels.add(3);
@@ -149,6 +151,7 @@ public class MasterController {
             nextLevel = levels.get(0);
             levels.remove(nextLevel);
         }
+        this.gameLevelDisplay ++;
         return nextLevel;
     }
 
@@ -209,8 +212,6 @@ public class MasterController {
         levels.add(4);
         levels.add(5);
 
-
-
         gameLevel = 1;
     }
 
@@ -247,5 +248,9 @@ public class MasterController {
 
     public int getGameLevel() {
         return gameLevel;
+    }
+
+    public int getGameLevelDisplay() {
+        return gameLevelDisplay;
     }
 }

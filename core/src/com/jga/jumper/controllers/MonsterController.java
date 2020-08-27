@@ -73,7 +73,7 @@ public class MonsterController{
         // input which checks how long the key is held and increases jump height up to a max
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) || (Gdx.input.isTouched() && isJumping && jumpTimeCounter < maxJumpTime )) {
             float currentMonsterAcceleration = monster.getAcceleration();
-            monster.setAcceleration(currentMonsterAcceleration + 0.2f);
+            monster.setAcceleration(currentMonsterAcceleration + 0.25f);
             jumpTimeCounter += delta;
         }
 

@@ -144,6 +144,9 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
 
     @Override
     public void enemyDeathLogic(Mage enemy) {
+        controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                enemy, 0,0,
+                GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE - 0.1f);
         magePool.free(enemy);
         mages.removeValue(enemy, true);
     }

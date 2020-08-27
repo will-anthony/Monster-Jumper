@@ -81,11 +81,12 @@ public class SkullSpikeTrapController {
 
         checkMonsterCollision(spikeTrap, monsterController.getMonsters().get(0));
         spikeTrap.setAngleDegree();
+
     }
 
     private void spikeTrapIdleLogic(SkullSpikeTrap spikeTrap, Skull skull) {
 
-        if (skull.getCurrentSkullState() == GameConfig.ENEMY_DEAD_STATE) {
+        if (skull.getCurrentSkullState() == GameConfig.ENEMY_DYING_STATE) {
             spikeTrap.setCurrentSpikeTrapState(GameConfig.SPIKE_TRAP_WITHDRAW_STATE);
         }
         checkMonsterCollision(spikeTrap, monsterController.getMonsters().get(0));

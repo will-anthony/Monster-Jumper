@@ -140,6 +140,9 @@ public class RedController implements EnemyController<Red> {
 
     @Override
     public void enemyDeathLogic(Red enemy) {
+        controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                enemy, 0,0,
+                GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE - 0.1f);
         redPool.free(enemy);
         reds.removeValue(enemy, true);
     }

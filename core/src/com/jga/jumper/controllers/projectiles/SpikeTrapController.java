@@ -91,6 +91,9 @@ public class SpikeTrapController {
             spikeTrap.setRadius(spikeTrap.getRadius() - 0.5f);
         }
         if (spikeTrap.getRadius() <= GameConfig.PLANET_HALF_SIZE - GameConfig.MONSTER_SIZE) {
+            controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
+                    spikeTrap, 0,0,
+                    GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE - 0.1f);
             enemyDeathLogic(spikeTrap);
         }
 
