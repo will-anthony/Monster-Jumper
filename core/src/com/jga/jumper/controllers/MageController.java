@@ -18,8 +18,6 @@ import com.jga.jumper.object_distance_checker.DistanceChecker;
 import com.jga.jumper.state_machines.GameState;
 import com.jga.jumper.state_machines.MonsterState;
 
-import java.util.List;
-
 public class MageController<T extends SmallEnemyBase> implements EnemyController<Mage> {
 
     // == attributes ==
@@ -123,7 +121,6 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
         }
 
         if (mageAttackTimer <= 0) {
-            controllerRegister.getSparkEffectController().spawnSparks(enemy, 0,0, enemy.getAngleDegrees());
             enemy.setCurrentMageState(2);
         }
     }
@@ -131,7 +128,6 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
     @Override
     public void enemyDyingLogic(Mage enemy, float delta) {
         float deathTimer = enemy.getDeathTimer();
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             enemy.setDeathTimer(deathTimer -= delta);
         }
@@ -193,7 +189,7 @@ public class MageController<T extends SmallEnemyBase> implements EnemyController
 //        // monster kills mage with jump attack
         if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), mage.getKillCollider()) && monster.getState() == MonsterState.FALLING) {
             mage.setCurrentMageState(GameConfig.ENEMY_DYING_STATE);
-            monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
+            monster.setAcceleration(GameConfig.MONSTER_MAX_DOUBLE_JUMP);
             monster.jump();
 
         } else if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), mage.getPolygonCollider())) {

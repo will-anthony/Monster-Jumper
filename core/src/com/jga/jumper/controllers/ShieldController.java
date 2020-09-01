@@ -97,7 +97,6 @@ public class ShieldController<T extends SmallEnemyBase> {
                 shield.setAlphaIncreasing(true);
             }
         }
-        System.out.println(shield.getShieldAlphaPercentage());
     }
 
     private void withdrawLogic(Shield shield, float delta) {
@@ -149,7 +148,7 @@ public class ShieldController<T extends SmallEnemyBase> {
         if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), shield.getKillCollider()) && monster.getState() == MonsterState.FALLING) {
             shield.setCurrentState(GameConfig.SHIELD_DEAD_STATE);
             shield.getShieldParent().setShielded(false);
-            monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
+            monster.setAcceleration(GameConfig.MONSTER_MAX_DOUBLE_JUMP);
             monster.jump();
 
         } else if (monster.getState() == MonsterState.DASHING && Intersector.overlapConvexPolygons(monster.getPolygonCollider(), shield.getPolygonCollider())) {

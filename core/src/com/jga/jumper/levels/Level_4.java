@@ -13,6 +13,7 @@ public class Level_4 implements Level {
     private final BearController bearController;
 
     private float levelTimer;
+    private boolean levelBrake;
 
     private boolean hasFirstWaveSpawned;
     private boolean hasSecondWaveSpawned;
@@ -21,13 +22,14 @@ public class Level_4 implements Level {
     private boolean hasFifthWaveSpawned;
     private boolean hasSixthWaveSpawned;
 
-    private static final float FINAL_WAVE_TIME = 10f;
+    private static final float FINAL_WAVE_TIME = 12f;
 
     public Level_4(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
         slugController = controllerRegister.getSlugController();
         mageController = controllerRegister.getMageController();
         this.bearController = controllerRegister.getBearController();
+        this.levelBrake = false;
         levelTimer = 0f;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
@@ -40,7 +42,7 @@ public class Level_4 implements Level {
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
-            System.out.println("Level 2");
+            System.out.println("Level 4");
             bearController.tryToAddBears(1);
             hasFirstWaveSpawned = true;
         }
@@ -72,12 +74,13 @@ public class Level_4 implements Level {
 //        }
 
         levelTimer += delta;
-        System.out.println(levelTimer);
     }
 
     @Override
     public boolean hasLevelFinished() {
-        if (levelTimer >= FINAL_WAVE_TIME && slugController.getSlugs().size == 0) {
+        if (levelTimer >= FINAL_WAVE_TIME && levelBrake == false) {
+            levelTimer = 0;
+            levelBrake = true;
             System.out.println("Level completed");
             return true;
         } else {
@@ -88,6 +91,7 @@ public class Level_4 implements Level {
     @Override
     public void reset() {
         levelTimer = 0f;
+        levelBrake= false;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
         hasThirdWaveSpawned = false;

@@ -6,14 +6,15 @@ import com.jga.jumper.controllers.projectiles.FireBallController;
 import com.jga.jumper.controllers.projectiles.SparkEffectController;
 import com.jga.jumper.controllers.projectiles.SpikeTrapController;
 import com.jga.jumper.controllers.projectiles.TrapWarningSmokeController;
+import com.jga.jumper.levels.LevelController;
 import com.jga.jumper.screen.game.MasterController;
 import com.jga.jumper.utils.BackgroundController;
+import com.jga.jumper.waves.WaveController;
 
 public class ControllerRegister {
 
     private MonsterController monsterController;
     private CoinController coinController;
-    private ObstacleController obstacleController;
     private FloatingScoreController floatingScoreController;
     private BackgroundController backgroundController;
     private PlanetController planetController;
@@ -30,15 +31,15 @@ public class ControllerRegister {
     private com.jga.jumper.controllers.projectiles.SpikeTrapController spikeTrapController;
     private FireBallController fireBallController;
     private OverlayCallbackController overlayCallbackController;
+    private LevelController levelController;
+    private WaveController waveController;
 
     private MasterController masterController;
 
     // make this class instantiate all controllers. Instantiate this in screen. Pass all info to master
-
     public ControllerRegister(SoundListener soundListener) {
         this.monsterController = new MonsterController(soundListener, this);
         this.coinController = new CoinController(this, soundListener);
-        this.obstacleController = new ObstacleController(this, soundListener);
         this.floatingScoreController = new FloatingScoreController();
         this.backgroundController =  new BackgroundController();
         this.planetController = new PlanetController();
@@ -50,12 +51,13 @@ public class ControllerRegister {
         this.sparkEffectController = new SparkEffectController(this, soundListener);
         this.redController = new RedController(this, soundListener);
         this.bearController = new BearController(this, soundListener);
-
         this.fireBallController = new FireBallController(this, soundListener);
         this.spikeTrapController = new SpikeTrapController(this, soundListener);
         this.shieldController = new ShieldController(this, soundListener);
         this.overlayCallbackController = new OverlayCallbackController(this);
         this.mageController = new MageController(this, soundListener);
+        this.levelController = new LevelController(this);
+        this.waveController = new WaveController(this);
         this.masterController = new MasterController(this);
 
     }
@@ -64,12 +66,12 @@ public class ControllerRegister {
         return monsterController;
     }
 
-    public CoinController getCoinController() {
-        return coinController;
+    public LevelController getLevelController() {
+        return levelController;
     }
 
-    public ObstacleController getObstacleController() {
-        return obstacleController;
+    public CoinController getCoinController() {
+        return coinController;
     }
 
     public FloatingScoreController getFloatingScoreController() {
@@ -138,5 +140,9 @@ public class ControllerRegister {
 
     public SparkEffectController getSparkEffectController() {
         return sparkEffectController;
+    }
+
+    public WaveController getWaveController() {
+        return waveController;
     }
 }

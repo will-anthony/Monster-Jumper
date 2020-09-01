@@ -2,7 +2,6 @@ package com.jga.jumper.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.Array;
 import com.jga.jumper.common.SoundListener;
 import com.jga.jumper.config.GameConfig;
@@ -64,6 +63,7 @@ public class MonsterController{
             soundListener.jump();
             isJumping = true;
             monster.setAcceleration(GameConfig.MONSTER_START_ACCELERATION);
+            monster.setDoubleJumpAcceleration(GameConfig.MONSTER_START_ACCELERATION);
             controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
                     monster, 0, 0,
                     GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE, GameConfig.PLANET_HALF_SIZE);
@@ -81,6 +81,7 @@ public class MonsterController{
         if(monster.getState() == MonsterState.WALKING) {
             isJumping = false;
             jumpTimeCounter = 0;
+            monster.setDoubleJumpAcceleration(0);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || (Gdx.input.getRoll() > 30) && monster.getDashInterval() <= 0) {

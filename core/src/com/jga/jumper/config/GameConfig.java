@@ -30,7 +30,7 @@ public class GameConfig {
     public static final float START_ANGLE = -90f;
     public static final float MONSTER_MAX_SPEED = 2f;
     public static final float MONSTER_START_ACCELERATION = 6.5f;
-    public static final float MONSTER_BOUNCE_ACCELERATION = 6.3f;
+    public static final float MONSTER_MAX_DOUBLE_JUMP = 10f;
     public static final float MONSTER_GRAVITY = 0.4f;
     public static final float MONSTER_DASH_DURATION = 0.2f;
     public static final float MONSTER_MAX_JUMP_TIME = 0.7f;

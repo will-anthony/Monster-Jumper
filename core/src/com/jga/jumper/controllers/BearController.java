@@ -106,12 +106,11 @@ public class BearController implements EnemyController<Bear> {
     public void enemyDyingLogic(Bear bear, float delta) {
 
         float deathTimer = bear.getDeathTimer();
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             bear.setDeathTimer(deathTimer -= delta);
 
             if (deathTimer <= 0) {
-                controllerRegister.getCoinController().spawnCoins(bear, 6);
+                controllerRegister.getCoinController().spawnCoins(bear, 12);
                 bear.setCurrentBearState(GameConfig.ENEMY_DEAD_STATE);
             }
         }
@@ -206,7 +205,7 @@ public class BearController implements EnemyController<Bear> {
                 } else {
                     bear.setCurrentBearState(GameConfig.ENEMY_DYING_STATE);
                 }
-                monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
+                monster.setAcceleration(GameConfig.MONSTER_MAX_DOUBLE_JUMP);
                 controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
                         monster, 0, 0, GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE,
                         GameConfig.PLANET_HALF_SIZE + GameConfig.BEAR_SIZE - 1.1f

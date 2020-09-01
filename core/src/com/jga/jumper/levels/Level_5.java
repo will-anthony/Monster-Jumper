@@ -13,6 +13,7 @@ public class Level_5 implements Level {
     private final RedController redController;
 
     private float levelTimer;
+    private boolean levelBrake;
 
     private boolean hasFirstWaveSpawned;
     private boolean hasSecondWaveSpawned;
@@ -21,7 +22,7 @@ public class Level_5 implements Level {
     private boolean hasFifthWaveSpawned;
     private boolean hasSixthWaveSpawned;
 
-    private static final float FINAL_WAVE_TIME = 10f;
+    private static final float FINAL_WAVE_TIME = 12f;
 
     public Level_5(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
@@ -30,6 +31,7 @@ public class Level_5 implements Level {
         this.redController = controllerRegister.getRedController();
 
         levelTimer = 0f;
+        levelBrake = false;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
         hasThirdWaveSpawned = false;
@@ -41,6 +43,7 @@ public class Level_5 implements Level {
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
+            System.out.println("Level 5");
             redController.tryToAddReds(1);
             hasFirstWaveSpawned = true;
         }
@@ -72,12 +75,13 @@ public class Level_5 implements Level {
 //        }
 
         levelTimer += delta;
-        System.out.println(levelTimer);
     }
 
     @Override
     public boolean hasLevelFinished() {
-        if (levelTimer >= FINAL_WAVE_TIME && redController.getReds().size == 0) {
+        if (levelTimer >= FINAL_WAVE_TIME && levelBrake == false) {
+            this.levelBrake = true;
+            levelTimer = 0;
             System.out.println("Level completed");
             return true;
         } else {
@@ -88,6 +92,7 @@ public class Level_5 implements Level {
     @Override
     public void reset() {
         levelTimer = 0f;
+        this.levelBrake = false;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
         hasThirdWaveSpawned = false;

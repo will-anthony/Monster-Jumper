@@ -117,7 +117,6 @@ public class SlugController implements EnemyController<Slug> {
     public void enemyDyingLogic(Slug enemy, float delta) {
         enemy.setMoving(false);
         float deathTimer = enemy.getDeathTimer();
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             enemy.setDeathTimer(deathTimer -= delta);
         }
@@ -190,7 +189,7 @@ public class SlugController implements EnemyController<Slug> {
         // monster kills slug with jump attack
         if (Intersector.overlapConvexPolygons(monster.getPolygonCollider(), slug.getKillCollider()) && monster.getState() == MonsterState.FALLING) {
             slug.setCurrentState(GameConfig.ENEMY_DYING_STATE);
-            monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
+            monster.setAcceleration(monster.getDoubleJumpAcceleration());
             controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
                     monster,0,0, GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE,
                     GameConfig.PLANET_HALF_SIZE + GameConfig.SLUG_SIZE / 2);

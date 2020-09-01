@@ -13,30 +13,34 @@ public class Level_1 implements Level {
     private final SkullController skullController;
 
     private float levelTimer;
+    private boolean levelBrake;
 
     private boolean hasFirstWaveSpawned;
     private boolean hasSecondWaveSpawned;
     private boolean hasThirdWaveSpawned;
     private boolean hasFourthWaveSpawned;
 
-    private static final float FINAL_WAVE_TIME = 10f;
+    private static final float FINAL_WAVE_TIME = 14f;
 
     public Level_1(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
-        slugController = controllerRegister.getSlugController();
-        mageController = controllerRegister.getMageController();
-        skullController = controllerRegister.getSkullController();
+        this.slugController = controllerRegister.getSlugController();
+        this.mageController = controllerRegister.getMageController();
+        this.skullController = controllerRegister.getSkullController();
 
-        levelTimer = 0f;
-        hasFirstWaveSpawned = false;
-        hasSecondWaveSpawned = false;
-        hasThirdWaveSpawned = false;
-        hasFourthWaveSpawned = false;
+        this.levelTimer = 0f;
+        this.levelBrake = false;
+
+        this.hasFirstWaveSpawned = false;
+        this.hasSecondWaveSpawned = false;
+        this.hasThirdWaveSpawned = false;
+        this.hasFourthWaveSpawned = false;
     }
 
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
+            System.out.println("Level 1");
             slugController.tryToAddSlugs(1);
             hasFirstWaveSpawned = true;
         }
@@ -60,8 +64,10 @@ public class Level_1 implements Level {
 
     @Override
     public boolean hasLevelFinished() {
-        if(levelTimer >= FINAL_WAVE_TIME && slugController.getSlugs().size == 0) {
+        if(levelTimer >= FINAL_WAVE_TIME && levelBrake == false) {
             System.out.println("Level completed");
+            levelBrake = true;
+            levelTimer = 0;
             return true;
         } else {
             return false;
@@ -71,6 +77,7 @@ public class Level_1 implements Level {
     @Override
     public void reset() {
         levelTimer = 0f;
+        levelBrake = false;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
         hasThirdWaveSpawned = false;

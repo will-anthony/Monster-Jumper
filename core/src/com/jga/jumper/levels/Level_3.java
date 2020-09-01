@@ -11,6 +11,7 @@ public class Level_3 implements Level {
     private final SkullController skullController;
 
     private float levelTimer;
+    private boolean levelBrake;
 
     private boolean hasFirstWaveSpawned;
     private boolean hasSecondWaveSpawned;
@@ -19,23 +20,25 @@ public class Level_3 implements Level {
     private boolean hasFifthWaveSpawned;
     private boolean hasSixthWaveSpawned;
 
-    private static final float FINAL_WAVE_TIME = 10f;
+    private static final float FINAL_WAVE_TIME = 12f;
 
     public Level_3(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
-        skullController = controllerRegister.getSkullController();
-        levelTimer = 0f;
-        hasFirstWaveSpawned = false;
-        hasSecondWaveSpawned = false;
-        hasThirdWaveSpawned = false;
-        hasFourthWaveSpawned = false;
-        hasFifthWaveSpawned = false;
-        hasSixthWaveSpawned = false;
+        this.skullController = controllerRegister.getSkullController();
+        this.levelTimer = 0f;
+        this.levelBrake = false;
+        this.hasFirstWaveSpawned = false;
+        this.hasSecondWaveSpawned = false;
+        this.hasThirdWaveSpawned = false;
+        this.hasFourthWaveSpawned = false;
+        this.hasFifthWaveSpawned = false;
+        this.hasSixthWaveSpawned = false;
     }
 
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
+            System.out.println("Level 3");
             skullController.tryToAddSkulls(1);
             hasFirstWaveSpawned = true;
         }
@@ -66,13 +69,14 @@ public class Level_3 implements Level {
 //            hasSixthWaveSpawned = true;
 //        }
 
-        levelTimer += delta;
-        System.out.println(levelTimer);
+        this.levelTimer += delta;
     }
 
     @Override
     public boolean hasLevelFinished() {
-        if (levelTimer >= FINAL_WAVE_TIME && skullController.getSkulls().size == 0) {
+        if (levelTimer >= FINAL_WAVE_TIME && levelBrake == false) {
+            levelTimer = 0;
+            levelBrake = true;
             System.out.println("Level completed");
             return true;
         } else {
@@ -82,12 +86,13 @@ public class Level_3 implements Level {
 
     @Override
     public void reset() {
-        levelTimer = 0f;
-        hasFirstWaveSpawned = false;
-        hasSecondWaveSpawned = false;
-        hasThirdWaveSpawned = false;
-        hasFourthWaveSpawned = false;
-        hasFifthWaveSpawned = false;
-        hasSixthWaveSpawned = false;
+        this.levelTimer = 0f;
+        this.levelBrake = false;
+        this.hasFirstWaveSpawned = false;
+        this.hasSecondWaveSpawned = false;
+        this.hasThirdWaveSpawned = false;
+        this.hasFourthWaveSpawned = false;
+        this.hasFifthWaveSpawned = false;
+        this.hasSixthWaveSpawned = false;
     }
 }

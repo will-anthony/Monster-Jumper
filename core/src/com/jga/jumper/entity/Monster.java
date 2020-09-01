@@ -14,6 +14,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
     private float monsterVelocityY;
     private float gravity = GameConfig.MONSTER_GRAVITY;
     private float acceleration = 0;
+    private float doubleJumpAcceleration = 0;
 
     private MonsterState state = MonsterState.IDLE;
 
@@ -21,6 +22,7 @@ public class Monster extends EntityBase implements Pool.Poolable {
     private float dashDuration = GameConfig.MONSTER_DASH_DURATION;
     private float dashTimer = 0;
     private float dashInterval = 0;
+    private boolean doubleJumpUsed = false;
 
     private boolean hasIdleAnimationStarted;
     private boolean hasDeathAnimationStarted;
@@ -213,5 +215,13 @@ public class Monster extends EntityBase implements Pool.Poolable {
 
     public float getAcceleration() {
         return acceleration;
+    }
+
+    public float getDoubleJumpAcceleration() {
+        return doubleJumpAcceleration;
+    }
+
+    public void setDoubleJumpAcceleration(float doubleJumpAcceleration) {
+        this.doubleJumpAcceleration = doubleJumpAcceleration;
     }
 }

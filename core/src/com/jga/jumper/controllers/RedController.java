@@ -127,13 +127,12 @@ public class RedController implements EnemyController<Red> {
     public void enemyDyingLogic(Red enemy, float delta) {
         enemy.setMoving(false);
         float deathTimer = enemy.getDeathTimer();
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             enemy.setDeathTimer(deathTimer -= delta);
         }
 
         if (deathTimer <= 0) {
-            controllerRegister.getCoinController().spawnCoins(enemy, 3);
+            controllerRegister.getCoinController().spawnCoins(enemy, 4);
             enemy.setCurrentState(GameConfig.ENEMY_DEAD_STATE);
         }
     }

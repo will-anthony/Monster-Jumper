@@ -136,13 +136,12 @@ public class SkullController implements EnemyController<Skull> {
     @Override
     public void enemyDyingLogic(Skull enemy, float delta) {
         float deathTimer = enemy.getDeathTimer();
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             enemy.setDeathTimer(deathTimer -= delta);
         }
 
         if (deathTimer <= 0) {
-            controllerRegister.getCoinController().spawnCoins(enemy, 2);
+            controllerRegister.getCoinController().spawnCoins(enemy, 5);
             enemy.setCurrentSkullState(GameConfig.ENEMY_DEAD_STATE);
         }
     }

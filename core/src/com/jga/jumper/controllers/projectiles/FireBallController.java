@@ -90,7 +90,6 @@ public class FireBallController {
         float deathTimer = fireball.getDeathTimer();
 
         fireball.move(delta);
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             fireball.setDeathTimer(deathTimer -= delta);
         }

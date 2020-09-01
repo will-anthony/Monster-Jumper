@@ -11,6 +11,7 @@ public class Level_2 implements Level {
     private final SlugController slugController;
 
     private float levelTimer;
+    private boolean levelBrake;
 
     private boolean hasFirstWaveSpawned;
     private boolean hasSecondWaveSpawned;
@@ -23,27 +24,29 @@ public class Level_2 implements Level {
 
     public Level_2(ControllerRegister controllerRegister) {
         this.controllerRegister = controllerRegister;
-        slugController = controllerRegister.getSlugController();
+        this.slugController = controllerRegister.getSlugController();
 
-        levelTimer = 0f;
-        hasFirstWaveSpawned = false;
-        hasSecondWaveSpawned = false;
-        hasThirdWaveSpawned = false;
-        hasFourthWaveSpawned = false;
-        hasFifthWaveSpawned = false;
-        hasSixthWaveSpawned = false;
+        this.levelTimer = 0f;
+        this.levelBrake = false;
+        this.hasFirstWaveSpawned = false;
+        this.hasSecondWaveSpawned = false;
+        this.hasThirdWaveSpawned = false;
+        this.hasFourthWaveSpawned = false;
+        this.hasFifthWaveSpawned = false;
+        this.hasSixthWaveSpawned = false;
     }
 
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
-            slugController.tryToAddSlugs(2);
-            hasFirstWaveSpawned = true;
+            System.out.println("Level 2");
+            this.slugController.tryToAddSlugs(2);
+            this.hasFirstWaveSpawned = true;
         }
 
         if (levelTimer >= 6 && !hasSecondWaveSpawned) {
-            slugController.tryToAddSlugs(3);
-            hasSecondWaveSpawned = true;
+            this.slugController.tryToAddSlugs(3);
+            this.hasSecondWaveSpawned = true;
         }
 //
 //        if (levelTimer >= 10 && !hasThirdWaveSpawned) {
@@ -65,13 +68,14 @@ public class Level_2 implements Level {
 //        }
 
         levelTimer += delta;
-        System.out.println(levelTimer);
     }
 
     @Override
     public boolean hasLevelFinished() {
-        if(levelTimer >= FINAL_WAVE_TIME && slugController.getSlugs().size == 0) {
+        if(levelTimer >= FINAL_WAVE_TIME && levelBrake == false) {
             System.out.println("Level completed");
+            levelTimer = 0;
+            levelBrake = true;
             return true;
         } else {
             return false;
@@ -81,6 +85,7 @@ public class Level_2 implements Level {
     @Override
     public void reset() {
         levelTimer = 0f;
+        levelBrake = false;
         hasFirstWaveSpawned = false;
         hasSecondWaveSpawned = false;
         hasThirdWaveSpawned = false;

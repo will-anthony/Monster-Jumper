@@ -37,45 +37,42 @@ public class Level_11 implements Level {
     @Override
     public void update(float delta) {
         if (levelTimer >= 0 && !hasFirstWaveSpawned) {
-            System.out.println("Level 2");
+            System.out.println("Level 11");
             slugController.tryToAddSlugs(2);
             hasFirstWaveSpawned = true;
         }
 
-        if (levelTimer >= 6 && !hasSecondWaveSpawned) {
-            mageController.tryToAddMages(1);
-            slugController.tryToAddSlugs(1);
-            hasSecondWaveSpawned = true;
-        }
-
-        if (levelTimer >= 10 && !hasThirdWaveSpawned) {
-            slugController.tryToAddSlugs(1);
-            hasThirdWaveSpawned = true;
-        }
-
-        if (levelTimer >= 12 && !hasFourthWaveSpawned) {
-            slugController.tryToAddSlugs(1);
-            hasFourthWaveSpawned = true;
-        }
-
-        if (levelTimer >= 16 && !hasFifthWaveSpawned) {
-            slugController.tryToAddSlugs(1);
-            hasFifthWaveSpawned = true;
-        }
-
-        if (levelTimer >= FINAL_WAVE_TIME && !hasSixthWaveSpawned) {
-            mageController.tryToAddMages(1);
-            slugController.tryToAddSlugs(1);
-            hasSixthWaveSpawned = true;
-        }
-
+//        if (levelTimer >= 6 && !hasSecondWaveSpawned) {
+//            mageController.tryToAddMages(1);
+//            slugController.tryToAddSlugs(1);
+//            hasSecondWaveSpawned = true;
+//        }
+//
+//        if (levelTimer >= 10 && !hasThirdWaveSpawned) {
+//            slugController.tryToAddSlugs(1);
+//            hasThirdWaveSpawned = true;
+//        }
+//
+//        if (levelTimer >= 12 && !hasFourthWaveSpawned) {
+//            slugController.tryToAddSlugs(1);
+//            hasFourthWaveSpawned = true;
+//        }
+//
+//        if (levelTimer >= 16 && !hasFifthWaveSpawned) {
+//            slugController.tryToAddSlugs(1);
+//            hasFifthWaveSpawned = true;
+//        }
+//
+//        if (levelTimer >= FINAL_WAVE_TIME && !hasSixthWaveSpawned) {
+//            mageController.tryToAddMages(1);
+//            slugController.tryToAddSlugs(1);
+//            hasSixthWaveSpawned = true;
         levelTimer += delta;
-        System.out.println(levelTimer);
     }
 
     @Override
     public boolean hasLevelFinished() {
-        if (levelTimer >= FINAL_WAVE_TIME && slugController.getSlugs().size == 0) {
+        if (levelTimer >= FINAL_WAVE_TIME) {
             System.out.println("Level completed");
             return true;
         } else {

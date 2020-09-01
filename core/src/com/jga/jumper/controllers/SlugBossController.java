@@ -134,13 +134,12 @@ public class SlugBossController implements EnemyController<SlugBoss> {
     @Override
     public void enemyDyingLogic(SlugBoss enemy, float delta) {
         float deathTimer = enemy.getDeathTimer();
-        System.out.println(deathTimer);
         if (deathTimer > 0) {
             enemy.setDeathTimer(deathTimer -= delta);
         }
 
         if (deathTimer <= 0) {
-            controllerRegister.getCoinController().spawnCoins(enemy, 2);
+            controllerRegister.getCoinController().spawnCoins(enemy, 14);
             enemy.setCurrentSlugBossState(GameConfig.SLUG_BOSS_DEAD_STATE);
         }
     }
@@ -202,7 +201,7 @@ public class SlugBossController implements EnemyController<SlugBoss> {
             } else {
                 slugBoss.setCurrentSlugBossState(GameConfig.SLUG_BOSS_DYING_STATE);
             }
-            monster.setAcceleration(GameConfig.MONSTER_BOUNCE_ACCELERATION);
+            monster.setAcceleration(GameConfig.MONSTER_MAX_DOUBLE_JUMP);
             controllerRegister.getTrapWarningSmokeController().spawnTrapWarningSmoke(
                     monster,0,0, GameConfig.TRAP_WARNING_SMOKE_WITHDRAW_STATE,
                     GameConfig.PLANET_HALF_SIZE + 1.35f

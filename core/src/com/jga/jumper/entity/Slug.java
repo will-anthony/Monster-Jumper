@@ -63,11 +63,8 @@ public class Slug extends SmallEnemyBase implements Pool.Poolable, KillCollider 
 
     public void move(float delta) {
 
-        int directionalMultiplier = 1;
+        int directionalMultiplier = clockWise ? -1 : 1;
 
-        if (clockWise) {
-            directionalMultiplier = -1;
-        }
         angleDegrees -= (angleDegreesSpeed * directionalMultiplier) * delta;
         setAngleDegree();
     }
@@ -80,20 +77,12 @@ public class Slug extends SmallEnemyBase implements Pool.Poolable, KillCollider 
     @Override
     public void setAngleDegree() {
 
-        sensorAngleDegree = angleDegrees + 3f;
-
         super.setAngleDegree();
 
-        float originX = GameConfig.WORLD_CENTER_X;
-        float originY = GameConfig.WORLD_CENTER_Y;
-
-        float newX = originX + MathUtils.cosDeg(-sensorAngleDegree) * (radius);
-        float newY = originY + MathUtils.sinDeg(-sensorAngleDegree) * (radius);
-
-        polygonCollider.setPosition(newX, newY);
+        polygonCollider.setPosition(this.x, this.y);
         polygonCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - 10f);
 
-        killCollider.setPosition(newX, newY);
+        killCollider.setPosition(this.x, this.y);
         killCollider.setRotation(GameConfig.START_ANGLE - angleDegrees - 10f);
 
         updateDistanceSensor(super.x, super.y);
